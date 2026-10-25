@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -166,10 +168,17 @@ public class Gravitizable : MonoBehaviour
 
     void SelectFirst()
     {
-        Renderer renderer = firstObject.GetComponent<Renderer>();
-        storedFirstColor = renderer.material.color;
+        Renderer cubeRenderer = firstObject.GetComponent<Renderer>();
+        HashSet<Renderer> renderers = new HashSet<Renderer>(firstObject.GetComponentsInChildren<Renderer>());
+        renderers.Remove(cubeRenderer);
+        Renderer borderRenderer = renderers.ToArray()[0];
 
-        renderer.material.color = firstColor;
+        storedFirstColor = borderRenderer.material.color;
+
+        borderRenderer.material.color = firstColor;
+        borderRenderer.material.SetColor("_EmissionColor", firstColor * 0.5f);
+        borderRenderer.enabled = true;
+
         top.color = firstColor;
         right.color = firstColor;
     }
@@ -178,7 +187,14 @@ public class Gravitizable : MonoBehaviour
     {
         if (!firstObject) { return; }
 
-        firstObject.GetComponent<Renderer>().material.color = storedFirstColor;
+        Renderer cubeRenderer = firstObject.GetComponent<Renderer>();
+        HashSet<Renderer> renderers = new HashSet<Renderer>(firstObject.GetComponentsInChildren<Renderer>());
+        renderers.Remove(cubeRenderer);
+        Renderer borderRenderer = renderers.ToArray()[0];
+
+        borderRenderer.material.color = storedFirstColor;
+        borderRenderer.enabled = false;
+
         top.color = uiDefault;
         right.color = uiDefault;
 
@@ -187,10 +203,17 @@ public class Gravitizable : MonoBehaviour
 
     void SelectSecond()
     {
-        Renderer renderer = secondObject.GetComponent<Renderer>();
-        storedSecondColor = renderer.material.color;
+        Renderer cubeRenderer = secondObject.GetComponent<Renderer>();
+        HashSet<Renderer> renderers = new HashSet<Renderer>(secondObject.GetComponentsInChildren<Renderer>());
+        renderers.Remove(cubeRenderer);
+        Renderer borderRenderer = renderers.ToArray()[0];
 
-        renderer.material.color = secondColor;
+        storedSecondColor = borderRenderer.material.color;
+        
+        borderRenderer.material.color = secondColor;
+        borderRenderer.material.SetColor("_EmissionColor", secondColor * 0.5f);
+        borderRenderer.enabled = true;
+
         bottom.color = secondColor;
         left.color = secondColor;
     }
@@ -199,7 +222,14 @@ public class Gravitizable : MonoBehaviour
     {
         if (!secondObject) { return; }
 
-        secondObject.GetComponent<Renderer>().material.color = storedSecondColor;
+        Renderer cubeRenderer = secondObject.GetComponent<Renderer>();
+        HashSet<Renderer> renderers = new HashSet<Renderer>(secondObject.GetComponentsInChildren<Renderer>());
+        renderers.Remove(cubeRenderer);
+        Renderer borderRenderer = renderers.ToArray()[0];
+
+        borderRenderer.material.color = storedSecondColor;
+        borderRenderer.enabled = false;
+
         bottom.color = uiDefault;
         left.color = uiDefault;
 
