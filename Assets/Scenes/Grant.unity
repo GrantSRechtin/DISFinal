@@ -1245,7 +1245,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18240485064958643abdcd904f7297c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CameraController
-  rotationSpeed: 10
+  rotationSpeed: 5
 --- !u!20 &1131592986
 Camera:
   m_ObjectHideFlags: 0
@@ -1323,7 +1323,6 @@ MonoBehaviour:
   arrowIn: {fileID: 21300000, guid: 393630d013c33ce44af5d36ddc640422, type: 3}
   arrowOut: {fileID: 21300000, guid: 0380319f3c55b654abe646f427025edf, type: 3}
   line: {fileID: 21300000, guid: ac6d9259329d5cb49a75f973a9ec8dbf, type: 3}
-  letThereBeLight: 1.5
 --- !u!114 &1131592988
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1951,10 +1950,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cube
       objectReference: {fileID: 0}
-    - target: {fileID: 4196998093017384362, guid: 8a84166b275208641b406ddb8be0e74e, type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1967,9 +1962,9 @@ SceneRoots:
   - {fileID: 603632251}
   - {fileID: 1639651401}
   - {fileID: 506327484}
-  - {fileID: 4127488599587066181}
   - {fileID: 167522055}
   - {fileID: 640413445}
+  - {fileID: 4127488599587066181}
   - {fileID: 817884410}
   - {fileID: 1998160547}
   - {fileID: 978335231}

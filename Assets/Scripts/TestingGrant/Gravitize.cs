@@ -28,16 +28,15 @@ public class Gravitizable : MonoBehaviour
     [SerializeField] Sprite arrowOut;
     [SerializeField] Sprite line;
 
-    [SerializeField] float letThereBeLight = 1.5f;
-
     GameObject firstObject;
     GameObject secondObject;
     Color storedFirstColor;
     Color storedSecondColor;
-    Color firstColor = new Color(0f,1f,1f,1); // Color.skyBlue;
-    Color secondColor = new Color(1f,0f,1f,1); // Color.orange;
-
+    Color firstColor = new Color(0f,1f,1f,1);
+    Color secondColor = new Color(1f,0f,1f,1);
     Color uiDefault = Color.gray8;
+    Vector3 firstBorderScale = new(1.011f,1.011f,1.011f);
+    Vector3 secondBorderScale = new(1.01f,1.01f,1.01f);
 
     bool pulling = false;
     bool pushing = false;
@@ -139,7 +138,6 @@ public class Gravitizable : MonoBehaviour
             pushing = false;
         }
 
-        // Apply forces
         if (pulling || pushing)
         {
             DirectionalForce(firstObject, secondObject);
@@ -151,7 +149,6 @@ public class Gravitizable : MonoBehaviour
 
     void DirectionalForce(GameObject victim, GameObject target)
     {
-        // Apply forces
         Vector3 direction = target.transform.position - victim.transform.position;
 
         float distance = Mathf.Max(direction.magnitude, minDist);
@@ -170,16 +167,16 @@ public class Gravitizable : MonoBehaviour
 
     void SelectFirst()
     {
-        Renderer cubeRenderer = firstObject.GetComponent<Renderer>();
-        HashSet<Renderer> renderers = new HashSet<Renderer>(firstObject.GetComponentsInChildren<Renderer>());
-        renderers.Remove(cubeRenderer);
-        Renderer borderRenderer = renderers.ToArray()[0];
+        GameObject frame = GetFrameObject(firstObject);
+        frame.transform.localScale = firstBorderScale;
 
-        storedFirstColor = borderRenderer.material.color;
+        Renderer frameRenderer = frame.GetComponentInChildren<Renderer>();
 
-        borderRenderer.material.color = firstColor;
-        borderRenderer.material.SetColor("_EmissionColor", firstColor * letThereBeLight);
-        borderRenderer.enabled = true;
+        storedFirstColor = frameRenderer.material.color;
+
+        frameRenderer.material.color = firstColor;
+        frameRenderer.material.SetColor("_EmissionColor", firstColor * 1.5f);
+        frameRenderer.enabled = true;
 
         top.color = firstColor;
         right.color = firstColor;
@@ -189,13 +186,11 @@ public class Gravitizable : MonoBehaviour
     {
         if (!firstObject) { return; }
 
-        Renderer cubeRenderer = firstObject.GetComponent<Renderer>();
-        HashSet<Renderer> renderers = new HashSet<Renderer>(firstObject.GetComponentsInChildren<Renderer>());
-        renderers.Remove(cubeRenderer);
-        Renderer borderRenderer = renderers.ToArray()[0];
+        GameObject frame = GetFrameObject(firstObject);
+        Renderer frameRenderer = frame.GetComponentInChildren<Renderer>();
 
-        borderRenderer.material.color = storedFirstColor;
-        borderRenderer.enabled = false;
+        frameRenderer.material.color = storedFirstColor;
+        frameRenderer.enabled = false;
 
         top.color = uiDefault;
         right.color = uiDefault;
@@ -205,16 +200,16 @@ public class Gravitizable : MonoBehaviour
 
     void SelectSecond()
     {
-        Renderer cubeRenderer = secondObject.GetComponent<Renderer>();
-        HashSet<Renderer> renderers = new HashSet<Renderer>(secondObject.GetComponentsInChildren<Renderer>());
-        renderers.Remove(cubeRenderer);
-        Renderer borderRenderer = renderers.ToArray()[0];
+        GameObject frame = GetFrameObject(secondObject);
+        frame.transform.localScale = secondBorderScale;
 
-        storedSecondColor = borderRenderer.material.color;
+        Renderer frameRenderer = frame.GetComponentInChildren<Renderer>();
+
+        storedSecondColor = frameRenderer.material.color;
         
-        borderRenderer.material.color = secondColor;
-        borderRenderer.material.SetColor("_EmissionColor", secondColor * letThereBeLight);
-        borderRenderer.enabled = true;
+        frameRenderer.material.color = secondColor;
+        frameRenderer.material.SetColor("_EmissionColor", secondColor * 1.5f);
+        frameRenderer.enabled = true;
 
         bottom.color = secondColor;
         left.color = secondColor;
@@ -224,18 +219,27 @@ public class Gravitizable : MonoBehaviour
     {
         if (!secondObject) { return; }
 
-        Renderer cubeRenderer = secondObject.GetComponent<Renderer>();
-        HashSet<Renderer> renderers = new HashSet<Renderer>(secondObject.GetComponentsInChildren<Renderer>());
-        renderers.Remove(cubeRenderer);
-        Renderer borderRenderer = renderers.ToArray()[0];
+        GameObject frame = GetFrameObject(secondObject);
+        Renderer frameRenderer = frame.GetComponentInChildren<Renderer>();
 
-        borderRenderer.material.color = storedSecondColor;
-        borderRenderer.enabled = false;
+        frameRenderer.material.color = storedSecondColor;
+        frameRenderer.enabled = false;
 
         bottom.color = uiDefault;
         left.color = uiDefault;
 
         secondObject = null;
+    }
+
+    GameObject GetFrameObject(GameObject parentObject)
+    {
+        foreach (Transform child in parentObject.GetComponentsInChildren<Transform>(true))
+        {
+            if (child != parentObject.transform && child.CompareTag("Frame"))
+                return child.gameObject;
+        }
+
+        return null;
     }
 
     void CheckAction()
