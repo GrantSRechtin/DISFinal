@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2192057440360972368}
-  - component: {fileID: 676611931672249370}
   - component: {fileID: 5634913227541026671}
   - component: {fileID: 2646115030686735936}
+  - component: {fileID: 1280487597849111377}
   m_Layer: 0
   m_Name: Body
   m_TagString: Untagged
@@ -34,29 +34,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7600163092860765417}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &676611931672249370
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2043157113570208371}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!33 &5634913227541026671
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -114,6 +91,27 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1280487597849111377
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2043157113570208371}
+  m_Material: {fileID: 13400000, guid: cedd3a4590277264db9c8ef0cad1821e, type: 2}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5099897958026433839
 GameObject:
   m_ObjectHideFlags: 0
@@ -157,8 +155,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5099897958026433839}
   serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
+  m_Mass: 0.1
+  m_LinearDamping: 0.5
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
@@ -192,6 +190,8 @@ MonoBehaviour:
   speed: 10
   accelerationRate: 20
   decelerationRate: 25
+  jumpPower: 0.75
+  gravityPower: 10
 --- !u!1 &7309028683050550764
 GameObject:
   m_ObjectHideFlags: 0
