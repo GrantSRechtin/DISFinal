@@ -28,12 +28,14 @@ public class Gravitizable : MonoBehaviour
     [SerializeField] Sprite arrowOut;
     [SerializeField] Sprite line;
 
+    [SerializeField] float letThereBeLight = 1.5f;
+
     GameObject firstObject;
     GameObject secondObject;
     Color storedFirstColor;
     Color storedSecondColor;
-    Color firstColor = new Color(59f/255f,66f/255f,136f/255f,1); // Color.skyBlue;
-    Color secondColor = new Color(149f/255f,80f/255f,20f/255f,1); // Color.orange;
+    Color firstColor = new Color(0f,1f,1f,1); // Color.skyBlue;
+    Color secondColor = new Color(1f,0f,1f,1); // Color.orange;
 
     Color uiDefault = Color.gray8;
 
@@ -176,7 +178,7 @@ public class Gravitizable : MonoBehaviour
         storedFirstColor = borderRenderer.material.color;
 
         borderRenderer.material.color = firstColor;
-        borderRenderer.material.SetColor("_EmissionColor", firstColor * 0.5f);
+        borderRenderer.material.SetColor("_EmissionColor", firstColor * letThereBeLight);
         borderRenderer.enabled = true;
 
         top.color = firstColor;
@@ -211,7 +213,7 @@ public class Gravitizable : MonoBehaviour
         storedSecondColor = borderRenderer.material.color;
         
         borderRenderer.material.color = secondColor;
-        borderRenderer.material.SetColor("_EmissionColor", secondColor * 0.5f);
+        borderRenderer.material.SetColor("_EmissionColor", secondColor * letThereBeLight);
         borderRenderer.enabled = true;
 
         bottom.color = secondColor;

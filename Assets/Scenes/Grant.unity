@@ -580,7 +580,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!108 &603632250
 Light:
   m_ObjectHideFlags: 0
@@ -1256,7 +1256,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1323,6 +1323,7 @@ MonoBehaviour:
   arrowIn: {fileID: 21300000, guid: 393630d013c33ce44af5d36ddc640422, type: 3}
   arrowOut: {fileID: 21300000, guid: 0380319f3c55b654abe646f427025edf, type: 3}
   line: {fileID: 21300000, guid: ac6d9259329d5cb49a75f973a9ec8dbf, type: 3}
+  letThereBeLight: 1.5
 --- !u!114 &1131592988
 MonoBehaviour:
   m_ObjectHideFlags: 0
