@@ -65,7 +65,6 @@ public class Gravitizable : MonoBehaviour
         ActionChange(line);
     }
 
-    // Inputs
     void OnLeftSelect()
     {
         Deselect(firstSelection);
