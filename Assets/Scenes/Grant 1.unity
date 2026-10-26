@@ -1851,10 +1851,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 56749451354040047, guid: d39838a8fce413347a51569c00b279f3, type: 3}
-      propertyPath: jumpPower
-      value: 0.75
-      objectReference: {fileID: 0}
     - target: {fileID: 2166943039202033664, guid: d39838a8fce413347a51569c00b279f3, type: 3}
       propertyPath: top
       value: 
@@ -1879,10 +1875,6 @@ PrefabInstance:
       propertyPath: rightBack
       value: 
       objectReference: {fileID: 867082193}
-    - target: {fileID: 4351058880083584241, guid: d39838a8fce413347a51569c00b279f3, type: 3}
-      propertyPath: m_Mass
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 5099897958026433839, guid: d39838a8fce413347a51569c00b279f3, type: 3}
       propertyPath: m_Name
       value: Player

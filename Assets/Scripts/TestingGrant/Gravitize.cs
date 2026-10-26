@@ -28,36 +28,47 @@ public class Gravitizable : MonoBehaviour
     [SerializeField] Sprite arrowOut;
     [SerializeField] Sprite line;
 
-    GameObject firstObject;
-    GameObject secondObject;
-    Color storedFirstColor;
-    Color storedSecondColor;
-    Color firstColor = new Color(0f,1f,1f,1);
-    Color secondColor = new Color(1f,0f,1f,1);
-    Color uiDefault = Color.gray8;
-    Vector3 firstBorderScale = new(1.011f,1.011f,1.011f);
-    Vector3 secondBorderScale = new(1.01f,1.01f,1.01f);
+    private class SelectionSlot
+    {
+        public GameObject targetObject;
+        public Color color;
+        public Vector3 frameScale;
+        public Image actionImage;
+        public Image borderImage;
+    }
+
+    SelectionSlot firstSelection = new();
+    SelectionSlot secondSelection = new();
+
+    Color uiDefaultColor = Color.gray8;
 
     bool pulling = false;
     bool pushing = false;
 
     void Awake()
     {
-        firstObject = null;
-        secondObject = null;
+        firstSelection.color = new Color(0f,1f,1f,1);
+        firstSelection.frameScale = new(1.011f,1.011f,1.011f);
+        firstSelection.borderImage = top;
+        firstSelection.actionImage = left;
 
-        top.color = uiDefault;
-        bottom.color = uiDefault;
-        left.color = uiDefault;
-        right.color = uiDefault;
+        secondSelection.color = new Color(1f,0f,1f,1);
+        secondSelection.frameScale = new(1.01f,1.01f,1.01f);
+        secondSelection.borderImage = bottom;
+        secondSelection.actionImage = right;
+
+        top.color = uiDefaultColor;
+        bottom.color = uiDefaultColor;
+        left.color = uiDefaultColor;
+        right.color = uiDefaultColor;
 
         ActionChange(line);
     }
 
+    // Inputs
     void OnLeftSelect()
     {
-        // Remove current firstObject
-        DeselectFirst();
+        Deselect(firstSelection);
 
         Ray ray = new Ray(head.position, head.forward);
         RaycastHit hit;
@@ -65,23 +76,17 @@ public class Gravitizable : MonoBehaviour
         if (Physics.Raycast(ray, out hit)) {
             GameObject obj = hit.collider.gameObject;
 
-            if (obj.CompareTag("Gravitizable") && obj != secondObject)
+            if (obj.CompareTag("Gravitizable") && obj != secondSelection.targetObject)
             {
-                if (firstObject)
-                {
-                    firstObject.GetComponent<Renderer>().material.color = storedFirstColor;
-                }
-
-                firstObject = obj;
-                SelectFirst();
+                firstSelection.targetObject = obj;
+                Select(firstSelection);
             }
         }
     }
 
     void OnRightSelect()
     {
-        // Remove current firstObject
-        DeselectSecond();
+        Deselect(secondSelection);
 
         Ray ray = new Ray(head.position, head.forward);
         RaycastHit hit;
@@ -89,50 +94,38 @@ public class Gravitizable : MonoBehaviour
         if (Physics.Raycast(ray, out hit)) {
             GameObject obj = hit.collider.gameObject;
 
-            if (obj.CompareTag("Gravitizable") && obj != firstObject)
+            if (obj.CompareTag("Gravitizable") && obj != firstSelection.targetObject)
             {
-                if (secondObject)
-                {
-                    secondObject.GetComponent<Renderer>().material.color = storedSecondColor;
-                }
-
-                secondObject = obj;
-                SelectSecond();
+                secondSelection.targetObject = obj;
+                Select(secondSelection);
             }        
         }
     }
 
     void OnGravitize()
     {
-        if (!pulling && firstObject && secondObject)
-        {
-            pushing = false;
-            pulling = true;
-        }
-        else
-        {
-            pushing = false;
-            pulling = false;
-        }
+        bool objects = firstSelection.targetObject && secondSelection.targetObject;
+        bool active = pulling || pushing;
+
+        pulling = objects && !active ? true : false;
+        pushing = false;
     }
 
     void OnRepell()
     {
-        if (!pushing && firstObject && secondObject)
-        {
-            pulling = false;
-            pushing = true;
-        }
-        else
-        {
-            pulling = false;
-            pushing = false;
-        }
+        bool objects = firstSelection.targetObject && secondSelection.targetObject;
+        bool active = pulling || pushing;
+
+        pushing = objects && !active ? true : false;
+        pulling = false;
     }
 
     void FixedUpdate()
     {
-        if (!firstObject || !secondObject)
+        GameObject first = firstSelection.targetObject;
+        GameObject second = secondSelection.targetObject;
+
+        if (!first || !second)
         {
             pulling = false;
             pushing = false;
@@ -140,8 +133,8 @@ public class Gravitizable : MonoBehaviour
 
         if (pulling || pushing)
         {
-            DirectionalForce(firstObject, secondObject);
-            DirectionalForce(secondObject, firstObject);
+            DirectionalForce(first, second);
+            DirectionalForce(second, first);
         }
 
         CheckAction();
@@ -165,70 +158,26 @@ public class Gravitizable : MonoBehaviour
         victim.GetComponent<Rigidbody>().AddForce(force, ForceMode.Force);
     }
 
-    void SelectFirst()
+    void Select(SelectionSlot selection)
     {
-        GameObject frame = GetFrameObject(firstObject);
-        frame.transform.localScale = firstBorderScale;
+        GameObject frame = GetFrameObject(selection.targetObject);
+        UpdateFrame(frame, selection.color, true);
 
-        Renderer frameRenderer = frame.GetComponentInChildren<Renderer>();
-
-        storedFirstColor = frameRenderer.material.color;
-
-        frameRenderer.material.color = firstColor;
-        frameRenderer.material.SetColor("_EmissionColor", firstColor * 1.5f);
-        frameRenderer.enabled = true;
-
-        top.color = firstColor;
-        right.color = firstColor;
+        frame.transform.localScale = selection.frameScale;
+        selection.actionImage.color = selection.color;
+        selection.borderImage.color = selection.color;
     }
 
-    void DeselectFirst()
+    void Deselect(SelectionSlot selection)
     {
-        if (!firstObject) { return; }
+        if (!selection.targetObject) return;
 
-        GameObject frame = GetFrameObject(firstObject);
-        Renderer frameRenderer = frame.GetComponentInChildren<Renderer>();
+        GameObject frame = GetFrameObject(selection.targetObject);
+        UpdateFrame(frame, Color.white, false);
 
-        frameRenderer.material.color = storedFirstColor;
-        frameRenderer.enabled = false;
-
-        top.color = uiDefault;
-        right.color = uiDefault;
-
-        firstObject = null;
-    }
-
-    void SelectSecond()
-    {
-        GameObject frame = GetFrameObject(secondObject);
-        frame.transform.localScale = secondBorderScale;
-
-        Renderer frameRenderer = frame.GetComponentInChildren<Renderer>();
-
-        storedSecondColor = frameRenderer.material.color;
-        
-        frameRenderer.material.color = secondColor;
-        frameRenderer.material.SetColor("_EmissionColor", secondColor * 1.5f);
-        frameRenderer.enabled = true;
-
-        bottom.color = secondColor;
-        left.color = secondColor;
-    }
-
-    void DeselectSecond()
-    {
-        if (!secondObject) { return; }
-
-        GameObject frame = GetFrameObject(secondObject);
-        Renderer frameRenderer = frame.GetComponentInChildren<Renderer>();
-
-        frameRenderer.material.color = storedSecondColor;
-        frameRenderer.enabled = false;
-
-        bottom.color = uiDefault;
-        left.color = uiDefault;
-
-        secondObject = null;
+        selection.actionImage.color = uiDefaultColor;
+        selection.borderImage.color = uiDefaultColor;
+        selection.targetObject = null;
     }
 
     GameObject GetFrameObject(GameObject parentObject)
@@ -242,6 +191,18 @@ public class Gravitizable : MonoBehaviour
         return null;
     }
 
+    void UpdateFrame(GameObject frame, Color color, bool enabled)
+    {
+        foreach (Renderer renderer in frame.GetComponentsInChildren<Renderer>(true))
+        {
+            renderer.material.color = color;
+            renderer.material.SetColor("_EmissionColor", color * 1.5f);
+            
+            renderer.enabled = enabled;
+        }
+    }
+
+    // Crosshair Changes
     void CheckAction()
     {
         if (pulling)
