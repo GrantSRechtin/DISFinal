@@ -44,4 +44,9 @@ public class CameraController : MonoBehaviour
         Cursor.lockState = locked ? CursorLockMode.Locked : CursorLockMode.None;
         Cursor.visible = !locked;
     }
+
+    public void SetSensitivity(float value)
+    {
+        rotationSpeed = value;
+    }
 }
