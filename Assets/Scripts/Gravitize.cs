@@ -1,10 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,25 +22,14 @@ public class Gravitizable : MonoBehaviour
     [SerializeField] Sprite arrowOut;
     [SerializeField] Sprite line;
 
-    private class SelectionSlot
-    {
-        public GameObject targetObject;
-        public SelectionVisuals visuals;
-    }
-
-    private class SelectionVisuals
-    {
-        public GameObject targetObject; // Will Remove
-        public Color color;
-        public Vector3 frameScale;
-        public Image actionImage;
-        public Image borderImage;
-    }
-
     SelectionVisuals firstSelection = new();
     SelectionVisuals secondSelection = new();
 
     Color uiDefaultColor = Color.gray8;
+
+    GravSlot slot1 = new();
+    GravSlot slot2 = new();
+    GravSlot slot3 = new();
 
     bool pulling = false;
     bool pushing = false;
