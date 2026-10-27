@@ -536,6 +536,8 @@ MonoBehaviour:
   speed: 10
   accelerationRate: 20
   decelerationRate: 25
+  jumpPower: 5
+  gravityPower: 1
 --- !u!54 &506327486
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1851,7 +1853,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1134331139094153762, guid: 8a84166b275208641b406ddb8be0e74e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.636961
+      value: 10.389
       objectReference: {fileID: 0}
     - target: {fileID: 1134331139094153762, guid: 8a84166b275208641b406ddb8be0e74e, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1859,7 +1861,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1134331139094153762, guid: 8a84166b275208641b406ddb8be0e74e, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.537768
+      value: -3.307
       objectReference: {fileID: 0}
     - target: {fileID: 1134331139094153762, guid: 8a84166b275208641b406ddb8be0e74e, type: 3}
       propertyPath: m_LocalRotation.w
