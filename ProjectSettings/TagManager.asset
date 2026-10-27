@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Gravitizable
   - Frame
+  - Weight
+  - Ground
   layers:
   - Default
   - TransparentFX
