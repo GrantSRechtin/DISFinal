@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,14 +32,20 @@ public class Gravitizable : MonoBehaviour
     private class SelectionSlot
     {
         public GameObject targetObject;
+        public SelectionVisuals visuals;
+    }
+
+    private class SelectionVisuals
+    {
+        public GameObject targetObject; // Will Remove
         public Color color;
         public Vector3 frameScale;
         public Image actionImage;
         public Image borderImage;
     }
 
-    SelectionSlot firstSelection = new();
-    SelectionSlot secondSelection = new();
+    SelectionVisuals firstSelection = new();
+    SelectionVisuals secondSelection = new();
 
     Color uiDefaultColor = Color.gray8;
 
@@ -157,7 +164,7 @@ public class Gravitizable : MonoBehaviour
         victim.GetComponent<Rigidbody>().AddForce(force, ForceMode.Force);
     }
 
-    void Select(SelectionSlot selection)
+    void Select(SelectionVisuals selection)
     {
         GameObject frame = GetFrameObject(selection.targetObject);
         UpdateFrame(frame, selection.color, true);
@@ -167,7 +174,7 @@ public class Gravitizable : MonoBehaviour
         selection.borderImage.color = selection.color;
     }
 
-    void Deselect(SelectionSlot selection)
+    void Deselect(SelectionVisuals selection)
     {
         if (!selection.targetObject) return;
 
