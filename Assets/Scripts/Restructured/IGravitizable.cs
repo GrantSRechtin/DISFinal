@@ -1,25 +1,5 @@
 using UnityEngine;
 
-public enum GravityMode { None, Pull, Push }
-public enum SelectionSlot { None, First, Second }
-
-/// <summary>
-/// How a selected object should look. Owned by whoever does the selecting
-/// (the player actions script), so object frames and crosshair UI stay in sync.
-/// </summary>
-[System.Serializable]
-public struct SelectionStyle
-{
-    public Color color;
-    public Vector3 frameScale;
-
-    public SelectionStyle(Color color, Vector3 frameScale)
-    {
-        this.color = color;
-        this.frameScale = frameScale;
-    }
-}
-
 /// <summary>
 /// Anything the player can select and link with gravity.
 /// Callers only ever talk to this interface, never to a concrete class.
@@ -37,9 +17,10 @@ public interface IGravitizable
     void Deselect();
 
     // --- Link ---
+    int LinkNum { get; }
     IGravitizable Partner { get; }
     /// <summary>Links both objects with Mode None. Calling it on either side is enough.</summary>
-    void Connect(IGravitizable partner);
+    void Connect(IGravitizable partner, int linkNum);
     /// <summary>Unlinks both objects and sets Mode to None. Calling it on either side is enough.</summary>
     void Disconnect();
 

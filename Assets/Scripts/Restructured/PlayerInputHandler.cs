@@ -25,52 +25,52 @@ public class PlayerInputHandler : MonoBehaviour
     public event Action<float> GravityControlPerformed;
     public event Action GravityReleasePerformed;
     public event Action PausePerformed;
-    public event Action<int> CartridgeChangePerformed;
+    public event Action<int> ChangeCurrentLinkPerformed;
 
     PlayerInput playerInput;
-    InputAction moveAction, lookAction, jumpAction, interactAction, selectAction, gravityControlAction, gravityReleaseAction, pauseAction, cartridgeChangeAction;
+    InputAction moveAction, lookAction, jumpAction, interactAction, selectAction, gravityControlAction, gravityReleaseAction, pauseAction, changeCurrentLinkAction;
 
     void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         var actions = playerInput.actions;
 
-        moveAction            = actions.FindAction("Move", throwIfNotFound: true);
-        lookAction            = actions.FindAction("Look", throwIfNotFound: true);
-        jumpAction            = actions.FindAction("Jump", throwIfNotFound: true);
-        interactAction        = actions.FindAction("Interact", throwIfNotFound: true);
-        selectAction          = actions.FindAction("Select", throwIfNotFound: true);
-        gravityControlAction  = actions.FindAction("GravityControl", throwIfNotFound: true);
-        gravityReleaseAction  = actions.FindAction("GravityRelease", throwIfNotFound: true);
-        pauseAction           = actions.FindAction("Pause", throwIfNotFound: true);
-        cartridgeChangeAction = actions.FindAction("CartridgeChange", throwIfNotFound: true);
+        moveAction              = actions.FindAction("Move", throwIfNotFound: true);
+        lookAction              = actions.FindAction("Look", throwIfNotFound: true);
+        jumpAction              = actions.FindAction("Jump", throwIfNotFound: true);
+        interactAction          = actions.FindAction("Interact", throwIfNotFound: true);
+        selectAction            = actions.FindAction("Select", throwIfNotFound: true);
+        gravityControlAction    = actions.FindAction("GravityControl", throwIfNotFound: true);
+        gravityReleaseAction    = actions.FindAction("GravityRelease", throwIfNotFound: true);
+        pauseAction             = actions.FindAction("Pause", throwIfNotFound: true);
+        changeCurrentLinkAction = actions.FindAction("CartridgeChange", throwIfNotFound: true);
 
     }
 
     void OnEnable()
     {
-        jumpAction.performed            += OnJumpPerformed;
-        interactAction.performed        += OnInteractPerformed;
-        interactAction.canceled         += OnInteractReleased;
-        selectAction.performed          += OnSelectPerformed;
-        selectAction.canceled           += OnSelectReleased;
-        gravityControlAction.performed  += OnGravityControlPerformed;
-        gravityReleaseAction.performed  += OnGravityReleasePerformed;
-        pauseAction.performed           += OnPausePerformed;
-        cartridgeChangeAction.performed += OnCartridgeChangePerformed;
+        jumpAction.performed              += OnJumpPerformed;
+        interactAction.performed          += OnInteractPerformed;
+        interactAction.canceled           += OnInteractReleased;
+        selectAction.performed            += OnSelectPerformed;
+        selectAction.canceled             += OnSelectReleased;
+        gravityControlAction.performed    += OnGravityControlPerformed;
+        gravityReleaseAction.performed    += OnGravityReleasePerformed;
+        pauseAction.performed             += OnPausePerformed;
+        changeCurrentLinkAction.performed += OnChangeCurrentLinkPerformed;
     }
 
     void OnDisable()
     {
-        jumpAction.performed            -= OnJumpPerformed;
-        interactAction.performed        -= OnInteractPerformed;
-        interactAction.canceled         -= OnInteractReleased;
-        selectAction.performed          -= OnSelectPerformed;
-        selectAction.canceled           -= OnSelectReleased;
-        gravityControlAction.performed  -= OnGravityControlPerformed;
-        gravityReleaseAction.performed  -= OnGravityReleasePerformed;
-        pauseAction.performed           -= OnPausePerformed;
-        cartridgeChangeAction.performed -= OnCartridgeChangePerformed;
+        jumpAction.performed              -= OnJumpPerformed;
+        interactAction.performed          -= OnInteractPerformed;
+        interactAction.canceled           -= OnInteractReleased;
+        selectAction.performed            -= OnSelectPerformed;
+        selectAction.canceled             -= OnSelectReleased;
+        gravityControlAction.performed    -= OnGravityControlPerformed;
+        gravityReleaseAction.performed    -= OnGravityReleasePerformed;
+        pauseAction.performed             -= OnPausePerformed;
+        changeCurrentLinkAction.performed -= OnChangeCurrentLinkPerformed;
 
         // Don't leave stale values behind when input is turned off
         Move = Vector2.zero;
@@ -96,10 +96,10 @@ public class PlayerInputHandler : MonoBehaviour
     }
     void OnGravityReleasePerformed(InputAction.CallbackContext _)  => GravityReleasePerformed?.Invoke();
     void OnPausePerformed(InputAction.CallbackContext _)           => PausePerformed?.Invoke();
-    void OnCartridgeChangePerformed(InputAction.CallbackContext ctx)
+    void OnChangeCurrentLinkPerformed(InputAction.CallbackContext ctx)
     {
         float cartridge = ctx.ReadValue<float>();
-        CartridgeChangePerformed?.Invoke((int) cartridge);
+        ChangeCurrentLinkPerformed?.Invoke((int) cartridge-1);
     }
 
     // --- Helpers so other systems (pause menu, cutscenes) never touch PlayerInput directly ---

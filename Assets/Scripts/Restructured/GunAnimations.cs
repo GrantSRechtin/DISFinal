@@ -11,43 +11,41 @@ using UnityEngine;
 public class GunAnimations : MonoBehaviour
 {
     [Header("References")]
-    // [SerializeField] PlayerInputHandler input;
-    // [SerializeField] PlayerActions actions;
     [SerializeField] GameObject[] cartridges;
 
-    [Header("Selection Styles")]
-    [SerializeField] SelectionStyle firstStyle  = new(new Color(0f, 1f, 1f), Vector3.one * 1.011f);
-    [SerializeField] SelectionStyle secondStyle = new(new Color(1f, 0f, 1f), Vector3.one * 1.01f);
-
     PlayerInputHandler input;
-    PlayerActions actions;
+    GravityController gravityController;
 
     void Awake()
     {
         input = GetComponentInParent<PlayerInputHandler>();
-        actions = GetComponentInParent<PlayerActions>();
     }
 
     void OnEnable()
     {
-        input.CartridgeChangePerformed += OnCartridgeChange;
-        actions.StateChanged           += OnStateChange;
+        input.ChangeCurrentLinkPerformed            += OnChangeCurrentLink;
+        gravityController = GravityController.Instance;
+        gravityController.GravLinksChanged += OnGravLinksChanged;
     }
 
     void OnDisable()
     {
-        input.CartridgeChangePerformed -= OnCartridgeChange;
-        actions.StateChanged           -= OnStateChange;
+        input.ChangeCurrentLinkPerformed            -= OnChangeCurrentLink;
+        if (gravityController != null)
+        {
+            gravityController.GravLinksChanged -= OnGravLinksChanged;
+            gravityController = null;
+        }
     }
 
-    void OnCartridgeChange(int newCartridge)
+    void OnChangeCurrentLink(int newLinkNum)
     {
         foreach (GameObject cartridge in cartridges)
         {
             SetFrame(cartridge, Color.white, false);
         }
 
-        SetFrame(cartridges[newCartridge-1], Color.white, true);
+        SetFrame(cartridges[newLinkNum], Color.white, true);
     }
 
     void SetFrame(GameObject cartridge, Color color, bool visible)
@@ -66,12 +64,14 @@ public class GunAnimations : MonoBehaviour
         }
     }
 
-    void OnStateChange()
+    void OnGravLinksChanged()
     {
-        for(int i = 1; i < 4; i++)
+        for(int i = 0; i < 3; i++)
         {
-            Color color = actions.CartridgeState(i) ? firstStyle.color : Color.gray7;
-            UpdateCartridge(i-1, color);
+            bool active = gravityController.gravLinks[i].Active();
+            Color linkColor = gravityController.gravLinks[i].style.color;
+            Color newColor = active ? linkColor : Color.gray7;
+            UpdateCartridge(i, newColor);
         }
     }
 

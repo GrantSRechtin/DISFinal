@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class Crosshair : MonoBehaviour
 {
-    [SerializeField] PlayerActions actions;
     [SerializeField] Sprite arrowIn;
     [SerializeField] Sprite arrowOut;
     [SerializeField] Sprite line;
@@ -15,18 +14,10 @@ public class Crosshair : MonoBehaviour
     Image leftBack;
     Image right;
     Image rightBack;
+    GravityController gravityController;
 
     void Awake()
     {
-        if (actions == null) actions = FindFirstObjectByType<PlayerActions>();
-
-        if (actions == null)
-        {
-            Debug.LogError("Crosshair requires an active PlayerActions component.", this);
-            enabled = false;
-            return;
-        }
-
         top = FindImage("Top");
         bottom = FindImage("Bottom");
         left = FindImage("Left");
@@ -49,15 +40,18 @@ public class Crosshair : MonoBehaviour
 
     void OnEnable()
     {
-        if (actions == null) return;
-
-        actions.StateChanged += UpdateAction;
+        gravityController = GravityController.Instance;
+        gravityController.GravLinksChanged += UpdateAction;
         UpdateAction();
     }
 
     void OnDisable()
     {
-        if (actions != null) actions.StateChanged -= UpdateAction;
+        if (gravityController != null)
+        {
+            gravityController.GravLinksChanged -= UpdateAction;
+            gravityController = null;
+        }
     }
 
     Image FindImage(string imageName)
@@ -75,7 +69,9 @@ public class Crosshair : MonoBehaviour
     {
         Sprite sprite;
 
-        switch (actions.CurrentMode)
+        GravLink currentLink = gravityController.gravLinks[gravityController.currentLinkNum];
+
+        switch (currentLink.mode)
         {
             case GravityMode.Pull:
                 sprite = arrowIn;
@@ -93,8 +89,8 @@ public class Crosshair : MonoBehaviour
         right.sprite = sprite;
         rightBack.sprite = sprite;
 
-        Color firstColor = actions.HasFirstSelection ? actions.FirstSelectionColor : unselectedColor;
-        Color secondColor = actions.HasSecondSelection ? actions.SecondSelectionColor : unselectedColor;
+        Color firstColor = currentLink.a != null ? currentLink.style.color : unselectedColor;
+        Color secondColor = currentLink.b != null ? currentLink.style.color : unselectedColor;
 
         top.color = left.color = firstColor;
         bottom.color = right.color = secondColor;

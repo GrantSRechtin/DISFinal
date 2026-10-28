@@ -23,6 +23,7 @@ public class DynamicGravitizable : MonoBehaviour, IGravitizable
     Renderer[] frameRenderers = System.Array.Empty<Renderer>();
 
     // --- IGravitizable ---
+    public int LinkNum { get; private set; } = -1;
     public Vector3 Position => transform.position;
     public SelectionSlot Slot { get; private set; } = SelectionSlot.None;
     public bool IsSelected => Slot != SelectionSlot.None;
@@ -82,7 +83,7 @@ public class DynamicGravitizable : MonoBehaviour, IGravitizable
 
     // ---------------- Link ----------------
 
-    public void Connect(IGravitizable partner)
+    public void Connect(IGravitizable partner, int linkNum)
     {
         if (partner == null || ReferenceEquals(partner, this)) return;
 
@@ -92,16 +93,18 @@ public class DynamicGravitizable : MonoBehaviour, IGravitizable
         // Switching to a different partner: release the old one first
         if (Partner != null) Disconnect();
 
+        LinkNum = linkNum;
         Partner = partner;
         Mode = GravityMode.None;
 
-        partner.Connect(this); // mirror on the other side
+        partner.Connect(this, LinkNum); // mirror on the other side
     }
 
     public void Disconnect()
     {
         if (Partner == null) return;
 
+        LinkNum = -1;
         IGravitizable oldPartner = Partner;
         Partner = null;
         Mode = GravityMode.None; // losing the partner always means None
@@ -117,7 +120,6 @@ public class DynamicGravitizable : MonoBehaviour, IGravitizable
         if (mode == Mode) return;    // also stops the mirrored call from recursing
 
         Mode = mode;
-        Partner.SetMode(mode); // keep both sides identical
     }
 
     public void Neutralize() => SetMode(GravityMode.None);

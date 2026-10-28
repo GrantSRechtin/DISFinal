@@ -6,8 +6,8 @@ using UnityEngine;
 /// </summary>
 public class SelectionLine : MonoBehaviour
 {
-    public IGravitizable first;
-    public IGravitizable second;
+    public IGravitizable a;
+    public IGravitizable b;
 
     public Transform head;
 
@@ -18,15 +18,28 @@ public class SelectionLine : MonoBehaviour
         lineRenderer = GetComponent<LineRenderer>();
     }
 
+    void OnEnable()
+    {
+        lineRenderer.enabled = true;
+    }
+
+    void OnDisable()
+    {
+        a = null;
+        b = null;
+        
+        lineRenderer.enabled = false;
+    }
+
     void FixedUpdate()
     {
-        if (first == null) { Destroy(gameObject); }
+        if (a == null) { return; }
 
-        Vector3 firstPoint = first.Position;
+        Vector3 firstPoint = a.Position;
 
         Vector3 frontPoint = head.position + head.forward * 10f;
 
-        Vector3 secondPoint = second == null ? frontPoint : second.Position;
+        Vector3 secondPoint = b == null ? frontPoint : b.Position;
         
         Vector3[] points = {firstPoint, secondPoint};
         lineRenderer.SetPositions(points);

@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3824676459722473629
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2314022189706417983}
+  - component: {fileID: 8195560176097465932}
+  m_Layer: 0
+  m_Name: GravityController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2314022189706417983
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3824676459722473629}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8195560176097465932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3824676459722473629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83dc420fa79564946a627fceb93a4f48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GravityController
+  firstStyle:
+    color: {r: 0, g: 1, b: 1, a: 1}
+    frameScale: {x: 1.01, y: 1.01, z: 1.01}
+  secondStyle:
+    color: {r: 1, g: 0, b: 1, a: 1}
+    frameScale: {x: 1.011, y: 1.011, z: 1.011}
+  thirdStyle:
+    color: {r: 1, g: 1, b: 0, a: 1}
+    frameScale: {x: 1.012, y: 1.012, z: 1.012}
+  linePrefab: {fileID: 2236184013358447826, guid: d33d73347ee834d4385ddc2c8621d146, type: 3}
+  currentLinkNum: 0
+  gravLinks:
+  - mode: 0
+    style:
+      color: {r: 0, g: 0, b: 0, a: 0}
+      frameScale: {x: 0, y: 0, z: 0}
+    line: {fileID: 0}
+  - mode: 0
+    style:
+      color: {r: 0, g: 0, b: 0, a: 0}
+      frameScale: {x: 0, y: 0, z: 0}
+    line: {fileID: 0}
+  - mode: 0
+    style:
+      color: {r: 0, g: 0, b: 0, a: 0}
+      frameScale: {x: 0, y: 0, z: 0}
+    line: {fileID: 0}
