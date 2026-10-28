@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -14,6 +15,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rb;
     private InputAction moveAction;
     private InputAction jumpAction;
+    private InputAction restartSceneAction;
     private Vector2 moveInput;
 
     private void Awake()
@@ -21,6 +23,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         moveAction = InputSystem.actions.FindAction("Player/Move", true);
         jumpAction = InputSystem.actions.FindAction("Player/Jump", true);
+        restartSceneAction = InputSystem.actions.FindAction("Player/RestartScene", true);
     }
 
     private void Update()
@@ -30,6 +33,11 @@ public class PlayerController : MonoBehaviour
         if (jumpAction.WasPressedThisFrame())
         {
             rb.AddForce(jumpPower * Vector3.up, ForceMode.Impulse);
+        }
+
+        if (restartSceneAction.WasPressedThisFrame())
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
