@@ -26,6 +26,11 @@ public class PlayerActions : MonoBehaviour
     IGravitizable[] gravitizables = new IGravitizable[6];
 
     public event Action StateChanged;
+    public GravityMode CurrentMode => first != null ? first.Mode : GravityMode.None;
+    public bool HasFirstSelection => first != null;
+    public bool HasSecondSelection => second != null;
+    public Color FirstSelectionColor => firstStyle.color;
+    public Color SecondSelectionColor => secondStyle.color;
 
     float catridge = 1;
 
@@ -62,6 +67,7 @@ public class PlayerActions : MonoBehaviour
 
         first.Select(SelectionSlot.First, firstStyle);
         gravitizables[(int) (catridge-1)*2] = first;
+        StateChanged?.Invoke();
 
         int j = (int) (catridge-1) * 10;
         for(int i = j; i < j+10; i++)
@@ -105,9 +111,14 @@ public class PlayerActions : MonoBehaviour
     void OnGravityControl(float direction)
     {
         first?.SetMode(direction > 0f ? GravityMode.Push : GravityMode.Pull);
+        StateChanged?.Invoke();
     }
 
-    void OnGravityRelease() => first?.Neutralize();
+    void OnGravityRelease()
+    {
+        first?.Neutralize();
+        StateChanged?.Invoke();
+    }
 
     void OnCartridgeChange(int newCartridge)
     {
@@ -115,6 +126,7 @@ public class PlayerActions : MonoBehaviour
 
         first = gravitizables[(int) (catridge-1)*2];
         second = gravitizables[(int) (catridge-1)*2+1];
+        StateChanged?.Invoke();
     }
 
     void ClearSelection()

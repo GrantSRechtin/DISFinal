@@ -864,7 +864,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004c24c9520cc2546a859a882b8e2cac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunAnimations
-  input: {fileID: 9001239680924629136}
   cartridges:
   - {fileID: 1879349065478789309}
   - {fileID: 6168688387298821653}
