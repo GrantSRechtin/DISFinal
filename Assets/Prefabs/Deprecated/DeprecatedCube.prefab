@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 9046275892472735584}
   - component: {fileID: 5920004722024050216}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: DeprecatedCube
   m_TagString: Gravitizable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

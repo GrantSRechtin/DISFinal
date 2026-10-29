@@ -17,26 +17,6 @@
                     "priority": 0
                 },
                 {
-                    "name": "MoveX",
-                    "type": "Value",
-                    "id": "f6b1e0e1-b60e-4ca4-bfe3-29c263d63db7",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true,
-                    "priority": 0
-                },
-                {
-                    "name": "MoveY",
-                    "type": "Value",
-                    "id": "ab63ddc4-2478-4b39-9f29-740df4a65f79",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true,
-                    "priority": 0
-                },
-                {
                     "name": "Look",
                     "type": "Value",
                     "id": "6b444451-8a00-4d00-a97e-f47457f736a8",
@@ -57,17 +37,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "LeftSelect",
-                    "type": "Button",
-                    "id": "47451018-f293-4d98-9811-76498f78945c",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false,
-                    "priority": 0
-                },
-                {
-                    "name": "RightSelect",
+                    "name": "Interact",
                     "type": "Button",
                     "id": "89fd5c46-0c36-4a6b-b7b2-eea880910948",
                     "expectedControlType": "",
@@ -77,9 +47,9 @@
                     "priority": 0
                 },
                 {
-                    "name": "Gravitize",
+                    "name": "Select",
                     "type": "Button",
-                    "id": "b1a9e854-ce07-45db-b59e-d5c9dc333693",
+                    "id": "bf7931cf-4117-4a6c-9284-3fab34185ff9",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -87,7 +57,17 @@
                     "priority": 0
                 },
                 {
-                    "name": "Repell",
+                    "name": "GravityControl",
+                    "type": "Value",
+                    "id": "b1a9e854-ce07-45db-b59e-d5c9dc333693",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true,
+                    "priority": 0
+                },
+                {
+                    "name": "GravityRelease",
                     "type": "Button",
                     "id": "71cc8611-5be0-4f39-9cd0-4d9efafc7e70",
                     "expectedControlType": "",
@@ -97,19 +77,29 @@
                     "priority": 0
                 },
                 {
-                    "name": "Scroll",
-                    "type": "Value",
-                    "id": "1400cbe4-8ab3-4bf5-a1cf-36b32f935799",
-                    "expectedControlType": "Axis",
+                    "name": "Pause",
+                    "type": "Button",
+                    "id": "43ae09d8-3071-4360-bcfe-308711ec246b",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true,
+                    "initialStateCheck": false,
                     "priority": 0
                 },
                 {
-                    "name": "OpenMenu",
+                    "name": "Restart",
                     "type": "Button",
-                    "id": "43ae09d8-3071-4360-bcfe-308711ec246b",
+                    "id": "12df2855-d36e-4a51-9428-e6518cbfc7c1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
+                    "name": "CartridgeChange",
+                    "type": "Button",
+                    "id": "d2571247-dbfd-42c8-a99b-94c9107d55c9",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -251,72 +241,6 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "A/D",
-                    "id": "39c28c40-73bf-4c03-8421-c0b893d58d5b",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MoveX",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "d96f8b58-c370-4c7f-807e-19c8d4492939",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MoveX",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "64a77f2f-232e-475a-98ee-9d23bba5cbd4",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MoveX",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "W/S",
-                    "id": "d9b4489a-70af-4a28-9034-9232091b5cd2",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "MoveY",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "negative",
-                    "id": "f9534477-4987-41d4-9be0-9e11246fdb64",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MoveY",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "positive",
-                    "id": "b68167a9-bcc7-433e-b098-f123d8c4f1f0",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "MoveY",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
                     "name": "",
                     "id": "c1f7a91b-d0fd-4a62-997e-7fb9b69bf235",
                     "path": "<Gamepad>/rightStick",
@@ -384,89 +308,122 @@
                 },
                 {
                     "name": "",
-                    "id": "96218d0a-9343-4039-a083-f1edb7045c5f",
+                    "id": "63dd159b-1a69-409b-bb77-befe7e2a7e17",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LeftSelect",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "63dd159b-1a69-409b-bb77-befe7e2a7e17",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RightSelect",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "12d4aafd-aec2-4bd0-8a5e-4fb31ee50eff",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Gravitize",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
                     "id": "48e5ecd7-bc69-4f61-8368-1ed2f27a615f",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Repell",
+                    "action": "GravityRelease",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4da938bd-86a0-4481-b1e4-d84988c63962",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f03b61e-22d6-4cd4-8e54-31f220c2656a",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "1D Axis",
-                    "id": "431426f3-92b6-44a0-ac77-10d6cbe28c7b",
+                    "id": "63183554-7b84-481c-8c4b-5c580c094445",
                     "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Scroll",
+                    "action": "GravityControl",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "negative",
-                    "id": "e1fe4c89-d7ca-4c68-b514-46fe5bde9019",
+                    "id": "c0373878-0689-4830-b603-e384cb928ba2",
                     "path": "<Mouse>/scroll/down",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Scroll",
+                    "action": "GravityControl",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "positive",
-                    "id": "e9d06ed1-79c3-48b5-aa09-1f1ec31a7628",
+                    "id": "e3a34bb9-fcc3-4abc-9353-6f07fbf6229f",
                     "path": "<Mouse>/scroll/up",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Scroll",
+                    "action": "GravityControl",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "",
-                    "id": "4da938bd-86a0-4481-b1e4-d84988c63962",
-                    "path": "<Keyboard>/backquote",
+                    "id": "2f715615-b195-4f34-9ecc-2398f21617d9",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "OpenMenu",
+                    "action": "Select",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "28945400-64ca-42c8-a630-ed847c7ff427",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "CartridgeChange",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "70847660-9778-44fc-ae5d-085db94d522b",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "Scale(factor=2)",
+                    "groups": "",
+                    "action": "CartridgeChange",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "55b7e4ef-b85d-46e9-a32a-9ce6b001766a",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "Scale(factor=3)",
+                    "groups": "",
+                    "action": "CartridgeChange",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
