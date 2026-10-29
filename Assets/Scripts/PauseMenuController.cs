@@ -10,7 +10,6 @@ public class PauseMenuController : MonoBehaviour
 
     private void Awake()
     {
-        // Find the existing Crouch action in the default Input System actions.
         crouchAction = InputSystem.actions.FindAction("Crouch", true);
     }
 
