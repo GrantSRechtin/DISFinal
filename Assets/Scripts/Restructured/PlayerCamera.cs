@@ -30,7 +30,7 @@ public class PlayerCamera : MonoBehaviour
         pitch += -lookInput.y * Time.deltaTime * rotationSpeed * 1f;
         yaw += lookInput.x * Time.deltaTime * rotationSpeed;
 
-        pitch = Mathf.Clamp(pitch, -30f, 80f);
+        pitch = Mathf.Clamp(pitch, -80f, 80f);
 
         transform.rotation = Quaternion.Euler(new(pitch, yaw, 0));
     }
