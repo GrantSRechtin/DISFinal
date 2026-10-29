@@ -15,6 +15,7 @@ public interface IGravitizable
     void Select(SelectionSlot slot, SelectionStyle style);
     /// <summary>Also disconnects from any partner.</summary>
     void Deselect();
+    void SetFrame(Color color, bool visible);
 
     // --- Link ---
     int LinkNum { get; }

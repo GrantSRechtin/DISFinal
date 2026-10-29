@@ -153,7 +153,7 @@ public class DynamicGravitizable : MonoBehaviour, IGravitizable
         return null;
     }
 
-    void SetFrame(Color color, bool visible)
+    public void SetFrame(Color color, bool visible)
     {
         foreach (Renderer r in frameRenderers)
         {

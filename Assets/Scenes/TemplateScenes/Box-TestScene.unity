@@ -1085,6 +1085,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c4d4a83b2fd3774a9d3f4e74ad9f213, type: 3}
+--- !u!1 &997422463 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7600726025842249961, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
+  m_PrefabInstance: {fileID: 1057215621}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &997422468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997422463}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93cf0b85132e588408ab1b3e6f4fffb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseHover
+  input: {fileID: 1388216038}
 --- !u!1 &1007614753
 GameObject:
   m_ObjectHideFlags: 0
@@ -1252,7 +1270,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7600726025842249961, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 997422468}
   m_SourcePrefab: {fileID: 100100000, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
 --- !u!1001 &1120466006
 PrefabInstance:
@@ -1523,6 +1544,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c509afc20c56a654897e3e2b42f84158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerActions
+--- !u!114 &1388216038 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9001239680924629136, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
+  m_PrefabInstance: {fileID: 1057215621}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a85af86a5adfef4e91e64a273e5c006, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputHandler
 --- !u!1 &1639651397
 GameObject:
   m_ObjectHideFlags: 0

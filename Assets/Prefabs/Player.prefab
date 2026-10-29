@@ -2158,6 +2158,7 @@ GameObject:
   - component: {fileID: 394469117214131276}
   - component: {fileID: 7081544239091657201}
   - component: {fileID: 1012847658231625085}
+  - component: {fileID: 7192139582111506952}
   m_Layer: 0
   m_Name: Head
   m_TagString: Head
@@ -2294,6 +2295,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
   input: {fileID: 9001239680924629136}
   rotationSpeed: 5
+--- !u!114 &7192139582111506952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7600726025842249961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93cf0b85132e588408ab1b3e6f4fffb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MouseHover
+  input: {fileID: 9001239680924629136}
 --- !u!1 &7670880659290561358
 GameObject:
   m_ObjectHideFlags: 0
