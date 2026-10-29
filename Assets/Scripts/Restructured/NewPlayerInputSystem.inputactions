@@ -87,6 +87,16 @@
                     "priority": 0
                 },
                 {
+                    "name": "Restart",
+                    "type": "Button",
+                    "id": "12df2855-d36e-4a51-9428-e6518cbfc7c1",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false,
+                    "priority": 0
+                },
+                {
                     "name": "CartridgeChange",
                     "type": "Button",
                     "id": "d2571247-dbfd-42c8-a99b-94c9107d55c9",
@@ -326,6 +336,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Pause",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3f03b61e-22d6-4cd4-8e54-31f220c2656a",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

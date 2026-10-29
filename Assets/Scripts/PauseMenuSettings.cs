@@ -8,7 +8,7 @@ public class PauseMenuSettings : MonoBehaviour
     [SerializeField] private Slider sensitivitySlider;
     [SerializeField] private Slider volumeSlider;
 
-    private CameraController cameraController;
+    private PlayerCamera playerCamera;
 
     private const string SensitivityKey = "MouseSensitivity";
     private const string VolumeKey = "AudioVolume";
@@ -52,16 +52,17 @@ public class PauseMenuSettings : MonoBehaviour
 
     private void FindCameraController()
     {
-        cameraController = FindFirstObjectByType<CameraController>();
+        // cameraController = FindFirstObjectByType<CameraController>();
+        playerCamera = FindFirstObjectByType<PlayerCamera>();
     }
 
     private void ApplySensitivity(float value)
     {
-        if (cameraController == null)
+        if (playerCamera == null)
             FindCameraController();
 
-        if (cameraController != null)
-            cameraController.SetSensitivity(value);
+        if (playerCamera != null)
+            playerCamera.SetSensitivity(value);
 
         PlayerPrefs.SetFloat(SensitivityKey, value);
         PlayerPrefs.Save();
@@ -84,8 +85,8 @@ public class PauseMenuSettings : MonoBehaviour
         float volume =
             PlayerPrefs.GetFloat(VolumeKey, DefaultVolume);
 
-        if (cameraController != null)
-            cameraController.SetSensitivity(sensitivity);
+        if (playerCamera != null)
+            playerCamera.SetSensitivity(sensitivity);
 
         AudioListener.volume = volume;
     }

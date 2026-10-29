@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// The ONLY script that knows about the Input System.
@@ -24,11 +25,12 @@ public class PlayerInputHandler : MonoBehaviour
     public event Action SelectReleased;
     public event Action<float> GravityControlPerformed;
     public event Action GravityReleasePerformed;
-    public event Action PausePerformed;
     public event Action<int> ChangeCurrentLinkPerformed;
+    public event Action PausePerformed;
+    public event Action RestartPerformed;
 
     PlayerInput playerInput;
-    InputAction moveAction, lookAction, jumpAction, interactAction, selectAction, gravityControlAction, gravityReleaseAction, pauseAction, changeCurrentLinkAction;
+    InputAction moveAction, lookAction, jumpAction, interactAction, selectAction, gravityControlAction, gravityReleaseAction, changeCurrentLinkAction, pauseAction, restartAction;
 
     void Awake()
     {
@@ -42,9 +44,10 @@ public class PlayerInputHandler : MonoBehaviour
         selectAction            = actions.FindAction("Select", throwIfNotFound: true);
         gravityControlAction    = actions.FindAction("GravityControl", throwIfNotFound: true);
         gravityReleaseAction    = actions.FindAction("GravityRelease", throwIfNotFound: true);
-        pauseAction             = actions.FindAction("Pause", throwIfNotFound: true);
         changeCurrentLinkAction = actions.FindAction("CartridgeChange", throwIfNotFound: true);
 
+        pauseAction             = actions.FindAction("Pause", throwIfNotFound: true);
+        restartAction           = actions.FindAction("Restart", throwIfNotFound: true);
     }
 
     void OnEnable()
@@ -56,8 +59,10 @@ public class PlayerInputHandler : MonoBehaviour
         selectAction.canceled             += OnSelectReleased;
         gravityControlAction.performed    += OnGravityControlPerformed;
         gravityReleaseAction.performed    += OnGravityReleasePerformed;
-        pauseAction.performed             += OnPausePerformed;
         changeCurrentLinkAction.performed += OnChangeCurrentLinkPerformed;
+
+        pauseAction.performed             += OnPausePerformed;
+        restartAction.performed           += OnRestartPerformed;
     }
 
     void OnDisable()
@@ -69,8 +74,10 @@ public class PlayerInputHandler : MonoBehaviour
         selectAction.canceled             -= OnSelectReleased;
         gravityControlAction.performed    -= OnGravityControlPerformed;
         gravityReleaseAction.performed    -= OnGravityReleasePerformed;
-        pauseAction.performed             -= OnPausePerformed;
         changeCurrentLinkAction.performed -= OnChangeCurrentLinkPerformed;
+
+        pauseAction.performed             -= OnPausePerformed;
+        restartAction.performed           -= OnRestartPerformed;
 
         // Don't leave stale values behind when input is turned off
         Move = Vector2.zero;
@@ -95,11 +102,16 @@ public class PlayerInputHandler : MonoBehaviour
         GravityControlPerformed?.Invoke(Mathf.Sign(value));
     }
     void OnGravityReleasePerformed(InputAction.CallbackContext _)  => GravityReleasePerformed?.Invoke();
-    void OnPausePerformed(InputAction.CallbackContext _)           => PausePerformed?.Invoke();
     void OnChangeCurrentLinkPerformed(InputAction.CallbackContext ctx)
     {
         float cartridge = ctx.ReadValue<float>();
         ChangeCurrentLinkPerformed?.Invoke((int) cartridge-1);
+    }
+    void OnPausePerformed(InputAction.CallbackContext _)           => PausePerformed?.Invoke();
+    void OnRestartPerformed(InputAction.CallbackContext _)
+    {
+        RestartPerformed?.Invoke();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     // --- Helpers so other systems (pause menu, cutscenes) never touch PlayerInput directly ---
