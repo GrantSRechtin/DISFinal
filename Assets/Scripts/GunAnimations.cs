@@ -21,6 +21,11 @@ public class GunAnimations : MonoBehaviour
         input = GetComponentInParent<PlayerInputHandler>();
     }
 
+    void Start()
+    {
+        OnChangeCurrentLink(0);
+    }
+
     void OnEnable()
     {
         input.ChangeCurrentLinkPerformed            += OnChangeCurrentLink;
@@ -42,7 +47,7 @@ public class GunAnimations : MonoBehaviour
     {
         foreach (GameObject cartridge in cartridges)
         {
-            SetFrame(cartridge, Color.white, false);
+            SetFrame(cartridge, Color.gray2, true);
         }
 
         SetFrame(cartridges[newLinkNum], Color.white, true);
@@ -70,7 +75,7 @@ public class GunAnimations : MonoBehaviour
         {
             bool active = gravityController.gravLinks[i].Active();
             Color linkColor = gravityController.gravLinks[i].style.color;
-            Color newColor = active ? linkColor : Color.gray7;
+            Color newColor = active ? linkColor : Color.white;
             UpdateCartridge(i, newColor);
         }
     }
