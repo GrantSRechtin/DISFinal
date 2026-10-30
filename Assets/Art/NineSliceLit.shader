@@ -38,6 +38,7 @@ Shader "Custom/NineSliceLit"
             #pragma multi_compile_fragment _ _SHADOWS_SOFT
             #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
             #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _FORWARD_PLUS
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
