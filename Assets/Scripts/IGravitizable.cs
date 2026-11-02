@@ -6,26 +6,33 @@ public interface IGravitizable
     Vector3 Position { get; } // World position
 
     // Selection
-    SelectionSlot Slot { get; }
     bool IsSelected { get; }
-    void Select(SelectionSlot slot, SelectionStyle style);
+    void Select(SelectionStyle style);
     void Deselect();
     void SetFrame(Color color, bool visible);
 
     // Link
     int LinkNum { get; }
+    // int[] LinkNums { get; }
     IGravitizable Partner { get; }
+    // IGravitizable Parter(int linkNum);
     void Connect(IGravitizable partner, int linkNum);
     void Disconnect();
+    // void Disconnect(int linkNum);
 
     // Anchor
     Vector3 GetAnchor();
-    void SetAnchor(Vector3 anchorPosition);
+    // Vector3 GetAnchor(int linkNum);
+    void SetAnchor(Vector3 anchorPoint);
+    // void GetAnchor(Vector3 anchorPoint, int linkNum);
 
     // Gravity
     GravityMode Mode { get; }
+    // GravityMode Mode(int linkNum);
     void SetMode(GravityMode mode);
+    // void SetMode(GravityMode mode, int linkNum);
     void Neutralize();
+    // void Neutralize(int linkNum);
 }
 
 public class GravitizableBase : MonoBehaviour, IGravitizable
@@ -38,8 +45,7 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
 
     public int LinkNum { get; private set; } = -1;
     public Vector3 Position => transform.position;
-    public SelectionSlot Slot { get; private set; } = SelectionSlot.None;
-    public bool IsSelected => Slot != SelectionSlot.None;
+    public bool IsSelected { get; private set; } = false;
     public IGravitizable Partner { get; private set; }
     public GravityMode Mode { get; private set; } = GravityMode.None;
 
@@ -62,15 +68,9 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
 
     // ---------------- Selection ----------------
 
-    public void Select(SelectionSlot slot, SelectionStyle style)
+    public void Select(SelectionStyle style)
     {
-        if (slot == SelectionSlot.None)
-        {
-            Deselect();
-            return;
-        }
-
-        Slot = slot;
+        IsSelected = true;
 
         if (frame != null) frame.transform.localScale = style.frameScale;
         SetFrame(style.color, true);
@@ -81,7 +81,8 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         if (!IsSelected) return;
 
         Disconnect();
-        Slot = SelectionSlot.None;
+        IsSelected = false;
+        
         SetFrame(Color.white, false);
     }
 

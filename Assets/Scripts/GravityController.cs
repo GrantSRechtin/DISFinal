@@ -69,7 +69,6 @@ public class GravityController : MonoBehaviour
 
     public void StartCurrentLink(IGravitizable gravitizableA, Vector3 anchorPoint)
     {
-        SelectionSlot slot = SelectionSlot.A;
         SelectionStyle style = gravLinks[currentLinkNum].style;
 
         if (gravitizableA.IsSelected)
@@ -80,7 +79,7 @@ public class GravityController : MonoBehaviour
             return;
         }
 
-        gravitizableA.Select(slot, style);
+        gravitizableA.Select(style);
         gravLinks[currentLinkNum].a = gravitizableA;
 
         gravLinks[currentLinkNum].a.SetAnchor(anchorPoint);
@@ -96,7 +95,6 @@ public class GravityController : MonoBehaviour
 
     public void EndCurrentLink(IGravitizable gravitizableB, Vector3 anchorPoint)
     {
-        SelectionSlot slot = SelectionSlot.B;
         SelectionStyle style = gravLinks[currentLinkNum].style;
 
         if (gravitizableB.IsSelected)
@@ -106,9 +104,10 @@ public class GravityController : MonoBehaviour
             {
                 ClearLink(gravitizableB.LinkNum);
             }
+            // Will remove
         }
 
-        gravitizableB.Select(slot, style);
+        gravitizableB.Select(style);
         gravLinks[currentLinkNum].b = gravitizableB;
 
         gravLinks[currentLinkNum].b.Connect(gravLinks[currentLinkNum].a, currentLinkNum);
