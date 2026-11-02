@@ -2029,6 +2029,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c509afc20c56a654897e3e2b42f84158, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerActions
+--- !u!1 &1567473894 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2680440696939608791, guid: 2225a3abe4b647046b6e732ebf5af175, type: 3}
+  m_PrefabInstance: {fileID: 1138369923}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1567473895 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3436381687043867989, guid: 2225a3abe4b647046b6e732ebf5af175, type: 3}
@@ -2497,6 +2502,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8fc61cea99294e4491a1527c3a22518, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StaticGravitizable
+  frame: {fileID: 1567473894}
 --- !u!1001 &1787564141
 PrefabInstance:
   m_ObjectHideFlags: 0

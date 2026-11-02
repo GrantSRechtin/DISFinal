@@ -27,7 +27,11 @@ public class DynamicGravitizable : GravitizableBase
     {
         if (Partner == null || Mode == GravityMode.None) return;
 
-        rb.AddForce(CalculateForce(Partner.Position), ForceMode.Force);
+        rb.AddForce(CalculateForce(Partner.GetAnchor()), ForceMode.Force);
+    }
+    public override Vector3 GetAnchor()
+    {
+        return transform.position;
     }
 
     // ---------------- Physics (unchanged from the original player script) ----------------

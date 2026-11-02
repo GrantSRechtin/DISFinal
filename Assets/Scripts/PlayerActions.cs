@@ -43,7 +43,7 @@ public class PlayerActions : MonoBehaviour
         IGravitizable gravitizableA = RaycastForGravitizable();
         if (gravitizableA == null) { return; }
 
-        GravityController.Instance.StartCurrentLink(gravitizableA);
+        GravityController.Instance.StartCurrentLink(gravitizableA, RaycastPoint());
     }
 
     // Release: finish the pair, or cancel it
@@ -61,7 +61,7 @@ public class PlayerActions : MonoBehaviour
             return;
         }
 
-        GravityController.Instance.EndCurrentLink(gravitizableB);
+        GravityController.Instance.EndCurrentLink(gravitizableB, RaycastPoint());
     }
 
     // Scroll up = Push, scroll down = Pull. Ignored by the object if it isn't linked.
@@ -84,5 +84,11 @@ public class PlayerActions : MonoBehaviour
     {
         if (!Physics.Raycast(head.position, head.forward, out RaycastHit hit)) return null;
         return hit.collider.GetComponentInParent<IGravitizable>();
+    }
+
+    Vector3 RaycastPoint()
+    {
+        if (!Physics.Raycast(head.position, head.forward, out RaycastHit hit)) return Vector3.zero;
+        return hit.point;
     }
 }

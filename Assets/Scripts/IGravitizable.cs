@@ -1,37 +1,30 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-/// <summary>
-/// Anything the player can select and link with gravity.
-/// Callers only ever talk to this interface, never to a concrete class.
-/// </summary>
 public interface IGravitizable
 {
-    /// <summary>World position other objects are pulled toward / pushed from.</summary>
-    Vector3 Position { get; }
+    Vector3 Position { get; } // World position
 
-    // --- Selection ---
+    // Selection
     SelectionSlot Slot { get; }
     bool IsSelected { get; }
     void Select(SelectionSlot slot, SelectionStyle style);
-    /// <summary>Also disconnects from any partner.</summary>
     void Deselect();
     void SetFrame(Color color, bool visible);
 
-    // --- Link ---
+    // Link
     int LinkNum { get; }
     IGravitizable Partner { get; }
-    /// <summary>Links both objects with Mode None. Calling it on either side is enough.</summary>
     void Connect(IGravitizable partner, int linkNum);
-    /// <summary>Unlinks both objects and sets Mode to None. Calling it on either side is enough.</summary>
     void Disconnect();
 
-    // --- Gravity ---
-    /// <summary>Always shared with the partner. None whenever there is no partner.</summary>
+    // Anchor
+    Vector3 GetAnchor();
+    void SetAnchor(Vector3 anchorPosition);
+
+    // Gravity
     GravityMode Mode { get; }
-    /// <summary>Sets the mode on both linked objects. Ignored if there is no partner.</summary>
     void SetMode(GravityMode mode);
-    /// <summary>Back to None while staying linked.</summary>
     void Neutralize();
 }
 
@@ -41,8 +34,8 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
     [SerializeField] GameObject frame;
 
     Renderer[] frameRenderers = System.Array.Empty<Renderer>();
+    Vector3 anchorPosition;
 
-    // --- IGravitizable ---
     public int LinkNum { get; private set; } = -1;
     public Vector3 Position => transform.position;
     public SelectionSlot Slot { get; private set; } = SelectionSlot.None;
@@ -55,7 +48,6 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         if (frame == null) frame = FindFrame();
         if (frame != null) frameRenderers = frame.GetComponentsInChildren<Renderer>(true);
 
-        // Start unselected
         foreach (Renderer r in frameRenderers) r.enabled = false;
     }
 
@@ -99,17 +91,14 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
     {
         if (partner == null || ReferenceEquals(partner, this)) return;
 
-        // Already linked: also stops the mirrored call below from recursing forever
         if (ReferenceEquals(Partner, partner)) return;
-
-        // Switching to a different partner: release the old one first
         if (Partner != null) Disconnect();
 
         LinkNum = linkNum;
         Partner = partner;
         Mode = GravityMode.None;
 
-        partner.Connect(this, LinkNum); // mirror on the other side
+        partner.Connect(this, LinkNum);
     }
 
     public void Disconnect()
@@ -119,17 +108,25 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         LinkNum = -1;
         IGravitizable oldPartner = Partner;
         Partner = null;
-        Mode = GravityMode.None; // losing the partner always means None
+        Mode = GravityMode.None;
 
-        oldPartner.Disconnect(); // mirror on the other side (returns early once cleared)
+        oldPartner.Disconnect();
+    }
+    public virtual Vector3 GetAnchor()
+    {
+        return anchorPosition;
+    }
+    public void SetAnchor(Vector3 anchorPoint)
+    {
+        anchorPosition = anchorPoint;
     }
 
     // ---------------- Gravity mode ----------------
 
     public void SetMode(GravityMode mode)
     {
-        if (Partner == null) return; // nothing to pull toward / push from
-        if (mode == Mode) return;    // also stops the mirrored call from recursing
+        if (Partner == null) return;
+        if (mode == Mode) return;
 
         Mode = mode;
     }

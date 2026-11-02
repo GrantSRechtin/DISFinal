@@ -67,7 +67,7 @@ public class GravityController : MonoBehaviour
 
     public event Action GravLinksChanged;
 
-    public void StartCurrentLink(IGravitizable gravitizableA)
+    public void StartCurrentLink(IGravitizable gravitizableA, Vector3 anchorPoint)
     {
         SelectionSlot slot = SelectionSlot.A;
         SelectionStyle style = gravLinks[currentLinkNum].style;
@@ -83,6 +83,8 @@ public class GravityController : MonoBehaviour
         gravitizableA.Select(slot, style);
         gravLinks[currentLinkNum].a = gravitizableA;
 
+        gravLinks[currentLinkNum].a.SetAnchor(anchorPoint);
+
         SelectionLine lineScript = gravLinks[currentLinkNum].line.GetComponent<SelectionLine>();
         lineScript.enabled = true;
 
@@ -92,7 +94,7 @@ public class GravityController : MonoBehaviour
         GravLinksChanged?.Invoke();
     }
 
-    public void EndCurrentLink(IGravitizable gravitizableB)
+    public void EndCurrentLink(IGravitizable gravitizableB, Vector3 anchorPoint)
     {
         SelectionSlot slot = SelectionSlot.B;
         SelectionStyle style = gravLinks[currentLinkNum].style;
@@ -104,13 +106,13 @@ public class GravityController : MonoBehaviour
             {
                 ClearLink(gravitizableB.LinkNum);
             }
-            // return;
         }
 
         gravitizableB.Select(slot, style);
         gravLinks[currentLinkNum].b = gravitizableB;
 
         gravLinks[currentLinkNum].b.Connect(gravLinks[currentLinkNum].a, currentLinkNum);
+        gravLinks[currentLinkNum].b.SetAnchor(anchorPoint);
 
         SelectionLine lineScript = gravLinks[currentLinkNum].line.GetComponent<SelectionLine>();
 
