@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -89,8 +90,10 @@ public class Crosshair : MonoBehaviour
         right.sprite = sprite;
         rightBack.sprite = sprite;
 
-        Color firstColor = currentLink.a != null ? currentLink.style.color : unselectedColor;
-        Color secondColor = currentLink.b != null ? currentLink.style.color : unselectedColor;
+        int gravitizableCount = currentLink.gravitizables != null ? currentLink.gravitizables.Count: 0;
+
+        Color firstColor = gravitizableCount >= 1 ? currentLink.style.color : unselectedColor;
+        Color secondColor = gravitizableCount >= 2 ? currentLink.style.color : unselectedColor;
 
         top.color = left.color = firstColor;
         bottom.color = right.color = secondColor;

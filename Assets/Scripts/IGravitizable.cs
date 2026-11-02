@@ -84,7 +84,7 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         GravityController instance = GravityController.Instance;
         GravLink link = instance.gravLinks[instance.currentLinkNum];
 
-        if (LinkNums.Count > 0 || link.a != null) return;
+        if (LinkNums.Count > 0 || link.gravitizables.Count > 0) return;
         
         IsSelected = false;
         SetFrame(Color.white, false);
@@ -92,50 +92,24 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
 
     void OnGravLinksChanged()
     {
-        GravityController instance = GravityController.Instance;
+        GravLink[] links = GravityController.Instance.gravLinks;
 
         // update links, modes, anchors, & partners
         foreach(int linkNum in LinkNums)
         {
-            int slot = GetSlot(linkNum);
-            if (!instance.gravLinks[linkNum].Active() || slot < 0) 
+            GravityController instance = GravityController.Instance;
+            GravLink link = links[linkNum];
+            if (!link.Active() || !link.Contains(this)) 
             {
                 Disconnect(linkNum);
                 continue;
             }
 
-            // temporary
-            if (slot == 1)
-            {
-                Partners[linkNum] = instance.gravLinks[linkNum].b;
-            }
-            else
-            {
-                Partners[linkNum] = instance.gravLinks[linkNum].a;
-            }
-
+            Partners[linkNum] = link.GetPartner(this);
             Modes[linkNum] = instance.gravLinks[linkNum].mode;
         }
 
         CheckDeselect();
-    }
-
-    int GetSlot(int linkNum)
-    {
-        GravityController instance = GravityController.Instance;
-
-        if (ReferenceEquals(instance.gravLinks[linkNum].a, this))
-        {
-            return 1;
-        }
-        else if (ReferenceEquals(instance.gravLinks[linkNum].b, this))
-        {
-            return 2;
-        }
-        else
-        {
-            return -1;
-        }
     }
 
     // ---------------- Link ----------------

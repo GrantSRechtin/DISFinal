@@ -52,10 +52,10 @@ public class PlayerActions : MonoBehaviour
         GravityController gravityController = GravityController.Instance;
         GravLink currentLink = gravityController.gravLinks[gravityController.currentLinkNum];
 
-        if (currentLink.a == null) return;
+        if (currentLink.gravitizables.Count == 0) return;
 
         IGravitizable gravitizableB = RaycastForGravitizable();
-        if (gravitizableB == null || ReferenceEquals(gravitizableB, currentLink.a))
+        if (gravitizableB == null || ReferenceEquals(gravitizableB, currentLink.gravitizables[0]))
         {
             GravityController.Instance.ClearCurrentLink();
             return;

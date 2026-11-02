@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum GravityMode { None, Pull, Push }
@@ -18,8 +19,7 @@ public struct SelectionStyle
 [System.Serializable]
 public struct GravLink
 {
-    public IGravitizable a;
-    public IGravitizable b;
+    public List<IGravitizable> gravitizables;
 
     public GravityMode mode;
     public SelectionStyle style;
@@ -27,8 +27,7 @@ public struct GravLink
 
     public GravLink(SelectionStyle style, GameObject line, int linkNum)
     {
-        a = null;
-        b = null;
+        gravitizables = new();
         mode = GravityMode.None;
 
         this.style = style;
@@ -45,6 +44,24 @@ public struct GravLink
 
     public readonly bool Active()
     {
-        return a != null && b != null;
+        return gravitizables.Count == 2;
+    }
+
+    public readonly bool Contains(IGravitizable gravitizable)
+    {
+        return gravitizables.Contains(gravitizable);
+    }
+
+    public readonly IGravitizable GetPartner(IGravitizable gravitizable)
+    {
+        if (!gravitizables.Contains(gravitizable)) return null;
+        foreach (IGravitizable i in gravitizables)
+        {
+            if (!ReferenceEquals(i, gravitizable))
+            {
+                return i;
+            }
+        }
+        return null;
     }
 }

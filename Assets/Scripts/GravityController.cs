@@ -73,10 +73,10 @@ public class GravityController : MonoBehaviour
 
         SelectionStyle style = gravLinks[currentLinkNum].style;
 
-        gravitizableA.Select(style);
-        gravLinks[currentLinkNum].a = gravitizableA;
+        gravLinks[currentLinkNum].gravitizables.Add(gravitizableA);
 
-        gravLinks[currentLinkNum].a.SetAnchor(anchorPoint, currentLinkNum);
+        gravitizableA.Select(style);
+        gravitizableA.SetAnchor(anchorPoint, currentLinkNum);
 
         SelectionLine lineScript = gravLinks[currentLinkNum].line.GetComponent<SelectionLine>();
         lineScript.enabled = true;
@@ -91,11 +91,11 @@ public class GravityController : MonoBehaviour
     {
         SelectionStyle style = gravLinks[currentLinkNum].style;
 
+        gravLinks[currentLinkNum].gravitizables.Add(gravitizableB);
+        
         gravitizableB.Select(style);
-        gravLinks[currentLinkNum].b = gravitizableB;
-
-        gravLinks[currentLinkNum].b.Connect(gravLinks[currentLinkNum].a, currentLinkNum);
-        gravLinks[currentLinkNum].b.SetAnchor(anchorPoint, currentLinkNum);
+        gravitizableB.SetAnchor(anchorPoint, currentLinkNum);
+        gravitizableB.Connect(gravLinks[currentLinkNum].gravitizables[0], currentLinkNum);
 
         SelectionLine lineScript = gravLinks[currentLinkNum].line.GetComponent<SelectionLine>();
 
@@ -120,16 +120,14 @@ public class GravityController : MonoBehaviour
 
     public void ClearLink(int linkNum)
     {
-        gravLinks[linkNum].a?.Disconnect(linkNum);
-        gravLinks[linkNum].b?.Disconnect(linkNum);
+        foreach (IGravitizable gravitizable in gravLinks[linkNum].gravitizables)
+        {
+            gravitizable?.Disconnect(linkNum);
+        }
 
-        gravLinks[linkNum].a = null;
-        gravLinks[linkNum].b = null;
-
+        gravLinks[linkNum].gravitizables.Clear();
         gravLinks[linkNum].mode = GravityMode.None;
-
-        GameObject line = gravLinks[linkNum].line;
-        line.GetComponent<SelectionLine>().enabled = false;
+        gravLinks[linkNum].line.GetComponent<SelectionLine>().enabled = false;
 
         GravLinksChanged?.Invoke();
     }
