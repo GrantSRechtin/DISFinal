@@ -110,6 +110,7 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         }
 
         CheckDeselect();
+        UpdateFrameColor();
     }
 
     // ---------------- Link ----------------
@@ -186,6 +187,22 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
                 return child.gameObject;
         }
         return null;
+    }
+
+    void UpdateFrameColor()
+    {
+        int i = 0;
+        Color32 combinedColor = Color.white;
+        foreach(int linkNum in LinkNums)
+        {
+            Color color = GravityController.Instance.gravLinks[linkNum].style.color;
+
+            float proportion = 1f/(i+1f); i++;
+            Color lerpedColor = Color32.Lerp(combinedColor, color,  proportion);
+
+            combinedColor = i == 0 ? color : lerpedColor;
+        }
+        SetFrame(combinedColor, IsSelected);
     }
 
     public void SetFrame(Color color, bool visible)
