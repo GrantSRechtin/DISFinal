@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,31 +9,24 @@ public interface IGravitizable
     // Selection
     bool IsSelected { get; }
     void Select(SelectionStyle style);
-    void Deselect();
+    void CheckDeselect();
     void SetFrame(Color color, bool visible);
 
     // Link
-    int LinkNum { get; }
-    // int[] LinkNums { get; }
-    IGravitizable Partner { get; }
-    // IGravitizable Parter(int linkNum);
+    HashSet<int> LinkNums { get; }
+    Dictionary<int, IGravitizable> Partners { get; }
     void Connect(IGravitizable partner, int linkNum);
-    void Disconnect();
-    // void Disconnect(int linkNum);
+    void Disconnect(int linkNum);
 
     // Anchor
-    Vector3 GetAnchor();
-    // Vector3 GetAnchor(int linkNum);
-    void SetAnchor(Vector3 anchorPoint);
-    // void GetAnchor(Vector3 anchorPoint, int linkNum);
+    Dictionary<int, Vector3> Anchors { get; }
+    void SetAnchor(Vector3 anchorPoint, int linkNum);
+    Vector3 GetAnchor(int linkNum);
 
     // Gravity
-    GravityMode Mode { get; }
-    // GravityMode Mode(int linkNum);
-    void SetMode(GravityMode mode);
-    // void SetMode(GravityMode mode, int linkNum);
-    void Neutralize();
-    // void Neutralize(int linkNum);
+    Dictionary<int, GravityMode> Modes { get; }
+    void SetMode(GravityMode mode, int linkNum);
+    void Neutralize(int linkNum);
 }
 
 public class GravitizableBase : MonoBehaviour, IGravitizable
@@ -41,13 +35,15 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
     [SerializeField] GameObject frame;
 
     Renderer[] frameRenderers = System.Array.Empty<Renderer>();
-    Vector3 anchorPosition;
+    GravityController gravityController;
 
-    public int LinkNum { get; private set; } = -1;
+    public HashSet<int> LinkNums { get; private set; } = new();
+    public Dictionary<int, IGravitizable> Partners { get; private set; } = new();
+    public Dictionary<int, GravityMode> Modes { get; private set; } = new();
+    public Dictionary<int, Vector3> Anchors { get; private set; }= new();
+
     public Vector3 Position => transform.position;
     public bool IsSelected { get; private set; } = false;
-    public IGravitizable Partner { get; private set; }
-    public GravityMode Mode { get; private set; } = GravityMode.None;
 
     protected virtual void Awake()
     {
@@ -57,13 +53,22 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         foreach (Renderer r in frameRenderers) r.enabled = false;
     }
 
-    // protected virtual since
-    // - can be overridden
-    // - not public
-    protected virtual void OnDisable()
+    void OnEnable()
     {
-        Deselect();
-        Disconnect();
+        gravityController = GravityController.Instance;
+        gravityController.GravLinksChanged += OnGravLinksChanged;
+    }
+
+    void OnDisable()
+    {   
+        if (gravityController != null)
+        {
+            DisconnectAll();
+            CheckDeselect();
+
+            gravityController.GravLinksChanged -= OnGravLinksChanged;
+            gravityController = null;
+        }
     }
 
     // ---------------- Selection ----------------
@@ -71,68 +76,131 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
     public void Select(SelectionStyle style)
     {
         IsSelected = true;
-
-        if (frame != null) frame.transform.localScale = style.frameScale;
-        SetFrame(style.color, true);
+        SetFrame(style.color, style.frameScale, true);
     }
 
-    public void Deselect()
+    public void CheckDeselect()
     {
-        if (!IsSelected) return;
+        GravityController instance = GravityController.Instance;
+        GravLink link = instance.gravLinks[instance.currentLinkNum];
 
-        Disconnect();
-        IsSelected = false;
+        if (LinkNums.Count > 0 || link.a != null) return;
         
+        IsSelected = false;
         SetFrame(Color.white, false);
+    }
+
+    void OnGravLinksChanged()
+    {
+        GravityController instance = GravityController.Instance;
+
+        // update links, modes, anchors, & partners
+        foreach(int linkNum in LinkNums)
+        {
+            int slot = GetSlot(linkNum);
+            if (!instance.gravLinks[linkNum].Active() || slot < 0) 
+            {
+                Disconnect(linkNum);
+                continue;
+            }
+
+            // temporary
+            if (slot == 1)
+            {
+                Partners[linkNum] = instance.gravLinks[linkNum].b;
+            }
+            else
+            {
+                Partners[linkNum] = instance.gravLinks[linkNum].a;
+            }
+
+            Modes[linkNum] = instance.gravLinks[linkNum].mode;
+        }
+
+        CheckDeselect();
+    }
+
+    int GetSlot(int linkNum)
+    {
+        GravityController instance = GravityController.Instance;
+
+        if (ReferenceEquals(instance.gravLinks[linkNum].a, this))
+        {
+            return 1;
+        }
+        else if (ReferenceEquals(instance.gravLinks[linkNum].b, this))
+        {
+            return 2;
+        }
+        else
+        {
+            return -1;
+        }
     }
 
     // ---------------- Link ----------------
 
     public void Connect(IGravitizable partner, int linkNum)
     {
-        if (partner == null || ReferenceEquals(partner, this)) return;
+        // Make sure not already partner (a1,b1 && a1,b1) or self
+        if (Partners.ContainsValue(partner) || ReferenceEquals(partner, this)) return; // May need to loop + reference equals if contain doesn't work
 
-        if (ReferenceEquals(Partner, partner)) return;
-        if (Partner != null) Disconnect();
+        // Disconnect if something already in slot
+        if (LinkNums.Contains(linkNum)) Disconnect(linkNum);
 
-        LinkNum = linkNum;
-        Partner = partner;
-        Mode = GravityMode.None;
+        LinkNums.Add(linkNum);
+        Partners[linkNum] = partner;
+        Modes[linkNum] = GravityMode.None;
+        // Anchors[linkNum] = something
 
-        partner.Connect(this, LinkNum);
+        partner.Connect(this, linkNum);
     }
 
-    public void Disconnect()
+    public void Disconnect(int linkNum)
     {
-        if (Partner == null) return;
+        if (!LinkNums.Contains(linkNum)) return;
 
-        LinkNum = -1;
-        IGravitizable oldPartner = Partner;
-        Partner = null;
-        Mode = GravityMode.None;
+        IGravitizable oldPartner = Partners[linkNum];
 
-        oldPartner.Disconnect();
+        LinkNums.Remove(linkNum);
+        Partners.Remove(linkNum);
+        Modes.Remove(linkNum);
+        Anchors.Remove(linkNum);
+
+        oldPartner.Disconnect(linkNum);
     }
-    public virtual Vector3 GetAnchor()
+
+    void DisconnectAll()
     {
-        return anchorPosition;
+        foreach(int linkNum in LinkNums)
+        {
+            Partners.Remove(linkNum);
+            Modes.Remove(linkNum);
+            Anchors.Remove(linkNum);
+        }
+
+        LinkNums.Clear();
     }
-    public void SetAnchor(Vector3 anchorPoint)
+
+    // ------------------ Anchors ------------------
+    public void SetAnchor(Vector3 anchorPoint, int linkNum)
     {
-        anchorPosition = anchorPoint;
+        Anchors[linkNum] = anchorPoint;
+    }
+    public virtual Vector3 GetAnchor(int linkNum)
+    {
+        return Anchors[linkNum];
     }
 
     // ---------------- Gravity mode ----------------
 
-    public void SetMode(GravityMode mode)
+    public void SetMode(GravityMode mode, int linkNum)
     {
-        if (Partner == null) return;
-        if (mode == Mode) return;
-
-        Mode = mode;
+        if (!LinkNums.Contains(linkNum)) return;
+        Modes[linkNum] = mode;
     }
 
-    public void Neutralize() => SetMode(GravityMode.None);
+    public void Neutralize(int linkNum) => SetMode(GravityMode.None, linkNum);
 
     // ---------------- Frame visuals ----------------
 
@@ -148,6 +216,17 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
 
     public void SetFrame(Color color, bool visible)
     {
+        foreach (Renderer r in frameRenderers)
+        {
+            r.material.color = color;
+            r.material.SetColor("_EmissionColor", color * 1.5f);
+            r.enabled = visible;
+        }
+    }
+
+     public void SetFrame(Color color, Vector3 scale, bool visible)
+    {
+        if (frame != null) frame.transform.localScale = scale;
         foreach (Renderer r in frameRenderers)
         {
             r.material.color = color;

@@ -10,6 +10,7 @@ public class SelectionLine : MonoBehaviour
     public IGravitizable b;
 
     public Transform head;
+    public int linkNum;
 
     LineRenderer lineRenderer;
 
@@ -35,14 +36,14 @@ public class SelectionLine : MonoBehaviour
     {
         if (a == null) { return; }
 
-        Vector3 firstPoint = a.GetAnchor();
+        Vector3 firstPoint = a.GetAnchor(linkNum);
 
         Vector3 frontFloatingPoint = head.position + head.forward * 10f;
 
         Vector3 frontClosePoint = LookingPoint();
         Vector3 frontPoint = frontClosePoint != Vector3.zero ? frontClosePoint : frontFloatingPoint;
 
-        Vector3 secondPoint = b == null ? frontPoint : b.GetAnchor();
+        Vector3 secondPoint = b == null ? frontPoint : b.GetAnchor(linkNum);
         
         Vector3[] points = {firstPoint, secondPoint};
         lineRenderer.SetPositions(points);

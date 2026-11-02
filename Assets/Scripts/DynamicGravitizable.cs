@@ -25,18 +25,30 @@ public class DynamicGravitizable : GravitizableBase
 
     void FixedUpdate()
     {
-        if (Partner == null || Mode == GravityMode.None) return;
+        if (LinkNums.Count <= 0) return;
 
-        rb.AddForce(CalculateForce(Partner.GetAnchor()), ForceMode.Force);
+        rb.AddForce(LinkForces(), ForceMode.Force);
     }
-    public override Vector3 GetAnchor()
+    public override Vector3 GetAnchor(int _)
     {
         return transform.position;
     }
 
     // ---------------- Physics (unchanged from the original player script) ----------------
 
-    Vector3 CalculateForce(Vector3 targetPosition)
+    Vector3 LinkForces()
+    {
+        Vector3 totalForce = Vector3.zero;
+        foreach(int linkNum in LinkNums)
+        {
+            Vector3 anchor = Partners[linkNum].GetAnchor(linkNum);
+            GravityMode mode = Modes[linkNum];
+            totalForce += CalculateForce(anchor, mode);
+        }
+        return totalForce; 
+    }
+
+    Vector3 CalculateForce(Vector3 targetPosition, GravityMode mode)
     {
         Vector3 direction = targetPosition - transform.position;
 
@@ -46,7 +58,8 @@ public class DynamicGravitizable : GravitizableBase
         Vector3 force = direction.normalized * gravitationalForce * powerRatio;
         if (force.magnitude < minForce) return Vector3.zero;
 
-        if (Mode == GravityMode.Push) force *= pushMultiplier;
+        if (mode == GravityMode.Push) force *= pushMultiplier;
+        if (mode == GravityMode.None) force = Vector3.zero;
 
         return force;
     }

@@ -1,7 +1,6 @@
 using UnityEngine;
 
 public enum GravityMode { None, Pull, Push }
-public enum SelectionSlot { None, A, B }
 
 [System.Serializable]
 public struct SelectionStyle
@@ -26,14 +25,18 @@ public struct GravLink
     public SelectionStyle style;
     public GameObject line;
 
-    public GravLink(SelectionStyle style, GameObject line)
+    public GravLink(SelectionStyle style, GameObject line, int linkNum)
     {
-        this.a = null;
-        this.b = null;
-        this.mode = GravityMode.None;
+        a = null;
+        b = null;
+        mode = GravityMode.None;
 
         this.style = style;
         this.line = line;
+
+        // Currently since the grav link doesn't store linkNum this could go in controller
+        var lineScript = line.GetComponent<SelectionLine>();
+        lineScript.linkNum = linkNum;
 
         var lineRenderer = line.GetComponent<LineRenderer>();
         lineRenderer.startColor = style.color;

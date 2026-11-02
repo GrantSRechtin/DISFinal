@@ -56,9 +56,9 @@ public class GravityController : MonoBehaviour
     {
         head = GameObject.FindGameObjectWithTag("Head").GetComponent<Transform>();
 
-        gravLinks[0] = new GravLink(firstStyle, Instantiate(linePrefab));
-        gravLinks[1] = new GravLink(secondStyle, Instantiate(linePrefab));
-        gravLinks[2] = new GravLink(thirdStyle, Instantiate(linePrefab));
+        gravLinks[0] = new GravLink(firstStyle, Instantiate(linePrefab), 0);
+        gravLinks[1] = new GravLink(secondStyle, Instantiate(linePrefab), 1);
+        gravLinks[2] = new GravLink(thirdStyle, Instantiate(linePrefab), 2);
     }
 
     // ---------- Stored stuff ----------
@@ -69,20 +69,14 @@ public class GravityController : MonoBehaviour
 
     public void StartCurrentLink(IGravitizable gravitizableA, Vector3 anchorPoint)
     {
-        SelectionStyle style = gravLinks[currentLinkNum].style;
+        ClearCurrentLink();
 
-        if (gravitizableA.IsSelected)
-        {
-            // Find which slot it's currently in and clear that slot
-            // I want for gravitizables to have a reference to their link, whether that be the slot number or actual GravLink
-            ClearCurrentLink();
-            return;
-        }
+        SelectionStyle style = gravLinks[currentLinkNum].style;
 
         gravitizableA.Select(style);
         gravLinks[currentLinkNum].a = gravitizableA;
 
-        gravLinks[currentLinkNum].a.SetAnchor(anchorPoint);
+        gravLinks[currentLinkNum].a.SetAnchor(anchorPoint, currentLinkNum);
 
         SelectionLine lineScript = gravLinks[currentLinkNum].line.GetComponent<SelectionLine>();
         lineScript.enabled = true;
@@ -97,21 +91,11 @@ public class GravityController : MonoBehaviour
     {
         SelectionStyle style = gravLinks[currentLinkNum].style;
 
-        if (gravitizableB.IsSelected)
-        {
-            // Find which slot it's currently in and clear that slot
-            if (gravitizableB.LinkNum != -1)
-            {
-                ClearLink(gravitizableB.LinkNum);
-            }
-            // Will remove
-        }
-
         gravitizableB.Select(style);
         gravLinks[currentLinkNum].b = gravitizableB;
 
         gravLinks[currentLinkNum].b.Connect(gravLinks[currentLinkNum].a, currentLinkNum);
-        gravLinks[currentLinkNum].b.SetAnchor(anchorPoint);
+        gravLinks[currentLinkNum].b.SetAnchor(anchorPoint, currentLinkNum);
 
         SelectionLine lineScript = gravLinks[currentLinkNum].line.GetComponent<SelectionLine>();
 
@@ -121,14 +105,10 @@ public class GravityController : MonoBehaviour
     }
 
     public void SetCurrentLinkMode(GravityMode newMode)
-    {
-        GravLink currentLink = gravLinks[currentLinkNum];
-        
-        if (!currentLink.Active()) { return; }
+    {        
+        if (!gravLinks[currentLinkNum].Active()) { return; }
 
         gravLinks[currentLinkNum].mode = newMode;
-        gravLinks[currentLinkNum].a.SetMode(newMode);
-        gravLinks[currentLinkNum].b.SetMode(newMode);
 
         GravLinksChanged?.Invoke();
     }
@@ -140,8 +120,8 @@ public class GravityController : MonoBehaviour
 
     public void ClearLink(int linkNum)
     {
-        gravLinks[linkNum].a?.Deselect();
-        gravLinks[linkNum].b?.Deselect();
+        gravLinks[linkNum].a?.Disconnect(linkNum);
+        gravLinks[linkNum].b?.Disconnect(linkNum);
 
         gravLinks[linkNum].a = null;
         gravLinks[linkNum].b = null;

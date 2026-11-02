@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
@@ -28,14 +29,16 @@ public class GunAnimations : MonoBehaviour
 
     void OnEnable()
     {
-        input.ChangeCurrentLinkPerformed            += OnChangeCurrentLink;
+        input.ChangeCurrentLinkPerformed   += OnChangeCurrentLink;
+
         gravityController = GravityController.Instance;
         gravityController.GravLinksChanged += OnGravLinksChanged;
     }
 
     void OnDisable()
     {
-        input.ChangeCurrentLinkPerformed            -= OnChangeCurrentLink;
+        input.ChangeCurrentLinkPerformed       -= OnChangeCurrentLink;
+
         if (gravityController != null)
         {
             gravityController.GravLinksChanged -= OnGravLinksChanged;
@@ -71,6 +74,12 @@ public class GunAnimations : MonoBehaviour
 
     void OnGravLinksChanged()
     {
+        StartCoroutine(ChangeAfterUpdate());
+    }
+
+    IEnumerator ChangeAfterUpdate()
+    {
+        yield return new WaitForEndOfFrame();
         for(int i = 0; i < 3; i++)
         {
             bool active = gravityController.gravLinks[i].Active();
