@@ -189,6 +189,27 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         return null;
     }
 
+    public void SetFrame(Color color, bool visible)
+    {
+        foreach (Renderer r in frameRenderers)
+        {
+            r.material.color = color;
+            r.material.SetColor("_EmissionColor", color * 1.5f);
+            r.enabled = visible;
+        }
+    }
+
+    void SetFrame(Color color, Vector3 scale, bool visible)
+    {
+        if (frame != null) frame.transform.localScale = scale;
+        foreach (Renderer r in frameRenderers)
+        {
+            r.material.color = color;
+            r.material.SetColor("_EmissionColor", color * 1.5f);
+            r.enabled = visible;
+        }
+    }
+
     void UpdateFrameColor()
     {
         int i = 0;
@@ -203,26 +224,5 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
             combinedColor = i == 0 ? color : lerpedColor;
         }
         SetFrame(combinedColor, IsSelected);
-    }
-
-    public void SetFrame(Color color, bool visible)
-    {
-        foreach (Renderer r in frameRenderers)
-        {
-            r.material.color = color;
-            r.material.SetColor("_EmissionColor", color * 1.5f);
-            r.enabled = visible;
-        }
-    }
-
-     public void SetFrame(Color color, Vector3 scale, bool visible)
-    {
-        if (frame != null) frame.transform.localScale = scale;
-        foreach (Renderer r in frameRenderers)
-        {
-            r.material.color = color;
-            r.material.SetColor("_EmissionColor", color * 1.5f);
-            r.enabled = visible;
-        }
     }
 }
