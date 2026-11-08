@@ -79,7 +79,7 @@ public class RewindController : MonoBehaviour
 
     IEnumerator StoreTimestepLoop()
     {
-        yield return new WaitForSeconds(.05f);
+        yield return new WaitForSeconds(.025f);
         yield return new WaitForEndOfFrame();
 
         if (!timeStopped)
@@ -92,7 +92,7 @@ public class RewindController : MonoBehaviour
 
     IEnumerator RewindTimestepLoop()
     {
-        yield return new WaitForSeconds(.025f);
+        yield return new WaitForSeconds(.015f);
         yield return new WaitForEndOfFrame();
 
         if (timeStopped)
