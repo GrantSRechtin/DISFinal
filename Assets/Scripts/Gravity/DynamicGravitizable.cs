@@ -25,10 +25,11 @@ public class DynamicGravitizable : GravitizableBase
 
     void FixedUpdate()
     {
-        if (LinkNums.Count <= 0) return;
+        if (LinkNums.Count <= 0 || IsTimeStopped) return;
 
         rb.AddForce(LinkForces(), ForceMode.Force);
     }
+
     public override Vector3 GetAnchor(int _)
     {
         return transform.position;
@@ -63,4 +64,19 @@ public class DynamicGravitizable : GravitizableBase
 
         return force;
     }
+
+    // ----------------- Rewindable -----------------
+
+    public override void OnTimeStarted()
+    {
+        rb.WakeUp();
+        base.OnTimeStarted();
+    }
+
+    public override void OnTimeStopped()
+    {
+        rb.Sleep();
+        base.OnTimeStopped();
+    }
+
 }

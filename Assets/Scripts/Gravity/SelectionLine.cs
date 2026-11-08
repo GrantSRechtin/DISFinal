@@ -1,10 +1,11 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
 /// Turns player intent into commands on IGravitizable objects.
 /// Holds only "which objects am I holding"; the objects own everything else.
 /// </summary>
-public class SelectionLine : MonoBehaviour
+public class SelectionLine : RewindableBase
 {
     public IGravitizable a;
     public IGravitizable b;
@@ -13,23 +14,40 @@ public class SelectionLine : MonoBehaviour
     public int linkNum;
 
     LineRenderer lineRenderer;
+    List<Timestep> timesteps = new();
 
     void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
     }
 
-    void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         lineRenderer.enabled = true;
     }
 
-    void OnDisable()
+    public override void OnStoreTimestep()
     {
-        a = null;
-        b = null;
-        
-        lineRenderer.enabled = false;
+        timesteps.Add(new Timestep
+        {
+            LineA = a,
+            LineB = b,
+            LineVisible = lineRenderer.enabled
+        });
+    }
+
+    public override void OnRewindTimestep()
+    {
+        if (timesteps.Count == 0) return;
+
+        int lastIndex = timesteps.Count - 1;
+        Timestep timestep = timesteps[lastIndex];
+        timesteps.RemoveAt(lastIndex);
+
+        a = timestep.LineA;
+        b = timestep.LineB;
+        lineRenderer.enabled = timestep.LineVisible;
     }
 
     void FixedUpdate()

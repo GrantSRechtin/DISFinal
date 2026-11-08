@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GravitizableBase : MonoBehaviour, IGravitizable
+public class GravitizableBase : RewindableBase, IGravitizable, IRewindable
 {
     [Header("Selection Frame")]
     [SerializeField] GameObject frame;
@@ -25,14 +25,16 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         foreach (Renderer r in frameRenderers) r.enabled = false;
     }
 
-    void OnEnable()
+    protected override void OnEnable()
     {
+        base.OnEnable();
         gravityController = GravityController.Instance;
         gravityController.GravLinksChanged += OnGravLinksChanged;
     }
 
-    void OnDisable()
+    protected override void OnDisable()
     {   
+        base.OnDisable();
         if (gravityController != null)
         {
             DisconnectAll();
@@ -67,7 +69,7 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
         GravLink[] links = GravityController.Instance.gravLinks;
 
         // update links, modes, anchors, & partners
-        foreach(int linkNum in LinkNums)
+        foreach (int linkNum in new List<int>(LinkNums))
         {
             GravityController instance = GravityController.Instance;
             GravLink link = links[linkNum];
@@ -196,5 +198,56 @@ public class GravitizableBase : MonoBehaviour, IGravitizable
             combinedColor = i == 0 ? color : lerpedColor;
         }
         SetFrame(combinedColor, IsSelected);
+    }
+
+    // ----------------- Rewindable -----------------
+
+    List<Timestep> timesteps = new();
+
+    public override void OnStoreTimestep()
+    {
+        Timestep currentTimestep = new()
+        {
+            Position = transform.position,
+            Rotation = transform.rotation,
+            LinearVelocity = TryGetComponent(out Rigidbody rb) ? rb.linearVelocity : Vector3.zero,
+            AngularVelocity = rb != null ? rb.angularVelocity : Vector3.zero,
+            LinkNums = new HashSet<int>(LinkNums),
+            Partners = new Dictionary<int, IGravitizable>(Partners),
+            Modes = new Dictionary<int, GravityMode>(Modes),
+            Anchors = new Dictionary<int, Vector3>(Anchors),
+            IsSelected = IsSelected
+        };
+
+        timesteps.Add(currentTimestep);
+    }
+
+    public override void OnRewindTimestep()
+    {
+        if (timesteps.Count == 0) return;
+
+        int lastIndex = timesteps.Count - 1;
+        Timestep lastTimestep = timesteps[lastIndex];
+        timesteps.RemoveAt(lastIndex);
+
+        if (TryGetComponent(out Rigidbody rb))
+        {
+            rb.position = lastTimestep.Position;
+            rb.rotation = lastTimestep.Rotation;
+            rb.linearVelocity = lastTimestep.LinearVelocity;
+            rb.angularVelocity = lastTimestep.AngularVelocity;
+        }
+        else
+        {
+            transform.position = lastTimestep.Position;
+            transform.rotation = lastTimestep.Rotation;
+        }
+
+        LinkNums = lastTimestep.LinkNums;
+        Partners = lastTimestep.Partners;
+        Modes = lastTimestep.Modes;
+        Anchors = lastTimestep.Anchors;
+        IsSelected = lastTimestep.IsSelected;
+        UpdateFrameColor();
     }
 }

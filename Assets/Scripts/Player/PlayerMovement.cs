@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -5,7 +6,7 @@ using UnityEngine;
 /// never touches the Input System directly.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : RewindableBase
 {
     [Header("References")]
     [SerializeField] private PlayerInputHandler input;
@@ -22,21 +23,62 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rb;
     private bool jumpRequested;
+    readonly List<Timestep> timesteps = new();
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
 
-    private void OnEnable()  => input.JumpPressed += RequestJump;
-    private void OnDisable() => input.JumpPressed -= RequestJump;
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        input.JumpPressed += RequestJump;
+    }
 
-    private void RequestJump() => jumpRequested = true;
+    protected override void OnDisable()
+    {
+        input.JumpPressed -= RequestJump;
+        base.OnDisable();
+    }
+
+    private void RequestJump()
+    {
+        if (!IsTimeStopped) jumpRequested = true;
+    }
 
     private void FixedUpdate()
     {
+        if (IsTimeStopped) return;
+
         ApplyMovement();
         ApplyJump();
+    }
+
+    public override void OnStoreTimestep()
+    {
+        timesteps.Add(new Timestep
+        {
+            Position = rb.position,
+            Rotation = rb.rotation,
+            LinearVelocity = rb.linearVelocity,
+            AngularVelocity = rb.angularVelocity
+        });
+    }
+
+    public override void OnRewindTimestep()
+    {
+        if (timesteps.Count == 0) return;
+
+        int lastIndex = timesteps.Count - 1;
+        Timestep timestep = timesteps[lastIndex];
+        timesteps.RemoveAt(lastIndex);
+
+        rb.position = timestep.Position;
+        rb.rotation = timestep.Rotation;
+        rb.linearVelocity = timestep.LinearVelocity;
+        rb.angularVelocity = timestep.AngularVelocity;
+        jumpRequested = false;
     }
 
     private void ApplyMovement()

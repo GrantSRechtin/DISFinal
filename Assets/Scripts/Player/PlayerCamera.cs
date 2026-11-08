@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -5,7 +6,7 @@ using UnityEngine;
 /// never touches the Input System directly.
 /// </summary>
 [RequireComponent(typeof(Camera))]
-public class PlayerCamera : MonoBehaviour
+public class PlayerCamera : RewindableBase
 {
     [Header("References")]
     [SerializeField] private PlayerInputHandler input;
@@ -15,6 +16,7 @@ public class PlayerCamera : MonoBehaviour
 
     private float yaw;
     private float pitch;
+    private List<Timestep> timesteps = new();
 
     private void Awake()
     {
@@ -25,6 +27,8 @@ public class PlayerCamera : MonoBehaviour
 
     private void Update()
     {
+        if (IsTimeStopped) return;
+
         Vector2 lookInput = input.Look;
 
         pitch += -lookInput.y * Time.deltaTime * rotationSpeed * 1f;
@@ -33,6 +37,30 @@ public class PlayerCamera : MonoBehaviour
         pitch = Mathf.Clamp(pitch, -80f, 80f);
 
         transform.rotation = Quaternion.Euler(new(pitch, yaw, 0));
+    }
+
+    public override void OnStoreTimestep()
+    {
+        timesteps.Add(new Timestep
+        {
+            Position = transform.position,
+            Rotation = transform.rotation
+        });
+    }
+
+    public override void OnRewindTimestep()
+    {
+        if (timesteps.Count == 0) return;
+
+        int lastIndex = timesteps.Count - 1;
+        Timestep timestep = timesteps[lastIndex];
+        timesteps.RemoveAt(lastIndex);
+
+        transform.SetPositionAndRotation(timestep.Position, timestep.Rotation);
+
+        Vector3 eulerAngles = timestep.Rotation.eulerAngles;
+        pitch = Mathf.DeltaAngle(0f, eulerAngles.x);
+        yaw = Mathf.DeltaAngle(0f, eulerAngles.y);
     }
 
     public Quaternion GetDirection()

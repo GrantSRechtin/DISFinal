@@ -28,12 +28,42 @@ public class PlayerInputHandler : MonoBehaviour
     public event Action<int> ChangeCurrentLinkPerformed;
     public event Action PausePerformed;
     public event Action RestartPerformed;
+    public event Action RewindPressed;
+    public event Action RewindReleased;
 
     PlayerInput playerInput;
-    InputAction moveAction, lookAction, jumpAction, interactAction, selectAction, gravityControlAction, gravityReleaseAction, changeCurrentLinkAction, pauseAction, restartAction;
+    InputAction moveAction, lookAction, jumpAction, interactAction, selectAction, gravityControlAction, gravityReleaseAction, changeCurrentLinkAction, pauseAction, restartAction, rewindAction;
 
+    private static PlayerInputHandler _instance;
+
+    public static PlayerInputHandler Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = FindFirstObjectByType<PlayerInputHandler>();
+
+                if (_instance == null)
+                {
+                    var go = new GameObject("PlayerInputHandler");
+                    _instance = go.AddComponent<PlayerInputHandler>();
+                }
+            }
+            return _instance;
+        }
+    }
+    
     void Awake()
     {
+        if (_instance != null && _instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        _instance = this;
+
         playerInput = GetComponent<PlayerInput>();
         var actions = playerInput.actions;
 
@@ -48,6 +78,7 @@ public class PlayerInputHandler : MonoBehaviour
 
         pauseAction             = actions.FindAction("Pause", throwIfNotFound: true);
         restartAction           = actions.FindAction("Restart", throwIfNotFound: true);
+        rewindAction            = actions.FindAction("Rewind", throwIfNotFound: true);
     }
 
     void OnEnable()
@@ -63,6 +94,8 @@ public class PlayerInputHandler : MonoBehaviour
 
         pauseAction.performed             += OnPausePerformed;
         restartAction.performed           += OnRestartPerformed;
+        rewindAction.performed            += OnRewindPerformed;
+        rewindAction.canceled             += OnRewindReleased;
     }
 
     void OnDisable()
@@ -78,8 +111,9 @@ public class PlayerInputHandler : MonoBehaviour
 
         pauseAction.performed             -= OnPausePerformed;
         restartAction.performed           -= OnRestartPerformed;
+        rewindAction.performed            -= OnRewindPerformed;
+        rewindAction.canceled             -= OnRewindReleased;
 
-        // Don't leave stale values behind when input is turned off
         Move = Vector2.zero;
         Look = Vector2.zero;
     }
@@ -113,6 +147,8 @@ public class PlayerInputHandler : MonoBehaviour
         RestartPerformed?.Invoke();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+    void OnRewindPerformed(InputAction.CallbackContext _)          => RewindPressed?.Invoke();
+    void OnRewindReleased(InputAction.CallbackContext _)           => RewindReleased?.Invoke();
 
     // --- Helpers so other systems (pause menu, cutscenes) never touch PlayerInput directly ---
     public void EnableGameplayInput() => playerInput.SwitchCurrentActionMap("Player");

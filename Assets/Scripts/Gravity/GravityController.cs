@@ -8,7 +8,7 @@ using UnityEngine;
 /// Drop it on an empty GameObject in your first scene, or just call
 /// GameData.Instance from anywhere and it will create itself.
 /// </summary>
-public class GravityController : MonoBehaviour
+public class GravityController : RewindableBase
 {
     // ---------- Singleton setup ----------
     private static GravityController _instance;
@@ -67,6 +67,56 @@ public class GravityController : MonoBehaviour
 
     public event Action GravLinksChanged;
 
+    List<Timestep> timesteps = new();
+
+    public override void OnTimeStarted()
+    {
+        base.OnTimeStarted();
+        GravLinksChanged?.Invoke();
+    }
+
+    public override void OnStoreTimestep()
+    {
+        Timestep timestep = new()
+        {
+            CurrentLinkNum = currentLinkNum,
+            GravLinks = new List<IGravitizable>[gravLinks.Length],
+            GravModes = new GravityMode[gravLinks.Length]
+        };
+
+        for (int i = 0; i < gravLinks.Length; i++)
+        {
+            timestep.GravLinks[i] = new List<IGravitizable>(gravLinks[i].gravitizables);
+            timestep.GravModes[i] = gravLinks[i].mode;
+        }
+
+        timesteps.Add(timestep);
+    }
+
+    public override void OnRewindTimestep()
+    {
+        if (timesteps.Count == 0) return;
+
+        int lastIndex = timesteps.Count - 1;
+        Timestep timestep = timesteps[lastIndex];
+        timesteps.RemoveAt(lastIndex);
+
+        currentLinkNum = timestep.CurrentLinkNum;
+        for (int i = 0; i < gravLinks.Length; i++)
+        {
+            gravLinks[i].gravitizables.Clear();
+            gravLinks[i].gravitizables.AddRange(timestep.GravLinks[i]);
+            gravLinks[i].mode = timestep.GravModes[i];
+
+            SelectionLine line = gravLinks[i].line.GetComponent<SelectionLine>();
+            line.a = timestep.GravLinks[i].Count > 0 ? timestep.GravLinks[i][0] : null;
+            line.b = timestep.GravLinks[i].Count > 1 ? timestep.GravLinks[i][1] : null;
+            line.head = head;
+            line.GetComponent<LineRenderer>().enabled = timestep.GravLinks[i].Count > 0;
+        }
+
+    }
+
     public void StartCurrentLink(IGravitizable gravitizableA, Vector3 anchorPoint)
     {
         ClearCurrentLink();
@@ -79,10 +129,9 @@ public class GravityController : MonoBehaviour
         gravitizableA.SetAnchor(anchorPoint, currentLinkNum);
 
         SelectionLine lineScript = gravLinks[currentLinkNum].line.GetComponent<SelectionLine>();
-        lineScript.enabled = true;
-
         lineScript.a = gravitizableA;
         lineScript.head = head;
+        lineScript.GetComponent<LineRenderer>().enabled = true;
 
         GravLinksChanged?.Invoke();
     }
@@ -98,7 +147,6 @@ public class GravityController : MonoBehaviour
         gravitizableB.Connect(gravLinks[currentLinkNum].gravitizables[0], currentLinkNum);
 
         SelectionLine lineScript = gravLinks[currentLinkNum].line.GetComponent<SelectionLine>();
-
         lineScript.b = gravitizableB;
 
         GravLinksChanged?.Invoke();
@@ -127,7 +175,10 @@ public class GravityController : MonoBehaviour
 
         gravLinks[linkNum].gravitizables.Clear();
         gravLinks[linkNum].mode = GravityMode.None;
-        gravLinks[linkNum].line.GetComponent<SelectionLine>().enabled = false;
+        SelectionLine lineScript = gravLinks[linkNum].line.GetComponent<SelectionLine>();
+        lineScript.a = null;
+        lineScript.b = null;
+        lineScript.GetComponent<LineRenderer>().enabled = false;
 
         GravLinksChanged?.Invoke();
     }
