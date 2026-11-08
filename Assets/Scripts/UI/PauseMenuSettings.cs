@@ -13,7 +13,7 @@ public class PauseMenuSettings : MonoBehaviour
     private const string SensitivityKey = "MouseSensitivity";
     private const string VolumeKey = "AudioVolume";
 
-    private const float DefaultSensitivity = 60f;
+    private const float DefaultSensitivity = 20f;
     private const float DefaultVolume = 1f;
 
     private void Awake()
