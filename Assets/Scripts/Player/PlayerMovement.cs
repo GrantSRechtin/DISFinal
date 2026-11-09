@@ -66,13 +66,28 @@ public class PlayerMovement : RewindableBase
         });
     }
 
-    public override void OnRewindTimestep()
+    public override void OnRewindTimestep(int steps)
     {
         if (timesteps.Count == 0) return;
 
-        int lastIndex = timesteps.Count - 1;
-        Timestep timestep = timesteps[lastIndex];
-        timesteps.RemoveAt(lastIndex);
+        Timestep timestep;
+        if (timesteps.Count > steps)
+        {
+            int lastIndex = timesteps.Count - steps;
+            timestep = timesteps[lastIndex];
+
+            while(timesteps.Count > lastIndex+1)
+            {
+                timesteps.RemoveAt(timesteps.Count-1);
+            }
+            timesteps.RemoveAt(lastIndex);
+        }
+        else
+        {
+            int lastIndex = 0;
+            timestep = timesteps[lastIndex];
+            timesteps.Clear();
+        }
 
         rb.position = timestep.Position;
         rb.rotation = timestep.Rotation;

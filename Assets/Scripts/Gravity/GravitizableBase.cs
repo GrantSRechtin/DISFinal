@@ -222,32 +222,47 @@ public class GravitizableBase : RewindableBase, IGravitizable, IRewindable
         timesteps.Add(currentTimestep);
     }
 
-    public override void OnRewindTimestep()
+    public override void OnRewindTimestep(int steps)
     {
         if (timesteps.Count == 0) return;
 
-        int lastIndex = timesteps.Count - 1;
-        Timestep lastTimestep = timesteps[lastIndex];
-        timesteps.RemoveAt(lastIndex);
-
-        if (TryGetComponent(out Rigidbody rb))
+        Timestep timestep;
+        if (timesteps.Count > steps)
         {
-            rb.position = lastTimestep.Position;
-            rb.rotation = lastTimestep.Rotation;
-            rb.linearVelocity = lastTimestep.LinearVelocity;
-            rb.angularVelocity = lastTimestep.AngularVelocity;
+            int lastIndex = timesteps.Count - steps;
+            timestep = timesteps[lastIndex];
+
+            while(timesteps.Count > lastIndex+1)
+            {
+                timesteps.RemoveAt(timesteps.Count-1);
+            }
+            timesteps.RemoveAt(lastIndex);
         }
         else
         {
-            transform.position = lastTimestep.Position;
-            transform.rotation = lastTimestep.Rotation;
+            int lastIndex = 0;
+            timestep = timesteps[lastIndex];
+            timesteps.Clear();
         }
 
-        LinkNums = lastTimestep.LinkNums;
-        Partners = lastTimestep.Partners;
-        Modes = lastTimestep.Modes;
-        Anchors = lastTimestep.Anchors;
-        IsSelected = lastTimestep.IsSelected;
+        if (TryGetComponent(out Rigidbody rb))
+        {
+            rb.position = timestep.Position;
+            rb.rotation = timestep.Rotation;
+            rb.linearVelocity = timestep.LinearVelocity;
+            rb.angularVelocity = timestep.AngularVelocity;
+        }
+        else
+        {
+            transform.position = timestep.Position;
+            transform.rotation = timestep.Rotation;
+        }
+
+        LinkNums = timestep.LinkNums;
+        Partners = timestep.Partners;
+        Modes = timestep.Modes;
+        Anchors = timestep.Anchors;
+        IsSelected = timestep.IsSelected;
         UpdateFrameColor();
     }
 }

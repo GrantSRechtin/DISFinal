@@ -54,5 +54,5 @@ public class RewindableBase : MonoBehaviour, IRewindable
 
     public virtual void OnStoreTimestep(){}
 
-    public virtual void OnRewindTimestep(){}
+    public virtual void OnRewindTimestep(int steps){}
 }

@@ -52,15 +52,19 @@ public class RewindController : MonoBehaviour
     }
 
     private bool timeStopped = false;
+    private float rewindSpeedIncreaseTime = 1;
+    private int currentRewindedTicks = 1;
 
     // Public
     public event Action TimeStarted;
     public event Action TimeStopped;
-    public event Action RewindTimestep;
+    public event Action<int> RewindTimestep;
     public event Action StoreTimestep;
 
     void OnRewindPressed()
     {
+        currentRewindedTicks = 1;
+
         timeStopped = true;
         TimeStopped?.Invoke();
     }
@@ -75,11 +79,11 @@ public class RewindController : MonoBehaviour
     {
         StartCoroutine(StoreTimestepLoop());
         StartCoroutine(RewindTimestepLoop());
+        StartCoroutine(RewindSpeedIncreaser());
     }
 
     IEnumerator StoreTimestepLoop()
     {
-        yield return new WaitForSeconds(.025f);
         yield return new WaitForEndOfFrame();
 
         if (!timeStopped)
@@ -91,15 +95,23 @@ public class RewindController : MonoBehaviour
     }
 
     IEnumerator RewindTimestepLoop()
-    {
-        yield return new WaitForSeconds(.015f);
+    {        
         yield return new WaitForEndOfFrame();
 
         if (timeStopped)
         {
-            RewindTimestep?.Invoke();
+            RewindTimestep?.Invoke(currentRewindedTicks);
         }
 
         StartCoroutine(RewindTimestepLoop());
+    }
+
+    IEnumerator RewindSpeedIncreaser()
+    {        
+        yield return new WaitForSeconds(rewindSpeedIncreaseTime);
+
+        currentRewindedTicks++;
+
+        StartCoroutine(RewindSpeedIncreaser());
     }
 }
