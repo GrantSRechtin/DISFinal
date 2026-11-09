@@ -53,16 +53,35 @@ public class DynamicGravitizable : GravitizableBase
     {
         Vector3 direction = targetPosition - transform.position;
 
-        float distance = Mathf.Max(direction.magnitude, minDist);
-        float powerRatio = 1f / Mathf.Pow(distance - minDist + 1f, distanceScaling);
+        float maxD = 20f;
+        float minD = 2f;
+        float maxForce = 50f;
 
-        Vector3 force = direction.normalized * gravitationalForce * powerRatio;
-        if (force.magnitude < minForce) return Vector3.zero;
+        float newDistance = Mathf.Clamp(direction.magnitude, minD, maxD);
 
-        if (mode == GravityMode.Push) force *= pushMultiplier;
-        if (mode == GravityMode.None) force = Vector3.zero;
+        float newPowerRatio = newDistance/maxD;
+        if (mode == GravityMode.Push) newPowerRatio = 1f-newPowerRatio;
 
-        return force;
+        Vector3 newForce = direction.normalized * newPowerRatio * maxForce;
+        if (newForce.magnitude < minForce) return Vector3.zero;
+
+        if (mode == GravityMode.Push) newForce *= pushMultiplier;
+        if (mode == GravityMode.None) newForce = Vector3.zero;
+
+        return newForce;
+
+        // Old Force Stuff
+
+        // float distance = Mathf.Max(direction.magnitude, minDist);
+        // float powerRatio = 1f / Mathf.Pow(distance - minDist + 1f, distanceScaling);
+
+        // Vector3 force = direction.normalized * gravitationalForce * powerRatio;
+        // if (force.magnitude < minForce) return Vector3.zero;
+
+        // if (mode == GravityMode.Push) force *= pushMultiplier;
+        // if (mode == GravityMode.None) force = Vector3.zero;
+
+        // return force;
     }
 
     // ----------------- Rewindable -----------------
