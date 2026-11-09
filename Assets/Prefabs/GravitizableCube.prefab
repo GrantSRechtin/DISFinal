@@ -156,9 +156,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DynamicGravitizable
   IsTimeStopped: 0
   frame: {fileID: 7959905885433714009}
-  gravitationalForce: 40
-  distanceScaling: 0.5
-  minDist: 10
+  anchorPosition: {fileID: 0}
+  gravitationalForce: 50
   pushMultiplier: -0.625
   minForce: 5
 --- !u!1001 &5423902567971467150

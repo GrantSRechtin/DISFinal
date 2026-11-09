@@ -9,9 +9,7 @@ using UnityEngine;
 public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
 {
     [Header("Gravity")]
-    [SerializeField] float gravitationalForce = 40f;
-    [SerializeField] float distanceScaling = 0.5f;
-    [SerializeField] float minDist = 10f;
+    [SerializeField] float gravitationalForce = 50f;
     [SerializeField] float pushMultiplier = -0.625f;
     [SerializeField] float minForce = 5f;
 
@@ -52,33 +50,19 @@ public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
 
         float maxD = 20f;
         float minD = 2f;
-        float maxForce = 50f;
 
-        float newDistance = Mathf.Clamp(direction.magnitude, minD, maxD);
+        float distance = Mathf.Clamp(direction.magnitude, minD, maxD);
 
-        float newPowerRatio = newDistance/maxD;
-        if (mode == GravityMode.Push) newPowerRatio = 1f-newPowerRatio;
+        float powerRation = distance/maxD;
+        if (mode == GravityMode.Push) powerRation = 1f-powerRation;
 
-        Vector3 newForce = direction.normalized * newPowerRatio * maxForce;
-        if (newForce.magnitude < minForce) return Vector3.zero;
+        Vector3 force = direction.normalized * powerRation * gravitationalForce;
+        if (force.magnitude < minForce) return Vector3.zero;
 
-        if (mode == GravityMode.Push) newForce *= pushMultiplier;
-        if (mode == GravityMode.None) newForce = Vector3.zero;
+        if (mode == GravityMode.Push) force *= pushMultiplier;
+        if (mode == GravityMode.None) force = Vector3.zero;
 
-        return newForce;
-
-        // Old Force Stuff
-
-        // float distance = Mathf.Max(direction.magnitude, minDist);
-        // float powerRatio = 1f / Mathf.Pow(distance - minDist + 1f, distanceScaling);
-
-        // Vector3 force = direction.normalized * gravitationalForce * powerRatio;
-        // if (force.magnitude < minForce) return Vector3.zero;
-
-        // if (mode == GravityMode.Push) force *= pushMultiplier;
-        // if (mode == GravityMode.None) force = Vector3.zero;
-
-        // return force;
+        return force;
     }
 
     // ----------------- Rewindable -----------------
