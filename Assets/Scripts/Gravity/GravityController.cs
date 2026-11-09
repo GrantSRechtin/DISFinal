@@ -3,14 +3,8 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-/// <summary>
-/// A persistent singleton that stores game data across scene loads.
-/// Drop it on an empty GameObject in your first scene, or just call
-/// GameData.Instance from anywhere and it will create itself.
-/// </summary>
 public class GravityController : RewindableBase
 {
-    // ---------- Singleton setup ----------
     private static GravityController _instance;
 
     public static GravityController Instance
@@ -130,6 +124,7 @@ public class GravityController : RewindableBase
             line.GetComponent<LineRenderer>().enabled = timestep.GravLinks[i].Count > 0;
         }
 
+        GravLinksChanged?.Invoke();
     }
 
     public void StartCurrentLink(IGravitizable gravitizableA, Vector3 anchorPoint)

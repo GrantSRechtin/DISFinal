@@ -43,7 +43,6 @@ public class PlayerCamera : RewindableBase
     {
         timesteps.Add(new Timestep
         {
-            Position = transform.position,
             Rotation = transform.rotation
         });
     }
@@ -71,7 +70,7 @@ public class PlayerCamera : RewindableBase
             timesteps.Clear();
         }
 
-        transform.SetPositionAndRotation(timestep.Position, timestep.Rotation);
+        transform.rotation = timestep.Rotation;
 
         Vector3 eulerAngles = timestep.Rotation.eulerAngles;
         pitch = Mathf.DeltaAngle(0f, eulerAngles.x);

@@ -38,8 +38,8 @@ public class PlayerMovement : RewindableBase
 
     protected override void OnDisable()
     {
-        input.JumpPressed -= RequestJump;
         base.OnDisable();
+        input.JumpPressed -= RequestJump;
     }
 
     private void RequestJump()
@@ -53,6 +53,18 @@ public class PlayerMovement : RewindableBase
 
         ApplyMovement();
         ApplyJump();
+    }
+
+    public override void OnTimeStarted()
+    {
+        base.OnTimeStarted();
+        rb.WakeUp();
+    }
+
+    public override void OnTimeStopped()
+    {
+        base.OnTimeStopped();
+        rb.Sleep();
     }
 
     public override void OnStoreTimestep()
