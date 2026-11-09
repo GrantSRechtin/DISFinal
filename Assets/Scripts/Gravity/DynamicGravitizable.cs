@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody))]
-public class DynamicGravitizable : GravitizableBase
+public class DynamicGravitizable : SingleAnchorGravitizable
 {
     [Header("Gravity")]
     [SerializeField] float gravitationalForce = 40f;
@@ -28,11 +28,6 @@ public class DynamicGravitizable : GravitizableBase
         if (LinkNums.Count <= 0 || IsTimeStopped) return;
 
         rb.AddForce(LinkForces(), ForceMode.Force);
-    }
-
-    public override Vector3 GetAnchor(int _)
-    {
-        return transform.position;
     }
 
     // ---------------- Physics (unchanged from the original player script) ----------------

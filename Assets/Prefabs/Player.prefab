@@ -3606,6 +3606,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59c43442ec377914a9d6205914339c99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerCamera
+  IsTimeStopped: 0
   input: {fileID: 9001239680924629136}
   rotationSpeed: 5
 --- !u!114 &7192139582111506952
@@ -3667,7 +3668,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7670880659290561358}
   serializedVersion: 5
-  m_Mass: 0.1
+  m_Mass: 0.01
   m_LinearDamping: 0.5
   m_AngularDamping: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -3740,12 +3741,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1cb7749783e627458264d83cdd66933, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
+  IsTimeStopped: 0
   input: {fileID: 9001239680924629136}
   playerCamera: {fileID: 1012847658231625085}
   speed: 10
   accelerationRate: 20
   decelerationRate: 25
-  jumpPower: 0.75
+  jumpPower: 0.085
   gravityPower: 10
 --- !u!114 &913537694172892556
 MonoBehaviour:
