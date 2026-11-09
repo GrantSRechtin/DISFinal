@@ -6,7 +6,7 @@ using UnityEngine;
 /// </summary>
 [DisallowMultipleComponent]
 [RequireComponent(typeof(Rigidbody))]
-public class DynamicGravitizable : SingleAnchorGravitizable
+public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
 {
     [Header("Gravity")]
     [SerializeField] float gravitationalForce = 40f;
@@ -17,6 +17,8 @@ public class DynamicGravitizable : SingleAnchorGravitizable
 
     Rigidbody rb;
 
+    public bool IsHeld { get; set; }
+
     protected override void Awake()
     {
         base.Awake();
@@ -25,12 +27,12 @@ public class DynamicGravitizable : SingleAnchorGravitizable
 
     void FixedUpdate()
     {
-        if (LinkNums.Count <= 0 || IsTimeStopped) return;
+        if (LinkNums.Count <= 0 || IsTimeStopped || IsHeld) return;
 
         rb.AddForce(LinkForces(), ForceMode.Force);
     }
 
-    // ---------------- Physics (unchanged from the original player script) ----------------
+    // ---------------- Physics ----------------
 
     Vector3 LinkForces()
     {

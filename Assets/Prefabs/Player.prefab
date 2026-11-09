@@ -1252,6 +1252,37 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3432155268696405475
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7439237666186288590}
+  m_Layer: 0
+  m_Name: HoldPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7439237666186288590
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3432155268696405475}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 2.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3847248315994535544}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3500111766335715928
 GameObject:
   m_ObjectHideFlags: 0
@@ -3495,6 +3526,7 @@ Transform:
   - {fileID: 4291958484541361233}
   - {fileID: 1796483698636066201}
   - {fileID: 8553638797824041983}
+  - {fileID: 7439237666186288590}
   m_Father: {fileID: 6156089240476182054}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &394469117214131276
@@ -3636,6 +3668,7 @@ GameObject:
   - component: {fileID: 9001239680924629136}
   - component: {fileID: 1528230378390903312}
   - component: {fileID: 913537694172892556}
+  - component: {fileID: 5848928362177353159}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -3685,7 +3718,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &995851742538117288
 MonoBehaviour:
@@ -3763,6 +3796,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerActions
   input: {fileID: 9001239680924629136}
   head: {fileID: 3847248315994535544}
+--- !u!114 &5848928362177353159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7670880659290561358}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16c27080ddb235945b0bc804aa7ad72a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerGrab
+  input: {fileID: 9001239680924629136}
+  head: {fileID: 3847248315994535544}
+  holdPosition: {fileID: 7439237666186288590}
+  pickupRange: 5
+  pickupForce: 150
 --- !u!1 &7785201059244908898
 GameObject:
   m_ObjectHideFlags: 0
