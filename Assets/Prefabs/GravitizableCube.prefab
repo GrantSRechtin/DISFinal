@@ -83,7 +83,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!33 &8326659013913758286
 MeshFilter:
@@ -154,12 +154,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 754b3bbef1ac7574abf32407240781bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DynamicGravitizable
+  IsTimeStopped: 0
+  frame: {fileID: 7959905885433714009}
   gravitationalForce: 40
   distanceScaling: 0.5
   minDist: 10
   pushMultiplier: -0.625
   minForce: 5
-  frame: {fileID: 7959905885433714009}
 --- !u!1001 &5423902567971467150
 PrefabInstance:
   m_ObjectHideFlags: 0
