@@ -89,6 +89,16 @@ public class PlayerActions : MonoBehaviour
     Vector3 RaycastPoint()
     {
         if (!Physics.Raycast(head.position, head.forward, out RaycastHit hit)) return Vector3.zero;
-        return hit.point;
+
+        Vector3 p = hit.point;
+        Vector3 anchorPoint = new(
+            RoundTo0625(p.x),
+            RoundTo0625(p.y),
+            RoundTo0625(p.z)
+        );
+
+        return anchorPoint;
     }
+
+    static float RoundTo0625(float value) => Mathf.Round(value / 0.625f) * 0.625f;
 }
