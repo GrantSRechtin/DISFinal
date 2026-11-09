@@ -110,19 +110,32 @@ public class PlayerMovement : RewindableBase
 
     private void ApplyMovement()
     {
+        // current version is ai
         Vector2 moveInput = Vector2.ClampMagnitude(input.Move, 1f);
-
-        Vector3 inputDirection = new(moveInput.x, 0f, moveInput.y);
-        Vector3 targetVelocity = playerCamera.GetDirection() * inputDirection * speed;
-
+        Vector3 inputDirection = playerCamera.GetDirection() * new Vector3(moveInput.x, 0f, moveInput.y);
         Vector3 horizontalVelocity = new(rb.linearVelocity.x, 0f, rb.linearVelocity.z);
-        Vector3 requiredAcceleration = (targetVelocity - horizontalVelocity) / Time.fixedDeltaTime;
-        float accelerationLimit = moveInput.sqrMagnitude > 0f ? accelerationRate : decelerationRate;
-        requiredAcceleration = Vector3.ClampMagnitude(requiredAcceleration, accelerationLimit);
 
-        requiredAcceleration += Vector3.down * gravityPower;
+        if (inputDirection.sqrMagnitude > 0f)
+        {
+            Vector3 targetVelocity = inputDirection * speed;
+            bool slowingDown = horizontalVelocity.sqrMagnitude > targetVelocity.sqrMagnitude
+                || Vector3.Dot(horizontalVelocity, targetVelocity) < horizontalVelocity.sqrMagnitude;
+            float accelerationLimit = slowingDown ? decelerationRate : accelerationRate;
+            Vector3 controlledVelocity = Vector3.MoveTowards(
+                horizontalVelocity,
+                targetVelocity,
+                accelerationLimit * Time.fixedDeltaTime);
+            rb.AddForce(
+                (controlledVelocity - horizontalVelocity) / Time.fixedDeltaTime,
+                ForceMode.Acceleration);
+        }
+        else if (OnGround())
+        {
+            Vector3 deceleration = -horizontalVelocity / Time.fixedDeltaTime;
+            rb.AddForce(Vector3.ClampMagnitude(deceleration, decelerationRate), ForceMode.Acceleration);
+        }
 
-        rb.AddForce(requiredAcceleration, ForceMode.Acceleration);
+        rb.AddForce(Vector3.down * gravityPower, ForceMode.Acceleration);
     }
 
     private void ApplyJump()
@@ -130,6 +143,14 @@ public class PlayerMovement : RewindableBase
         if (!jumpRequested) return;
         jumpRequested = false;
 
-        rb.AddForce(jumpPower * Vector3.up, ForceMode.Impulse);
+        if (OnGround()) rb.AddForce(jumpPower * Vector3.up, ForceMode.Impulse);
+    }
+
+    private bool OnGround()
+    {
+        Vector3 overlapBoxCenter = transform.position + (Vector3.down * .1f);
+        Vector3 size = new(0.5f,0.125f,0.5f);
+        Collider[] groundColliders = Physics.OverlapBox(overlapBoxCenter, size);
+        return groundColliders.Length > 1;
     }
 }
