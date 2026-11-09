@@ -51,6 +51,8 @@ public class RewindController : MonoBehaviour
         PlayerInputHandler.Instance.RewindReleased -= OnRewindReleased;
     }
 
+    [SerializeField] private GameObject rewindArrow;
+
     private bool timeStopped = false;
     private float rewindSpeedIncreaseTime = 1;
     private int currentRewindedTicks = 1;
@@ -65,18 +67,22 @@ public class RewindController : MonoBehaviour
     {
         currentRewindedTicks = 1;
 
+        rewindArrow.SetActive(true);
         timeStopped = true;
         TimeStopped?.Invoke();
     }
     
     void OnRewindReleased()
     {
+        rewindArrow.SetActive(false);
         timeStopped = false;
         TimeStarted?.Invoke();
     }
 
     void Start()
     {
+        rewindArrow.SetActive(false);
+
         StartCoroutine(StoreTimestepLoop());
         StartCoroutine(RewindTimestepLoop());
         StartCoroutine(RewindSpeedIncreaser());
