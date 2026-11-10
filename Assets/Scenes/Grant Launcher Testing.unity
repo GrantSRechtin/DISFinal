@@ -3991,6 +3991,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1802455381680031841, guid: c8a8a3c776b5cee418ff3f696c936cc7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1802455381680031841, guid: c8a8a3c776b5cee418ff3f696c936cc7, type: 3}
       propertyPath: m_Name
       value: RewindController
       objectReference: {fileID: 0}
