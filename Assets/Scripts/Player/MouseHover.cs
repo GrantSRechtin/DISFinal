@@ -1,21 +1,16 @@
 using System.Collections;
 using UnityEngine;
 
-/// <summary>
-/// Orbit-style camera rotation. Reads look intent from PlayerInputHandler,
-/// never touches the Input System directly.
-/// </summary>
 public class MouseHover : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private PlayerInputHandler input;
 
+    float hoverDistance = 5f;
     bool highlighting = false;
 
     private void Update()
     {
-        Vector2 lookInput = input.Look;
-
         if(!highlighting)
         {
             IGravitizable gravitizable = RaycastForGravitizable();
@@ -43,7 +38,12 @@ public class MouseHover : MonoBehaviour
 
     IGravitizable RaycastForGravitizable()
     {
-        if (!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit)) return null;
+        if (!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, hoverDistance)) return null;
         return hit.collider.GetComponentInParent<IGravitizable>();
+    }
+
+    public void SetHoverDistance(float distance)
+    {
+        hoverDistance = distance;
     }
 }
