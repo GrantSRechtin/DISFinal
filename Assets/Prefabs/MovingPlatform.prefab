@@ -495,7 +495,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6039183586699406708}
   serializedVersion: 5
-  m_Mass: 0.5
+  m_Mass: 10
   m_LinearDamping: 0.5
   m_AngularDamping: 0.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -529,9 +529,7 @@ MonoBehaviour:
   IsTimeStopped: 0
   frame: {fileID: 3200309131748465476}
   anchorPosition: {fileID: 0}
-  gravitationalForce: 40
-  distanceScaling: 0.5
-  minDist: 10
+  gravitationalForce: 100
   pushMultiplier: -0.625
   minForce: 5
 --- !u!1 &8396714634619266833

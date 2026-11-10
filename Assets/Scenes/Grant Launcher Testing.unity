@@ -3969,9 +3969,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5467101763170641605, guid: 117fe752563ebb74090636a5e1076b4d, type: 3}
-      propertyPath: gravitationalForce
-      value: 50
+    - target: {fileID: 5995579142221380009, guid: 117fe752563ebb74090636a5e1076b4d, type: 3}
+      propertyPath: m_Mass
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6039183586699406708, guid: 117fe752563ebb74090636a5e1076b4d, type: 3}
       propertyPath: m_Name

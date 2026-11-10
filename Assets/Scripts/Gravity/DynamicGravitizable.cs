@@ -27,7 +27,7 @@ public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
     {
         if (LinkNums.Count <= 0 || IsTimeStopped || IsHeld) return;
 
-        rb.AddForce(LinkForces(), ForceMode.Force);
+        rb.AddForce(LinkForces(), ForceMode.Acceleration);
     }
 
     // ---------------- Physics ----------------
@@ -55,10 +55,10 @@ public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
 
         // Pull: max power at or above max distance
         // Push: max power at or below min distance
-        float powerRation = distance/maxD;
-        if (mode == GravityMode.Push) powerRation = 1f-powerRation;
+        float powerRatio = distance / maxD;
+        if (mode == GravityMode.Push) powerRatio = 1f-powerRatio;
 
-        Vector3 force = direction.normalized * powerRation * gravitationalForce;
+        Vector3 force = direction.normalized * powerRatio * gravitationalForce;
         if (force.magnitude < minForce) return Vector3.zero;
 
         if (mode == GravityMode.Push) force *= pushMultiplier;
