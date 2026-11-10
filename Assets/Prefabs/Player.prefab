@@ -3701,7 +3701,7 @@ GameObject:
   - component: {fileID: 9001239680924629136}
   - component: {fileID: 1528230378390903312}
   - component: {fileID: 913537694172892556}
-  - component: {fileID: 5848928362177353159}
+  - component: {fileID: 7070498178933027435}
   - component: {fileID: 411948287330140956}
   m_Layer: 0
   m_Name: Player
@@ -3830,7 +3830,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerActions
   input: {fileID: 9001239680924629136}
   head: {fileID: 3847248315994535544}
---- !u!114 &5848928362177353159
+--- !u!114 &7070498178933027435
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

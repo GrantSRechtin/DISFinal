@@ -12,8 +12,8 @@ public class PlayerInteractionMode : MonoBehaviour
     [Header("References")]
     [SerializeField] PlayerInputHandler input;
 
-    PlayerGrab playerGrab;
-    PlayerLinkControl playerLinkControl;
+    InteractionModeHold hold;
+    InteractionModeLink link;
     GunAnimations gunAnimations;
 
     bool isHolding = true;
@@ -22,8 +22,8 @@ public class PlayerInteractionMode : MonoBehaviour
     {
         if (input == null) input = GetComponent<PlayerInputHandler>();
 
-        playerGrab = GetComponent<PlayerGrab>();
-        playerLinkControl = GetComponent<PlayerLinkControl>();
+        hold = GetComponent<InteractionModeHold>();
+        link = GetComponent<InteractionModeLink>();
         gunAnimations = GetComponentInChildren<GunAnimations>();
     }
 
@@ -53,14 +53,14 @@ public class PlayerInteractionMode : MonoBehaviour
 
     private void SetInteractToLinking()
     {
-        input.InteractPressed          += playerLinkControl.StartLink;
-        input.InteractReleased         += playerLinkControl.EndLink;
-        input.InteractPressed          -= playerGrab.Grab;
-        input.InteractReleased         -= playerGrab.Drop;
+        input.InteractPressed          += link.StartLink;
+        input.InteractReleased         += link.EndLink;
+        input.InteractPressed          -= hold.Grab;
+        input.InteractReleased         -= hold.Drop;
 
-        input.GravityControlPressed    += playerLinkControl.OnGravityControl;
-        input.GravityReleasePressed    += playerLinkControl.OnGravityRelease;
-        input.ChangeCurrentLinkPressed += playerLinkControl.OnChangeCurrentLink;
+        input.GravityControlPressed    += link.OnGravityControl;
+        input.GravityReleasePressed    += link.OnGravityRelease;
+        input.ChangeCurrentLinkPressed += link.OnChangeCurrentLink;
 
         input.ChangeCurrentLinkPressed += gunAnimations.OnChangeCurrentLink;
 
@@ -70,14 +70,14 @@ public class PlayerInteractionMode : MonoBehaviour
 
     private void SetInteractToHolding()
     {
-        input.InteractPressed          -= playerLinkControl.StartLink;
-        input.InteractReleased         -= playerLinkControl.EndLink;
-        input.InteractPressed          += playerGrab.Grab;
-        input.InteractReleased         += playerGrab.Drop;
+        input.InteractPressed          -= link.StartLink;
+        input.InteractReleased         -= link.EndLink;
+        input.InteractPressed          += hold.Grab;
+        input.InteractReleased         += hold.Drop;
 
-        input.GravityControlPressed    -= playerLinkControl.OnGravityControl;
-        input.GravityReleasePressed    -= playerLinkControl.OnGravityRelease;
-        input.ChangeCurrentLinkPressed -= playerLinkControl.OnChangeCurrentLink;
+        input.GravityControlPressed    -= link.OnGravityControl;
+        input.GravityReleasePressed    -= link.OnGravityRelease;
+        input.ChangeCurrentLinkPressed -= link.OnChangeCurrentLink;
 
         input.ChangeCurrentLinkPressed -= gunAnimations.OnChangeCurrentLink;
         

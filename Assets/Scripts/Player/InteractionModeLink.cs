@@ -6,7 +6,7 @@ using UnityEngine;
 /// Turns player intent into commands on IGravitizable objects.
 /// Holds only "which objects am I holding"; the objects own everything else.
 /// </summary>
-public class PlayerLinkControl : MonoBehaviour
+public class InteractionModeLink : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] PlayerInputHandler input;
