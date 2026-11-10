@@ -2,6 +2,7 @@ using System;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Turns player intent into commands on IGravitizable objects.
@@ -13,6 +14,8 @@ public class PlayerInteractionMode : MonoBehaviour
     [SerializeField] PlayerInputHandler input;
     [SerializeField] Crosshair crosshair;
 
+    MouseHover mouseHover;
+
     bool isHolding = true;
 
     public event Action<bool> InteractionModeChanged;
@@ -20,6 +23,7 @@ public class PlayerInteractionMode : MonoBehaviour
     void Awake()
     {
         if (input == null) input = GetComponent<PlayerInputHandler>();
+        mouseHover = GetComponentInChildren<MouseHover>();
     }
 
     void OnEnable()
@@ -37,5 +41,8 @@ public class PlayerInteractionMode : MonoBehaviour
     {
         isHolding = !isHolding;
         InteractionModeChanged?.Invoke(isHolding);
+
+        float mouseHoverDistance = isHolding ? 5 : 20;
+        mouseHover.SetHoverDistance(mouseHoverDistance);
     }
 }
