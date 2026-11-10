@@ -12,22 +12,54 @@ public class InteractionModeLink : MonoBehaviour
     [SerializeField] PlayerInputHandler input;
     [SerializeField] Transform head;
 
+    PlayerInteractionMode interactionMode;
+
     void Awake()
     {
         if (input == null) input = GetComponent<PlayerInputHandler>();
+        interactionMode = GetComponent<PlayerInteractionMode>();
+    }
+
+    void OnEnable()
+    {
+        interactionMode.InteractionModeChanged += OnModeSwitch;
     }
 
     void OnDisable()
     {
-        input.InteractPressed          -= StartLink;
-        input.InteractReleased         -= EndLink;
-        input.GravityControlPressed    -= OnGravityControl;
-        input.GravityReleasePressed    -= OnGravityRelease;
-        input.ChangeCurrentLinkPressed -= OnChangeCurrentLink;
+        interactionMode.InteractionModeChanged -= OnModeSwitch;
+
+        input.InteractPressed                  -= StartLink;
+        input.InteractReleased                 -= EndLink;
+        input.GravityControlPressed            -= OnGravityControl;
+        input.GravityReleasePressed            -= OnGravityRelease;
+        input.ChangeCurrentLinkPressed         -= OnChangeCurrentLink;
+    }
+
+    void OnModeSwitch(bool holding)
+    {
+        if (holding)
+        {
+            input.InteractPressed          -= StartLink;
+            input.InteractReleased         -= EndLink;
+
+            input.GravityControlPressed    -= OnGravityControl;
+            input.GravityReleasePressed    -= OnGravityRelease;
+            input.ChangeCurrentLinkPressed -= OnChangeCurrentLink;
+        }
+        else
+        {
+            input.InteractPressed          += StartLink;
+            input.InteractReleased         += EndLink;
+
+            input.GravityControlPressed    += OnGravityControl;
+            input.GravityReleasePressed    += OnGravityRelease;
+            input.ChangeCurrentLinkPressed += OnChangeCurrentLink;
+        }
     }
 
     // Press: start a new pair
-    public void StartLink()
+    void StartLink()
     {
         GravityController.Instance.ClearCurrentLink();
 
@@ -38,7 +70,7 @@ public class InteractionModeLink : MonoBehaviour
     }
 
     // Release: finish the pair, or cancel it
-    public void EndLink()
+    void EndLink()
     {
         GravityController gravityController = GravityController.Instance;
         GravLink currentLink = gravityController.gravLinks[gravityController.currentLinkNum];
@@ -56,17 +88,17 @@ public class InteractionModeLink : MonoBehaviour
     }
 
     // Scroll up = Push, scroll down = Pull. Ignored by the object if it isn't linked.
-    public void OnGravityControl(float direction)
+    void OnGravityControl(float direction)
     {
         GravityController.Instance.SetCurrentLinkMode(direction > 0f ? GravityMode.Push : GravityMode.Pull);
     }
 
-    public void OnGravityRelease()
+    void OnGravityRelease()
     {
         GravityController.Instance.SetCurrentLinkMode(GravityMode.None);
     }
 
-    public void OnChangeCurrentLink(int newLinkNum)
+    void OnChangeCurrentLink(int newLinkNum)
     {
         GravityController.Instance.ChangeCurrentLink(newLinkNum);
     }

@@ -62,7 +62,7 @@ public class GunAnimations : MonoBehaviour
         }
     }
 
-    public void OnChangeCurrentLink(int newLinkNum)
+    void OnChangeCurrentLink(int newLinkNum)
     {
         // Unselect all
         foreach (GameObject cartridge in cartridges)

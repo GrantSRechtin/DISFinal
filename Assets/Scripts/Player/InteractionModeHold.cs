@@ -27,10 +27,12 @@ public class InteractionModeHold : MonoBehaviour
 
     float prevLinearDamping;
     Quaternion prevRotation;
+    PlayerInteractionMode interactionMode;
 
     void Awake()
     {
         if (input == null) input = GetComponent<PlayerInputHandler>();
+        interactionMode = GetComponent<PlayerInteractionMode>();
     }
 
     void FixedUpdate()
@@ -39,13 +41,34 @@ public class InteractionModeHold : MonoBehaviour
         MoveObject();
     }
 
-    void OnDisable()
+    void OnEnable()
     {
-        input.InteractPressed  -= Grab;
-        input.InteractReleased -= Drop;
+        interactionMode.InteractionModeChanged += OnModeSwitch;
     }
 
-    public void Grab()
+    void OnDisable()
+    {
+        interactionMode.InteractionModeChanged -= OnModeSwitch;
+
+        input.InteractPressed                  -= Grab;
+        input.InteractReleased                 -= Drop;
+    }
+
+    void OnModeSwitch(bool holding)
+    {
+        if (holding)
+        {
+            input.InteractPressed          += Grab;
+            input.InteractReleased         += Drop;
+        }
+        else
+        {
+            input.InteractPressed          -= Grab;
+            input.InteractReleased         -= Drop;
+        }
+    }
+
+    void Grab()
     {
         if (!holding) return;
 
@@ -69,7 +92,7 @@ public class InteractionModeHold : MonoBehaviour
         heldScript.IsHeld = true;
     }
 
-    public void Drop()
+    void Drop()
     {
         if (!heldObject || !holding) return;
 
