@@ -90,6 +90,38 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &703117456633067504
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2628487437833731385}
+  m_Layer: 15
+  m_Name: GunCap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2628487437833731385
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 703117456633067504}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6699168984536739028}
+  m_Father: {fileID: 3849978802818195690}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &818392087218334923
 GameObject:
   m_ObjectHideFlags: 0
@@ -1613,7 +1645,7 @@ Transform:
   - {fileID: 862967037125736622}
   - {fileID: 989807534172468188}
   - {fileID: 1893384934972102002}
-  - {fileID: 6699168984536739028}
+  - {fileID: 2628487437833731385}
   - {fileID: 4568378463098812105}
   - {fileID: 5726845866289584845}
   - {fileID: 4070223763237908490}
@@ -2488,6 +2520,7 @@ MonoBehaviour:
   - {fileID: 5600316351025218323}
   - {fileID: 3784219352139102698}
   - {fileID: 2301112331601099367}
+  gunCap: {fileID: 703117456633067504}
 --- !u!1 &6508718093670166068
 GameObject:
   m_ObjectHideFlags: 0
@@ -4081,11 +4114,11 @@ Transform:
   m_GameObject: {fileID: 8369055410506955802}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.1329999, z: 0.484}
-  m_LocalScale: {x: 0.225, y: 0.025, z: 0.225}
+  m_LocalPosition: {x: 0, y: -0.1329999, z: 0.48399997}
+  m_LocalScale: {x: 0.225, y: 0.025000002, z: 0.225}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3849978802818195690}
+  m_Father: {fileID: 2628487437833731385}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &5731442154138909314
 MeshFilter:
@@ -4120,7 +4153,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: d2a4857368dd9314488d4e7a2f40d579, type: 2}
+  - {fileID: 2100000, guid: e14849f91fb9fd541b5967cec3fc1e41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

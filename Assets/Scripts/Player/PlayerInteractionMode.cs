@@ -63,6 +63,9 @@ public class PlayerInteractionMode : MonoBehaviour
         input.ChangeCurrentLinkPressed += playerLinkControl.OnChangeCurrentLink;
 
         input.ChangeCurrentLinkPressed += gunAnimations.OnChangeCurrentLink;
+
+        // Highlight selected slot
+        gunAnimations.SetHolding(false);
     }
 
     private void SetInteractToHolding()
@@ -77,5 +80,8 @@ public class PlayerInteractionMode : MonoBehaviour
         input.ChangeCurrentLinkPressed -= playerLinkControl.OnChangeCurrentLink;
 
         input.ChangeCurrentLinkPressed -= gunAnimations.OnChangeCurrentLink;
+        
+        // Highlight cap
+        gunAnimations.SetHolding(true);
     }
 }

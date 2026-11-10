@@ -13,6 +13,7 @@ public class GunAnimations : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] GameObject[] cartridges;
+    [SerializeField] GameObject gunCap;
 
     PlayerInputHandler input;
     GravityController gravityController;
@@ -20,11 +21,6 @@ public class GunAnimations : MonoBehaviour
     void Awake()
     {
         input = GetComponentInParent<PlayerInputHandler>();
-    }
-
-    void Start()
-    {
-        OnChangeCurrentLink(0);
     }
 
     void OnEnable()
@@ -44,13 +40,31 @@ public class GunAnimations : MonoBehaviour
         }
     }
 
+    public void SetHolding(bool isHolding)
+    {
+        if (isHolding) OnChangeCurrentLink(3);
+        else
+        {
+            int slot = GravityController.Instance.currentLinkNum;
+            OnChangeCurrentLink(slot);
+        }
+    }
+
     public void OnChangeCurrentLink(int newLinkNum)
     {
+        // Unselect all
         foreach (GameObject cartridge in cartridges)
         {
             SetFrame(cartridge, Color.gray2, true);
         }
+        SetFrame(gunCap, Color.gray2, true);
 
+        // Select current
+        if (newLinkNum > 2)
+        {
+            SetFrame(gunCap, Color.white, true);
+            return;
+        }
         SetFrame(cartridges[newLinkNum], Color.white, true);
     }
 
