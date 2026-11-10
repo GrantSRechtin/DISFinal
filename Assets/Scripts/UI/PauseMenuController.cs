@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PauseMenuController : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenu;
-
+    [SerializeField] private GameObject crosshair;
     private InputAction crouchAction;
     private bool isPaused = false;
 
@@ -43,12 +43,14 @@ public class PauseMenuController : MonoBehaviour
     {
         pauseMenu.SetActive(true);
         SetPaused(true);
+        crosshair.SetActive(false);
     }
 
     public void ResumeGame()
     {
         pauseMenu.SetActive(false);
         SetPaused(false);
+        crosshair.SetActive(true);
     }
 
     private void SetPaused(bool paused)
