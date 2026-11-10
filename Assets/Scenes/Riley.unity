@@ -1449,6 +1449,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2098555641}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1008743627 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7762042110799144980, guid: 926f91f4625cc72479ca55dbdf33d5a4, type: 3}
+  m_PrefabInstance: {fileID: 198941159}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1057215621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2434,6 +2439,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PauseMenuManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8480108285133550234, guid: 4d02f96470b9d4cbaa2ca973b3fe5093, type: 3}
+      propertyPath: crosshair
+      value: 
+      objectReference: {fileID: 1008743627}
     - target: {fileID: 8480108285133550234, guid: 4d02f96470b9d4cbaa2ca973b3fe5093, type: 3}
       propertyPath: pauseMenu
       value: 
