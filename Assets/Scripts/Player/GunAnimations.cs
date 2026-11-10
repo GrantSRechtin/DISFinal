@@ -29,15 +29,13 @@ public class GunAnimations : MonoBehaviour
 
     void OnEnable()
     {
-        input.ChangeCurrentLinkPerformed   += OnChangeCurrentLink;
-
         gravityController = GravityController.Instance;
         gravityController.GravLinksChanged += OnGravLinksChanged;
     }
 
     void OnDisable()
     {
-        input.ChangeCurrentLinkPerformed       -= OnChangeCurrentLink;
+        input.ChangeCurrentLinkPressed       -= OnChangeCurrentLink;
 
         if (gravityController != null)
         {
@@ -46,7 +44,7 @@ public class GunAnimations : MonoBehaviour
         }
     }
 
-    void OnChangeCurrentLink(int newLinkNum)
+    public void OnChangeCurrentLink(int newLinkNum)
     {
         foreach (GameObject cartridge in cartridges)
         {

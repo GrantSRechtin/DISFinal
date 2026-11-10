@@ -22,12 +22,11 @@ public class PlayerInputHandler : MonoBehaviour
     public event Action InteractPressed;
     public event Action InteractReleased;
     public event Action SelectPressed;
-    public event Action SelectReleased;
-    public event Action<float> GravityControlPerformed;
-    public event Action GravityReleasePerformed;
-    public event Action<int> ChangeCurrentLinkPerformed;
-    public event Action PausePerformed;
-    public event Action RestartPerformed;
+    public event Action<float> GravityControlPressed;
+    public event Action GravityReleasePressed;
+    public event Action<int> ChangeCurrentLinkPressed;
+    public event Action PausePressed;
+    public event Action RestartPressed;
     public event Action RewindPressed;
     public event Action RewindReleased;
 
@@ -83,35 +82,33 @@ public class PlayerInputHandler : MonoBehaviour
 
     void OnEnable()
     {
-        jumpAction.performed              += OnJumpPerformed;
-        interactAction.performed          += OnInteractPerformed;
+        jumpAction.performed              += OnJumpPressed;
+        interactAction.performed          += OnInteractPressed;
         interactAction.canceled           += OnInteractReleased;
-        selectAction.performed            += OnSelectPerformed;
-        selectAction.canceled             += OnSelectReleased;
-        gravityControlAction.performed    += OnGravityControlPerformed;
-        gravityReleaseAction.performed    += OnGravityReleasePerformed;
-        changeCurrentLinkAction.performed += OnChangeCurrentLinkPerformed;
+        selectAction.performed            += OnSelectPressed;
+        gravityControlAction.performed    += OnGravityControlPressed;
+        gravityReleaseAction.performed    += OnGravityReleasePressed;
+        changeCurrentLinkAction.performed += OnChangeCurrentLinkPressed;
 
-        pauseAction.performed             += OnPausePerformed;
-        restartAction.performed           += OnRestartPerformed;
-        rewindAction.performed            += OnRewindPerformed;
+        pauseAction.performed             += OnPausePressed;
+        restartAction.performed           += OnRestartPressed;
+        rewindAction.performed            += OnRewindPressed;
         rewindAction.canceled             += OnRewindReleased;
     }
 
     void OnDisable()
     {
-        jumpAction.performed              -= OnJumpPerformed;
-        interactAction.performed          -= OnInteractPerformed;
+        jumpAction.performed              -= OnJumpPressed;
+        interactAction.performed          -= OnInteractPressed;
         interactAction.canceled           -= OnInteractReleased;
-        selectAction.performed            -= OnSelectPerformed;
-        selectAction.canceled             -= OnSelectReleased;
-        gravityControlAction.performed    -= OnGravityControlPerformed;
-        gravityReleaseAction.performed    -= OnGravityReleasePerformed;
-        changeCurrentLinkAction.performed -= OnChangeCurrentLinkPerformed;
+        selectAction.performed            -= OnSelectPressed;
+        gravityControlAction.performed    -= OnGravityControlPressed;
+        gravityReleaseAction.performed    -= OnGravityReleasePressed;
+        changeCurrentLinkAction.performed -= OnChangeCurrentLinkPressed;
 
-        pauseAction.performed             -= OnPausePerformed;
-        restartAction.performed           -= OnRestartPerformed;
-        rewindAction.performed            -= OnRewindPerformed;
+        pauseAction.performed             -= OnPausePressed;
+        restartAction.performed           -= OnRestartPressed;
+        rewindAction.performed            -= OnRewindPressed;
         rewindAction.canceled             -= OnRewindReleased;
 
         Move = Vector2.zero;
@@ -124,31 +121,30 @@ public class PlayerInputHandler : MonoBehaviour
         Look = lookAction.ReadValue<Vector2>();
     }
 
-    void OnJumpPerformed(InputAction.CallbackContext _)            => JumpPressed?.Invoke();
-    void OnInteractPerformed(InputAction.CallbackContext _)        => InteractPressed?.Invoke();
-    void OnInteractReleased(InputAction.CallbackContext _)         => InteractReleased?.Invoke();
-    void OnSelectPerformed(InputAction.CallbackContext _)          => SelectPressed?.Invoke();
-    void OnSelectReleased(InputAction.CallbackContext _)           => SelectReleased?.Invoke();
-    void OnGravityControlPerformed(InputAction.CallbackContext ctx)
+    void OnJumpPressed(InputAction.CallbackContext _)            => JumpPressed?.Invoke();
+    void OnInteractPressed(InputAction.CallbackContext _)        => InteractPressed?.Invoke();
+    void OnInteractReleased(InputAction.CallbackContext _)       => InteractReleased?.Invoke();
+    void OnSelectPressed(InputAction.CallbackContext _)          => SelectPressed?.Invoke();
+    void OnGravityControlPressed(InputAction.CallbackContext ctx)
     {
         float value = ctx.ReadValue<float>();
         if (Mathf.Approximately(value, 0f)) return;
-        GravityControlPerformed?.Invoke(Mathf.Sign(value));
+        GravityControlPressed?.Invoke(Mathf.Sign(value));
     }
-    void OnGravityReleasePerformed(InputAction.CallbackContext _)  => GravityReleasePerformed?.Invoke();
-    void OnChangeCurrentLinkPerformed(InputAction.CallbackContext ctx)
+    void OnGravityReleasePressed(InputAction.CallbackContext _)  => GravityReleasePressed?.Invoke();
+    void OnChangeCurrentLinkPressed(InputAction.CallbackContext ctx)
     {
         float cartridge = ctx.ReadValue<float>();
-        ChangeCurrentLinkPerformed?.Invoke((int) cartridge-1);
+        ChangeCurrentLinkPressed?.Invoke((int) cartridge-1);
     }
-    void OnPausePerformed(InputAction.CallbackContext _)           => PausePerformed?.Invoke();
-    void OnRestartPerformed(InputAction.CallbackContext _)
+    void OnPausePressed(InputAction.CallbackContext _)           => PausePressed?.Invoke();
+    void OnRestartPressed(InputAction.CallbackContext _)
     {
-        RestartPerformed?.Invoke();
+        RestartPressed?.Invoke();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-    void OnRewindPerformed(InputAction.CallbackContext _)          => RewindPressed?.Invoke();
-    void OnRewindReleased(InputAction.CallbackContext _)           => RewindReleased?.Invoke();
+    void OnRewindPressed(InputAction.CallbackContext _)          => RewindPressed?.Invoke();
+    void OnRewindReleased(InputAction.CallbackContext _)         => RewindReleased?.Invoke();
 
     // --- Helpers so other systems (pause menu, cutscenes) never touch PlayerInput directly ---
     public void EnableGameplayInput() => playerInput.SwitchCurrentActionMap("Player");

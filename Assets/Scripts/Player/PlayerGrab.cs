@@ -18,6 +18,8 @@ public class PlayerGrab : MonoBehaviour
     [SerializeField] float pickupRange = 5f;
     [SerializeField] float pickupForce = 150f;
 
+    bool holding = true;
+
     GameObject heldObject;
     Rigidbody heldRigidbody;
     IHoldable heldScript;
@@ -31,26 +33,22 @@ public class PlayerGrab : MonoBehaviour
         if (input == null) input = GetComponent<PlayerInputHandler>();
     }
 
-    void OnEnable()
+    void FixedUpdate()
     {
-        input.InteractPressed  += OnInteractPressed;
-        input.InteractReleased += OnInteractReleased;
+        if (!heldObject || !holding) return;
+        MoveObject();
     }
 
     void OnDisable()
     {
-        input.InteractPressed  -= OnInteractPressed;
-        input.InteractReleased -= OnInteractReleased;
+        input.InteractPressed  -= Grab;
+        input.InteractReleased -= Drop;
     }
 
-    void FixedUpdate()
+    public void Grab()
     {
-        if (!heldObject) return;
-        MoveObject();
-    }
+        if (!holding) return;
 
-    void OnInteractPressed()
-    {
         heldObject = RaycastForHoldableGameObject();
 
         if (!heldObject) return;
@@ -71,9 +69,9 @@ public class PlayerGrab : MonoBehaviour
         heldScript.IsHeld = true;
     }
 
-    void OnInteractReleased()
+    public void Drop()
     {
-        if (!heldObject) return;
+        if (!heldObject || !holding) return;
 
         heldRigidbody.useGravity = true;
         heldRigidbody.mass = heldMass;

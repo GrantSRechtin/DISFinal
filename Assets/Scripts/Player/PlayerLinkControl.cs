@@ -6,7 +6,7 @@ using UnityEngine;
 /// Turns player intent into commands on IGravitizable objects.
 /// Holds only "which objects am I holding"; the objects own everything else.
 /// </summary>
-public class PlayerActions : MonoBehaviour
+public class PlayerLinkControl : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] PlayerInputHandler input;
@@ -17,26 +17,17 @@ public class PlayerActions : MonoBehaviour
         if (input == null) input = GetComponent<PlayerInputHandler>();
     }
 
-    void OnEnable()
-    {
-        input.SelectPressed              += OnSelectPressed;
-        input.SelectReleased             += OnSelectReleased;
-        input.GravityControlPerformed    += OnGravityControl;
-        input.GravityReleasePerformed    += OnGravityRelease;
-        input.ChangeCurrentLinkPerformed += OnChangeCurrentLink;
-    }
-
     void OnDisable()
     {
-        input.SelectPressed              -= OnSelectPressed;
-        input.SelectReleased             -= OnSelectReleased;
-        input.GravityControlPerformed    -= OnGravityControl;
-        input.GravityReleasePerformed    -= OnGravityRelease;
-        input.ChangeCurrentLinkPerformed -= OnChangeCurrentLink;
+        input.InteractPressed          -= StartLink;
+        input.InteractReleased         -= EndLink;
+        input.GravityControlPressed    -= OnGravityControl;
+        input.GravityReleasePressed    -= OnGravityRelease;
+        input.ChangeCurrentLinkPressed -= OnChangeCurrentLink;
     }
 
     // Press: start a new pair
-    void OnSelectPressed()
+    public void StartLink()
     {
         GravityController.Instance.ClearCurrentLink();
 
@@ -47,7 +38,7 @@ public class PlayerActions : MonoBehaviour
     }
 
     // Release: finish the pair, or cancel it
-    void OnSelectReleased()
+    public void EndLink()
     {
         GravityController gravityController = GravityController.Instance;
         GravLink currentLink = gravityController.gravLinks[gravityController.currentLinkNum];
@@ -65,17 +56,17 @@ public class PlayerActions : MonoBehaviour
     }
 
     // Scroll up = Push, scroll down = Pull. Ignored by the object if it isn't linked.
-    void OnGravityControl(float direction)
+    public void OnGravityControl(float direction)
     {
         GravityController.Instance.SetCurrentLinkMode(direction > 0f ? GravityMode.Push : GravityMode.Pull);
     }
 
-    void OnGravityRelease()
+    public void OnGravityRelease()
     {
         GravityController.Instance.SetCurrentLinkMode(GravityMode.None);
     }
 
-    void OnChangeCurrentLink(int newLinkNum)
+    public void OnChangeCurrentLink(int newLinkNum)
     {
         GravityController.Instance.ChangeCurrentLink(newLinkNum);
     }
