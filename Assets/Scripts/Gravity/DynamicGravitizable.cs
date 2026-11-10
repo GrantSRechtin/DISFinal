@@ -53,6 +53,8 @@ public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
 
         float distance = Mathf.Clamp(direction.magnitude, minD, maxD);
 
+        // Pull: max power at or above max distance
+        // Push: max power at or below min distance
         float powerRation = distance/maxD;
         if (mode == GravityMode.Push) powerRation = 1f-powerRation;
 

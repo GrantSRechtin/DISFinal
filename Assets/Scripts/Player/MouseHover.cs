@@ -21,7 +21,6 @@ public class MouseHover : MonoBehaviour
             IGravitizable gravitizable = RaycastForGravitizable();
             if (gravitizable != null && !gravitizable.IsSelected)
             {
-                Debug.Log("hover");
                 gravitizable.SetFrame(Color.white, true);
                 highlighting = true;
                 StartCoroutine(Unhighlight(gravitizable));
@@ -39,7 +38,6 @@ public class MouseHover : MonoBehaviour
         {
             gravitizable.SetFrame(Color.white, false);
         }
-        Debug.Log("unhover");
         highlighting = false;
     }
 
