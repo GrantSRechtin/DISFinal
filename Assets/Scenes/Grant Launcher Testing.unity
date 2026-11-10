@@ -304,9 +304,9 @@ PrefabInstance:
     m_TransformParent: {fileID: 4616547597509237255}
     m_Modifications:
     - target: {fileID: 6656764102282960638, guid: 926f91f4625cc72479ca55dbdf33d5a4, type: 3}
-      propertyPath: actions
+      propertyPath: interactionMode
       value: 
-      objectReference: {fileID: 1388216036}
+      objectReference: {fileID: 1863196261}
     - target: {fileID: 7165787938296529932, guid: 926f91f4625cc72479ca55dbdf33d5a4, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -2063,6 +2063,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 411948287330140956, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
+      propertyPath: crosshair
+      value: 
+      objectReference: {fileID: 1790359113}
     - target: {fileID: 6156089240476182054, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.7364106
@@ -2755,17 +2759,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1c4d4a83b2fd3774a9d3f4e74ad9f213, type: 3}
---- !u!114 &1388216036 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 913537694172892556, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
-  m_PrefabInstance: {fileID: 1057215621}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c509afc20c56a654897e3e2b42f84158, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerActions
 --- !u!1 &1554499652
 GameObject:
   m_ObjectHideFlags: 0
@@ -3391,6 +3384,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7165787938296529932, guid: 926f91f4625cc72479ca55dbdf33d5a4, type: 3}
   m_PrefabInstance: {fileID: 198941159}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1790359113 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6656764102282960638, guid: 926f91f4625cc72479ca55dbdf33d5a4, type: 3}
+  m_PrefabInstance: {fileID: 198941159}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce1cdfaf65ae8694bb4f8a334dbe9e00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Crosshair
 --- !u!1 &1798371432 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2680440696939608791, guid: 2225a3abe4b647046b6e732ebf5af175, type: 3}
@@ -3531,6 +3535,17 @@ MonoBehaviour:
   IsTimeStopped: 0
   frame: {fileID: 664859632}
   anchorPosition: {fileID: 810182436}
+--- !u!114 &1863196261 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 411948287330140956, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
+  m_PrefabInstance: {fileID: 1057215621}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 357abf9ede9523a44930ec4e20ccd6fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInteract
 --- !u!1001 &1898634088
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3993,6 +4008,10 @@ PrefabInstance:
     - target: {fileID: 1802455381680031841, guid: c8a8a3c776b5cee418ff3f696c936cc7, type: 3}
       propertyPath: m_Name
       value: RewindController
+      objectReference: {fileID: 0}
+    - target: {fileID: 1802455381680031841, guid: c8a8a3c776b5cee418ff3f696c936cc7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2711745971334402174, guid: c8a8a3c776b5cee418ff3f696c936cc7, type: 3}
       propertyPath: m_LocalPosition.x

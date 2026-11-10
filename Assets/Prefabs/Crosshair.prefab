@@ -508,11 +508,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce1cdfaf65ae8694bb4f8a334dbe9e00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Crosshair
-  actions: {fileID: 0}
+  interactionMode: {fileID: 0}
   arrowIn: {fileID: 21300000, guid: 393630d013c33ce44af5d36ddc640422, type: 3}
   arrowOut: {fileID: 21300000, guid: 0380319f3c55b654abe646f427025edf, type: 3}
+  openHand: {fileID: 21300000, guid: e9dadfded7bccaa4aa59e82730564fab, type: 3}
+  closedHand: {fileID: 21300000, guid: ae36e6306d856c24e8ed6317e99f7e7c, type: 3}
   line: {fileID: 21300000, guid: ac6d9259329d5cb49a75f973a9ec8dbf, type: 3}
   unselectedColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  holdColor: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 1}
 --- !u!1 &8023497976064735048
 GameObject:
   m_ObjectHideFlags: 0

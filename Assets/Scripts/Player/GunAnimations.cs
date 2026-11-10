@@ -16,36 +16,48 @@ public class GunAnimations : MonoBehaviour
     [SerializeField] GameObject gunCap;
 
     PlayerInputHandler input;
+    PlayerInteractionMode interactionMode;
     GravityController gravityController;
 
     void Awake()
     {
         input = GetComponentInParent<PlayerInputHandler>();
+        interactionMode = GetComponentInParent<PlayerInteractionMode>();
     }
 
     void OnEnable()
     {
         gravityController = GravityController.Instance;
-        gravityController.GravLinksChanged += OnGravLinksChanged;
+        gravityController.GravLinksChanged     += OnGravLinksChanged;
+        interactionMode.InteractionModeChanged += SetHolding;
     }
 
     void OnDisable()
     {
-        input.ChangeCurrentLinkPressed       -= OnChangeCurrentLink;
+        input.ChangeCurrentLinkPressed         -= OnChangeCurrentLink;
 
         if (gravityController != null)
         {
             gravityController.GravLinksChanged -= OnGravLinksChanged;
             gravityController = null;
         }
+        interactionMode.InteractionModeChanged -= SetHolding;
     }
 
-    public void SetHolding(bool isHolding)
+    void SetHolding(bool isHolding)
     {
-        if (isHolding) OnChangeCurrentLink(3);
+        if (isHolding) 
+        {
+            input.ChangeCurrentLinkPressed -= OnChangeCurrentLink;
+
+            OnChangeCurrentLink(3);
+        }
         else
         {
             int slot = GravityController.Instance.currentLinkNum;
+
+            input.ChangeCurrentLinkPressed += OnChangeCurrentLink;
+
             OnChangeCurrentLink(slot);
         }
     }

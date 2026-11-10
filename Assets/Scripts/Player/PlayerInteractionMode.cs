@@ -11,12 +11,15 @@ public class PlayerInteractionMode : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] PlayerInputHandler input;
+    [SerializeField] Crosshair crosshair;
 
     InteractionModeHold hold;
     InteractionModeLink link;
     GunAnimations gunAnimations;
 
     bool isHolding = true;
+
+    public event Action<bool> InteractionModeChanged;
 
     void Awake()
     {
@@ -62,10 +65,7 @@ public class PlayerInteractionMode : MonoBehaviour
         input.GravityReleasePressed    += link.OnGravityRelease;
         input.ChangeCurrentLinkPressed += link.OnChangeCurrentLink;
 
-        input.ChangeCurrentLinkPressed += gunAnimations.OnChangeCurrentLink;
-
-        // Highlight selected slot
-        gunAnimations.SetHolding(false);
+        InteractionModeChanged?.Invoke(false);
     }
 
     private void SetInteractToHolding()
@@ -78,10 +78,7 @@ public class PlayerInteractionMode : MonoBehaviour
         input.GravityControlPressed    -= link.OnGravityControl;
         input.GravityReleasePressed    -= link.OnGravityRelease;
         input.ChangeCurrentLinkPressed -= link.OnChangeCurrentLink;
-
-        input.ChangeCurrentLinkPressed -= gunAnimations.OnChangeCurrentLink;
         
-        // Highlight cap
-        gunAnimations.SetHolding(true);
+        InteractionModeChanged?.Invoke(true);
     }
 }

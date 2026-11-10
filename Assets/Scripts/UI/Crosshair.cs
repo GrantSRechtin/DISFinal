@@ -4,10 +4,15 @@ using UnityEngine.UI;
 
 public class Crosshair : MonoBehaviour
 {
+    [SerializeField] PlayerInteractionMode interactionMode;
+
     [SerializeField] Sprite arrowIn;
     [SerializeField] Sprite arrowOut;
+    [SerializeField] Sprite openHand;
+    [SerializeField] Sprite closedHand;
     [SerializeField] Sprite line;
     [SerializeField] Color unselectedColor = Color.gray;
+    [SerializeField] Color holdColor = Color.whiteSmoke;
 
     Image top;
     Image bottom;
@@ -16,6 +21,8 @@ public class Crosshair : MonoBehaviour
     Image right;
     Image rightBack;
     GravityController gravityController;
+
+    bool isHolding = true;
 
     void Awake()
     {
@@ -42,7 +49,8 @@ public class Crosshair : MonoBehaviour
     void OnEnable()
     {
         gravityController = GravityController.Instance;
-        gravityController.GravLinksChanged += UpdateAction;
+        gravityController.GravLinksChanged     += UpdateAction;
+        interactionMode.InteractionModeChanged += SetHolding;
         UpdateAction();
     }
 
@@ -53,6 +61,7 @@ public class Crosshair : MonoBehaviour
             gravityController.GravLinksChanged -= UpdateAction;
             gravityController = null;
         }
+        interactionMode.InteractionModeChanged -= SetHolding;
     }
 
     Image FindImage(string imageName)
@@ -85,17 +94,36 @@ public class Crosshair : MonoBehaviour
                 break;
         }
 
-        left.sprite = sprite;
-        leftBack.sprite = sprite;
-        right.sprite = sprite;
-        rightBack.sprite = sprite;
-
         int gravitizableCount = currentLink.gravitizables != null ? currentLink.gravitizables.Count: 0;
 
         Color firstColor = gravitizableCount >= 1 ? currentLink.style.color : unselectedColor;
         Color secondColor = gravitizableCount >= 2 ? currentLink.style.color : unselectedColor;
 
+        // Holding crosshair
+        if (isHolding) 
+        {
+            sprite = openHand;
+            firstColor = holdColor;
+            secondColor = holdColor;
+        }
+
+        UpdateSprite(sprite, firstColor, secondColor);
+    }
+
+    void UpdateSprite(Sprite sprite, Color firstColor, Color secondColor)
+    {
+        left.sprite = sprite;
+        leftBack.sprite = sprite;
+        right.sprite = sprite;
+        rightBack.sprite = sprite;
+
         top.color = left.color = firstColor;
         bottom.color = right.color = secondColor;
+    }
+
+    void SetHolding(bool holding)
+    {
+        isHolding = holding;
+        UpdateAction();
     }
 }
