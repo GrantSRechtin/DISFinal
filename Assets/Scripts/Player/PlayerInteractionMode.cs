@@ -32,16 +32,16 @@ public class PlayerInteractionMode : MonoBehaviour
 
     void OnEnable()
     {
-        input.SelectPressed += OnSelectPressed;
+        input.ModeSwitchPressed += OnModeSwitchPressed;
         ConnectEvents();
     }
 
     void OnDisable()
     {
-        input.SelectPressed -= OnSelectPressed;
+        input.ModeSwitchPressed -= OnModeSwitchPressed;
     }
 
-    void OnSelectPressed()
+    void OnModeSwitchPressed()
     {
         isHolding = !isHolding;
         

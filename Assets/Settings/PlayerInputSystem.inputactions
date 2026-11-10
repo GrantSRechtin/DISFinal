@@ -47,7 +47,7 @@
                     "priority": 0
                 },
                 {
-                    "name": "Select",
+                    "name": "ModeSwitch",
                     "type": "Button",
                     "id": "bf7931cf-4117-4a6c-9284-3fab34185ff9",
                     "expectedControlType": "",
@@ -400,7 +400,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Select",
+                    "action": "ModeSwitch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -21,7 +21,7 @@ public class PlayerInputHandler : MonoBehaviour
     public event Action JumpPressed;
     public event Action InteractPressed;
     public event Action InteractReleased;
-    public event Action SelectPressed;
+    public event Action ModeSwitchPressed;
     public event Action<float> GravityControlPressed;
     public event Action GravityReleasePressed;
     public event Action<int> ChangeCurrentLinkPressed;
@@ -31,7 +31,7 @@ public class PlayerInputHandler : MonoBehaviour
     public event Action RewindReleased;
 
     PlayerInput playerInput;
-    InputAction moveAction, lookAction, jumpAction, interactAction, selectAction, gravityControlAction, gravityReleaseAction, changeCurrentLinkAction, pauseAction, restartAction, rewindAction;
+    InputAction moveAction, lookAction, jumpAction, interactAction, modeSwitchAction, gravityControlAction, gravityReleaseAction, changeCurrentLinkAction, pauseAction, restartAction, rewindAction;
 
     private static PlayerInputHandler _instance;
 
@@ -70,7 +70,7 @@ public class PlayerInputHandler : MonoBehaviour
         lookAction              = actions.FindAction("Look", throwIfNotFound: true);
         jumpAction              = actions.FindAction("Jump", throwIfNotFound: true);
         interactAction          = actions.FindAction("Interact", throwIfNotFound: true);
-        selectAction            = actions.FindAction("Select", throwIfNotFound: true);
+        modeSwitchAction        = actions.FindAction("ModeSwitch", throwIfNotFound: true);
         gravityControlAction    = actions.FindAction("GravityControl", throwIfNotFound: true);
         gravityReleaseAction    = actions.FindAction("GravityRelease", throwIfNotFound: true);
         changeCurrentLinkAction = actions.FindAction("CartridgeChange", throwIfNotFound: true);
@@ -85,7 +85,7 @@ public class PlayerInputHandler : MonoBehaviour
         jumpAction.performed              += OnJumpPressed;
         interactAction.performed          += OnInteractPressed;
         interactAction.canceled           += OnInteractReleased;
-        selectAction.performed            += OnSelectPressed;
+        modeSwitchAction.performed        += OnModeSwitchPressed;
         gravityControlAction.performed    += OnGravityControlPressed;
         gravityReleaseAction.performed    += OnGravityReleasePressed;
         changeCurrentLinkAction.performed += OnChangeCurrentLinkPressed;
@@ -101,7 +101,7 @@ public class PlayerInputHandler : MonoBehaviour
         jumpAction.performed              -= OnJumpPressed;
         interactAction.performed          -= OnInteractPressed;
         interactAction.canceled           -= OnInteractReleased;
-        selectAction.performed            -= OnSelectPressed;
+        modeSwitchAction.performed        -= OnModeSwitchPressed;
         gravityControlAction.performed    -= OnGravityControlPressed;
         gravityReleaseAction.performed    -= OnGravityReleasePressed;
         changeCurrentLinkAction.performed -= OnChangeCurrentLinkPressed;
@@ -124,7 +124,7 @@ public class PlayerInputHandler : MonoBehaviour
     void OnJumpPressed(InputAction.CallbackContext _)            => JumpPressed?.Invoke();
     void OnInteractPressed(InputAction.CallbackContext _)        => InteractPressed?.Invoke();
     void OnInteractReleased(InputAction.CallbackContext _)       => InteractReleased?.Invoke();
-    void OnSelectPressed(InputAction.CallbackContext _)          => SelectPressed?.Invoke();
+    void OnModeSwitchPressed(InputAction.CallbackContext _)      => ModeSwitchPressed?.Invoke();
     void OnGravityControlPressed(InputAction.CallbackContext ctx)
     {
         float value = ctx.ReadValue<float>();
