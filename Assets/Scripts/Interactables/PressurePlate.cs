@@ -1,13 +1,14 @@
+using System;
 using UnityEngine;
 
 public class PressurePlate : MonoBehaviour
 {
+    public event Action Activated;
+
     public GameObject player;
-    public GameObject objectToActivate;
     public float pressDepth = 0.1f;
     private Vector3 originalPosition;
     private Vector3 pressedPosition;
-    // private bool isPressed = false;
 
     void Start()
     {
@@ -20,7 +21,7 @@ public class PressurePlate : MonoBehaviour
         if (other.gameObject == player)
         {
             transform.position = pressedPosition;
-            // isPressed = true;
+            Activated?.Invoke();
         }
     }
 
