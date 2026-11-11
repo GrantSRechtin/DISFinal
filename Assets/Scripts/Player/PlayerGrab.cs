@@ -21,28 +21,26 @@ public class PlayerGrab : MonoBehaviour
     GameObject heldObject;
     Rigidbody heldRigidbody;
     IHoldable heldScript;
+    float heldMass;
 
     float prevLinearDamping;
     Quaternion prevRotation;
 
-    Rigidbody rb;
-
     void Awake()
     {
         if (input == null) input = GetComponent<PlayerInputHandler>();
-        rb = GetComponent<Rigidbody>();
     }
 
     void OnEnable()
     {
-        input.InteractPressed            += OnInteractPressed;
-        input.InteractReleased           += OnInteractReleased;
+        input.InteractPressed  += OnInteractPressed;
+        input.InteractReleased += OnInteractReleased;
     }
 
     void OnDisable()
     {
-        input.InteractPressed            -= OnInteractPressed;
-        input.InteractReleased           -= OnInteractReleased;
+        input.InteractPressed  -= OnInteractPressed;
+        input.InteractReleased -= OnInteractReleased;
     }
 
     void FixedUpdate()
@@ -61,7 +59,11 @@ public class PlayerGrab : MonoBehaviour
 
         heldRigidbody = heldObject.GetComponent<Rigidbody>();
         heldRigidbody.useGravity = false;
+
         prevLinearDamping = heldRigidbody.linearDamping;
+        heldMass = heldRigidbody.mass;
+
+        heldRigidbody.mass = 0.00001f;
         heldRigidbody.linearDamping = 10;
         heldRigidbody.transform.parent = holdPosition;
 
@@ -74,6 +76,7 @@ public class PlayerGrab : MonoBehaviour
         if (!heldObject) return;
 
         heldRigidbody.useGravity = true;
+        heldRigidbody.mass = heldMass;
         heldRigidbody.linearDamping = prevLinearDamping;
         heldRigidbody.transform.parent = holdPosition;
         heldRigidbody = null;
@@ -91,7 +94,7 @@ public class PlayerGrab : MonoBehaviour
         if (Vector3.Distance(heldObject.transform.position, holdPosition.position) > 0.1f)
         {
             Vector3 moveDirection = holdPosition.position - heldObject.transform.position;
-            heldRigidbody.AddForce(moveDirection * pickupForce);
+            heldRigidbody.AddForce(moveDirection * pickupForce, ForceMode.Acceleration);
         }
     }
 

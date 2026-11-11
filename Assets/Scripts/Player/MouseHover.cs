@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MouseHover : MonoBehaviour
@@ -6,26 +7,45 @@ public class MouseHover : MonoBehaviour
     [Header("References")]
     [SerializeField] private PlayerInputHandler input;
 
-    float hoverDistance = 5f;
-    bool highlighting = false;
+    readonly float linkHoverDistance = 20f;
+    readonly float holdHoverDistance = 5f;
+    bool linkHighlighting = false;
+    bool holdHighlighting = false;
 
     private void Update()
     {
-        if(!highlighting)
+        if(!holdHighlighting)
         {
+            // Hold Highlight
+            IHoldable holdable = RaycastForHoldable();
+            if (holdable != null && !holdable.IsSelected)
+            {
+                holdable.SetFrame(Color.black, true);
+                holdHighlighting = true;
+                // linkHighlighting = false;
+                StartCoroutine(HoldableUnhighlight(holdable));
+            }
+        }
+        if(!holdHighlighting && !linkHighlighting)
+        {
+            // Link Highlight
             IGravitizable gravitizable = RaycastForGravitizable();
             if (gravitizable != null && !gravitizable.IsSelected)
             {
                 gravitizable.SetFrame(Color.white, true);
-                highlighting = true;
-                StartCoroutine(Unhighlight(gravitizable));
+                linkHighlighting = true;
+                StartCoroutine(GravitizableUnhighlight(gravitizable));
             }
         }
     }
 
-    IEnumerator Unhighlight(IGravitizable gravitizable)
+    IEnumerator GravitizableUnhighlight(IGravitizable gravitizable)
     {
-        while (ReferenceEquals(gravitizable, RaycastForGravitizable()) && !gravitizable.IsSelected)
+        // check both types
+        while (
+            ReferenceEquals(gravitizable, RaycastForGravitizable()) 
+            && !gravitizable.IsSelected 
+        )
         {
             yield return new WaitForEndOfFrame();
         }
@@ -33,17 +53,36 @@ public class MouseHover : MonoBehaviour
         {
             gravitizable.SetFrame(Color.white, false);
         }
-        highlighting = false;
+        linkHighlighting = false;
     }
 
     IGravitizable RaycastForGravitizable()
     {
-        if (!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, hoverDistance)) return null;
+        if (!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, linkHoverDistance)) return null;
         return hit.collider.GetComponentInParent<IGravitizable>();
     }
 
-    public void SetHoverDistance(float distance)
+    IEnumerator HoldableUnhighlight(IHoldable holdable)
     {
-        hoverDistance = distance;
+        // check both types
+        while (ReferenceEquals(holdable, RaycastForHoldable()) && !holdable.IsSelected)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        if (!holdable.IsSelected && linkHighlighting)
+        {
+            holdable.SetFrame(Color.white, true);
+        }
+        else if (!holdable.IsSelected)
+        {
+            holdable.SetFrame(Color.white, false);
+        }
+        holdHighlighting = false;
+    }
+
+    IHoldable RaycastForHoldable()
+    {
+        if (!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, holdHoverDistance)) return null;
+        return hit.collider.GetComponentInParent<IHoldable>();
     }
 }
