@@ -2079,23 +2079,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 375002908853035384, guid: 1c4d4a83b2fd3774a9d3f4e74ad9f213, type: 3}
   m_PrefabInstance: {fileID: 592655572}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD
-=======
-  m_GameObject: {fileID: 1007614753}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.375071, y: 2, z: -17.80059}
-  m_LocalScale: {x: 4, y: 4, z: 6}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2098555641}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1008743627 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7762042110799144980, guid: 926f91f4625cc72479ca55dbdf33d5a4, type: 3}
-  m_PrefabInstance: {fileID: 198941159}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> 8269109d37077bf90cadaa2ecfea4b6cf9c38c28
 --- !u!1001 &1057215621
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3708,17 +3691,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 1
       objectReference: {fileID: 0}
-<<<<<<< HEAD
-=======
-    - target: {fileID: 8480108285133550234, guid: 4d02f96470b9d4cbaa2ca973b3fe5093, type: 3}
-      propertyPath: crosshair
-      value: 
-      objectReference: {fileID: 1008743627}
-    - target: {fileID: 8480108285133550234, guid: 4d02f96470b9d4cbaa2ca973b3fe5093, type: 3}
-      propertyPath: pauseMenu
-      value: 
-      objectReference: {fileID: 2131335541}
->>>>>>> 8269109d37077bf90cadaa2ecfea4b6cf9c38c28
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
