@@ -10,7 +10,7 @@ public class DoorOpen : MonoBehaviour
 
     private float originY= 2;
     private float entranceDoorStart = 6.15f;
-    private float moveUpAmount = 5f;
+    private float openHeight = 5f;
 
     void Start()
     {
@@ -33,7 +33,7 @@ public class DoorOpen : MonoBehaviour
 
     void OpenDoor()
     {
-        StartCoroutine(MoveToPosition(transform.position + Vector3.up * moveUpAmount));
+        StartCoroutine(MoveToPosition(transform.position + Vector3.up * openHeight));
     }
 
     IEnumerator MoveToOrigin()
