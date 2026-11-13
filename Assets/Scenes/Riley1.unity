@@ -1147,11 +1147,6 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 117160982}
   m_SourcePrefab: {fileID: 100100000, guid: 9e91c4a8b15702c429f8671f0b8ec639, type: 3}
---- !u!1 &827463918 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7670880659290561358, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
-  m_PrefabInstance: {fileID: 1057215621}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &879902459
 GameObject:
   m_ObjectHideFlags: 0
@@ -1584,7 +1579,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 913537694172892556, guid: 989e5aa1244870f498ab0b0b0d765626, type: 3}
   m_PrefabInstance: {fileID: 1057215621}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 827463918}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c509afc20c56a654897e3e2b42f84158, type: 3}
@@ -1790,7 +1785,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::DoorOpen
   moveSpeed: 1
   isEntrance: 0
-  activationObject: {fileID: 0}
+  activationObject: {fileID: 8842467852410585360}
 --- !u!1 &1851065303 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 7762042110799144980, guid: 926f91f4625cc72479ca55dbdf33d5a4, type: 3}
@@ -2211,7 +2206,7 @@ PrefabInstance:
       objectReference: {fileID: 668946228}
     - target: {fileID: 1149400432787062983, guid: a199af580a9ce4a4083a78d98f4b4583, type: 3}
       propertyPath: m_VersionIndex
-      value: 15
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 5502085599582968098, guid: a199af580a9ce4a4083a78d98f4b4583, type: 3}
       propertyPath: m_Mesh
@@ -2221,13 +2216,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PressurePlate
       objectReference: {fileID: 0}
+    - target: {fileID: 7776061528276786651, guid: a199af580a9ce4a4083a78d98f4b4583, type: 3}
+      propertyPath: pressDepth
+      value: 0.1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1779809782186662515, guid: a199af580a9ce4a4083a78d98f4b4583, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8842467852410585354}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a199af580a9ce4a4083a78d98f4b4583, type: 3}
 --- !u!1001 &1914724569102577669
 PrefabInstance:
@@ -2589,11 +2585,6 @@ MonoBehaviour:
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
   m_PresetInfoIsWorld: 0
---- !u!1 &6254686652845009428 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1779809782186662515, guid: a199af580a9ce4a4083a78d98f4b4583, type: 3}
-  m_PrefabInstance: {fileID: 1216501357991283640}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8186329765675511605
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2651,20 +2642,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c788d1ef195cd449fb513e4ef60677b4, type: 3}
---- !u!114 &8842467852410585354
+--- !u!114 &8842467852410585360 stripped
 MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
+  m_CorrespondingSourceObject: {fileID: 6456482902262213692, guid: a199af580a9ce4a4083a78d98f4b4583, type: 3}
+  m_PrefabInstance: {fileID: 1216501357991283640}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6254686652845009428}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 799f33d2a52c7a347b46284d1153f5f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PressurePlate
-  player: {fileID: 827463918}
-  pressDepth: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
