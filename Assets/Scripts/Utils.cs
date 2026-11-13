@@ -53,6 +53,7 @@ public struct GravLink
     public GravityMode mode;
     public SelectionStyle style;
     public GameObject line;
+    public int linkNum;
 
     public GravLink(SelectionStyle style, GameObject line, int linkNum)
     {
@@ -61,6 +62,7 @@ public struct GravLink
 
         this.style = style;
         this.line = line;
+        this.linkNum = linkNum;
 
         // Currently since the grav link doesn't store linkNum this could go in controller
         var lineScript = line.GetComponent<SelectionLine>();
@@ -92,5 +94,14 @@ public struct GravLink
             }
         }
         return null;
+    }
+
+    public readonly float Length()
+    {
+        if (!Active()) return 0;
+
+        Vector3 pos1 = gravitizables[0].GetAnchor(linkNum);
+        Vector3 pos2 = gravitizables[1].GetAnchor(linkNum);
+        return (pos1 - pos2).magnitude;
     }
 }

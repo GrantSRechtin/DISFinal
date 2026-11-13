@@ -55,7 +55,18 @@ public class GravityController : RewindableBase
         gravLinks[2] = new GravLink(thirdStyle, Instantiate(linePrefab), 2);
     }
 
-    // ---------- Stored stuff ----------
+    // ------------- Checks -------------
+
+    void FixedUpdate()
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            CheckLinkLength(i);
+        }
+    }
+
+    // ---------- Stored stuff ---------
+    public float maxLinkDistance = 20f;
     public int currentLinkNum = 0;
     public GravLink[] gravLinks = new GravLink[3];
 
@@ -199,5 +210,13 @@ public class GravityController : RewindableBase
 
         GravLinksChanged?.Invoke();
         return gravLinks[currentLinkNum];
+    }
+
+    public void CheckLinkLength(int linkNum)
+    {
+        if (gravLinks[linkNum].Length() > maxLinkDistance)
+        {
+            ClearLink(linkNum);
+        }
     }
 }
