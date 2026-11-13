@@ -55,19 +55,24 @@ public class MouseHover : MonoBehaviour
         if(!linkHighlighting)
         {
             // Link Highlight
-            IGravitizable gravitizable = Utils.RaycastForGravitizable(transform, isHolding: playerHold.IsHolding, maxDistance: linkHoverDistance);
-            if (gravitizable != null && !gravitizable.IsSelected)
+            GravityController gc = GravityController.Instance;
+            float hoverDistance = (gc.gravLinks[gc.currentLinkNum].gravitizables.Count == 1) ? Mathf.Infinity : linkHoverDistance;
+
+            IGravitizable gravitizable = Utils.RaycastForGravitizable(transform, isHolding: playerHold.IsHolding, maxDistance: hoverDistance);
+            if (gravitizable != null && !gravitizable.IsSelected && gc.gravLinks[gc.currentLinkNum].Length() < gc.maxLinkDistance)
             {
                 gravitizable.SetFrame(Color.white, true);
                 linkHighlighting = true;
-                StartCoroutine(GravitizableUnhighlight(gravitizable));
+                StartCoroutine(GravitizableUnhighlight(gravitizable, hoverDistance));
             }
         }
     }
 
-    IEnumerator GravitizableUnhighlight(IGravitizable gravitizable)
+    IEnumerator GravitizableUnhighlight(IGravitizable gravitizable, float hoverDistance)
     {
-        while (ReferenceEquals(gravitizable, Utils.RaycastForGravitizable(transform, isHolding: playerHold.IsHolding, maxDistance: linkHoverDistance)) && !gravitizable.IsSelected)
+        while (
+            ReferenceEquals(gravitizable, Utils.RaycastForGravitizable(transform, isHolding: playerHold.IsHolding, maxDistance: hoverDistance)) 
+            && !gravitizable.IsSelected)
         {
             yield return new WaitForEndOfFrame();
         }
