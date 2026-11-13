@@ -3654,6 +3654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MouseHover
   input: {fileID: 9001239680924629136}
+  crosshair: {fileID: 0}
 --- !u!1 &7670880659290561358
 GameObject:
   m_ObjectHideFlags: 0
@@ -3811,7 +3812,7 @@ MonoBehaviour:
   input: {fileID: 9001239680924629136}
   head: {fileID: 3847248315994535544}
   holdPosition: {fileID: 7439237666186288590}
-  pickupRange: 5
+  pickupRange: 4
   pickupForce: 150
 --- !u!1 &7785201059244908898
 GameObject:

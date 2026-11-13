@@ -7,7 +7,7 @@ using UnityEngine;
 /// Turns player intent into commands on IGravitizable objects.
 /// Holds only "which objects am I holding"; the objects own everything else.
 /// </summary>
-public class PlayerGrab : MonoBehaviour
+public class PlayerHold : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] PlayerInputHandler input;
@@ -15,8 +15,10 @@ public class PlayerGrab : MonoBehaviour
     [SerializeField] Transform holdPosition;
 
     [Header("Settings")]
-    [SerializeField] float pickupRange = 5f;
+    [SerializeField] float pickupRange = 4f;
     [SerializeField] float pickupForce = 150f;
+
+    public bool IsHolding => heldObject != null;
 
     GameObject heldObject;
     Rigidbody heldRigidbody;
@@ -79,6 +81,9 @@ public class PlayerGrab : MonoBehaviour
         heldRigidbody.mass = heldMass;
         heldRigidbody.linearDamping = prevLinearDamping;
         heldRigidbody.transform.parent = holdPosition;
+        
+        StopObject();
+
         heldRigidbody = null;
 
         heldScript.IsHeld = false;
@@ -96,6 +101,12 @@ public class PlayerGrab : MonoBehaviour
             Vector3 moveDirection = holdPosition.position - heldObject.transform.position;
             heldRigidbody.AddForce(moveDirection * pickupForce, ForceMode.Acceleration);
         }
+    }
+
+    void StopObject()
+    {
+        Rigidbody playerRb = holdPosition.GetComponentInParent<Rigidbody>();
+        heldRigidbody.linearVelocity = playerRb.GetPointVelocity(heldRigidbody.worldCenterOfMass);
     }
 
     GameObject RaycastForHoldableGameObject()

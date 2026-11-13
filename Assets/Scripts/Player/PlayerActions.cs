@@ -1,5 +1,4 @@
 using System;
-using Unity.Mathematics;
 using UnityEngine;
 
 /// <summary>
@@ -12,9 +11,12 @@ public class PlayerActions : MonoBehaviour
     [SerializeField] PlayerInputHandler input;
     [SerializeField] Transform head;
 
+    PlayerHold playerHold;
+
     void Awake()
     {
         if (input == null) input = GetComponent<PlayerInputHandler>();
+        playerHold = GetComponent<PlayerHold>();
     }
 
     void OnEnable()
@@ -40,7 +42,7 @@ public class PlayerActions : MonoBehaviour
     {
         GravityController.Instance.ClearCurrentLink();
 
-        IGravitizable gravitizableA = RaycastForGravitizable();
+        IGravitizable gravitizableA = Utils.RaycastForGravitizable(head, isHolding: playerHold.IsHolding);
         if (gravitizableA == null) { return; }
 
         GravityController.Instance.StartCurrentLink(gravitizableA, RaycastPoint());
@@ -54,7 +56,7 @@ public class PlayerActions : MonoBehaviour
 
         if (currentLink.gravitizables.Count == 0) return;
 
-        IGravitizable gravitizableB = RaycastForGravitizable();
+        IGravitizable gravitizableB = Utils.RaycastForGravitizable(head, isHolding: playerHold.IsHolding);
         if (gravitizableB == null || ReferenceEquals(gravitizableB, currentLink.gravitizables[0]))
         {
             GravityController.Instance.ClearCurrentLink();
@@ -80,25 +82,17 @@ public class PlayerActions : MonoBehaviour
         GravityController.Instance.ChangeCurrentLink(newLinkNum);
     }
 
-    IGravitizable RaycastForGravitizable()
-    {
-        if (!Physics.Raycast(head.position, head.forward, out RaycastHit hit)) return null;
-        return hit.collider.GetComponentInParent<IGravitizable>();
-    }
-
     Vector3 RaycastPoint()
     {
         if (!Physics.Raycast(head.position, head.forward, out RaycastHit hit)) return Vector3.zero;
 
         Vector3 p = hit.point;
         Vector3 anchorPoint = new(
-            RoundTo0625(p.x),
-            RoundTo0625(p.y),
-            RoundTo0625(p.z)
+            Utils.RoundTo0625(p.x),
+            Utils.RoundTo0625(p.y),
+            Utils.RoundTo0625(p.z)
         );
 
         return anchorPoint;
     }
-
-    static float RoundTo0625(float value) => Mathf.Round(value / 0.625f) * 0.625f;
 }
