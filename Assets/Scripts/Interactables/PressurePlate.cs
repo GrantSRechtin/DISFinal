@@ -4,33 +4,35 @@ using UnityEngine;
 public class PressurePlate : MonoBehaviour
 {
     public event Action Activated;
-
-    public GameObject player;
+    public event Action Deactivated;
     public float pressDepth = 0.1f;
-    private Vector3 originalPosition;
-    private Vector3 pressedPosition;
+    [SerializeField] Transform plateToMove;
+    Vector3 originalPosition;
+    Vector3 pressedPosition;
 
     void Start()
     {
-        originalPosition = transform.position;
+        if (plateToMove == null) plateToMove = transform;
+        originalPosition = plateToMove.position;
         pressedPosition = originalPosition - new Vector3(0, pressDepth, 0);
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject == player)
+        Debug.Log(other.name);
+        if (other.GetComponent<IGravitizable>() != null)
         {
-            transform.position = pressedPosition;
+            plateToMove.position = pressedPosition;
             Activated?.Invoke();
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject == player)
+        if (other.GetComponent<IGravitizable>() != null)
         {
-            transform.position = originalPosition;
-            // isPressed = false;
+            plateToMove.position = originalPosition;
+            Deactivated?.Invoke();
         }
     }
 }
