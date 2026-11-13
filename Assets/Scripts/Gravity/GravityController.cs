@@ -62,6 +62,7 @@ public class GravityController : RewindableBase
         for (int i = 0; i < 3; i++)
         {
             CheckLinkLength(i);
+            
         }
     }
 
