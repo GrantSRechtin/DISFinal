@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2971176445139673462}
   - component: {fileID: 7776061528276786651}
   m_Layer: 0
-  m_Name: Collider
+  m_Name: Trigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -173,6 +173,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PressurePlate
   pressDepth: 0.1
+  plateToMove: {fileID: 0}
 --- !u!65 &3092846722002823205
 BoxCollider:
   m_ObjectHideFlags: 0
