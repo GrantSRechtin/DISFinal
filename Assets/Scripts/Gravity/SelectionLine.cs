@@ -13,6 +13,8 @@ public class SelectionLine : RewindableBase
     public Transform head;
     public int linkNum;
 
+    public float length = 0;
+
     LineRenderer lineRenderer;
     List<Timestep> timesteps = new();
 
@@ -67,7 +69,11 @@ public class SelectionLine : RewindableBase
 
     void FixedUpdate()
     {
-        if (a == null) { return; }
+        if (a == null) 
+        { 
+            length = 0;
+            return; 
+        }
 
         Vector3 firstPoint = a.GetAnchor(linkNum);
 
@@ -76,6 +82,14 @@ public class SelectionLine : RewindableBase
         Vector3 frontClosePoint = LookingPoint();
         Vector3 frontPoint = frontClosePoint != Vector3.zero ? frontClosePoint : frontFloatingPoint;
 
+        // If longer do something
+        Vector3 linkDirection = (firstPoint - frontPoint).normalized;
+        float linkLength = Mathf.Clamp(
+            (firstPoint - frontPoint).magnitude, 0, GravityController.Instance.maxLinkDistance);
+
+        frontPoint = firstPoint - (linkDirection * linkLength);
+
+        length = b == null ? linkLength : (a.GetAnchor(linkNum) - b.GetAnchor(linkNum)).magnitude;
         Vector3 secondPoint = b == null ? frontPoint : b.GetAnchor(linkNum);
         
         Vector3[] points = {firstPoint, secondPoint};
@@ -84,7 +98,7 @@ public class SelectionLine : RewindableBase
 
     Vector3 LookingPoint()
     {
-        if (!Physics.Raycast(head.position, head.forward, out RaycastHit hit, 10f)) return Vector3.zero;
+        if (!Physics.Raycast(head.position, head.forward, out RaycastHit hit, GravityController.Instance.maxLinkDistance)) return Vector3.zero;
         return hit.point;
     }
 }

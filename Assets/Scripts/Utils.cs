@@ -98,10 +98,6 @@ public struct GravLink
 
     public readonly float Length()
     {
-        if (!Active()) return 0;
-
-        Vector3 pos1 = gravitizables[0].GetAnchor(linkNum);
-        Vector3 pos2 = gravitizables[1].GetAnchor(linkNum);
-        return (pos1 - pos2).magnitude;
+        return line.GetComponent<SelectionLine>().length;
     }
 }

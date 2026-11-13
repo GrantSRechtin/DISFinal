@@ -101,17 +101,20 @@ public class GunAnimations : MonoBehaviour
 
     void FixedUpdate()
     {
-        UpdateCartridgeSize(0);
-        UpdateCartridgeSize(1);
-        UpdateCartridgeSize(2);
+        for (int i = 0; i < 3; i++)
+        {
+            UpdateCartridgeSize(i);
+        }
     }
 
-    void UpdateCartridgeSize(int linkNum)
+    public void UpdateCartridgeSize(int linkNum)
     {
         Transform body = cartridgeBodies[linkNum];
         if (body == null) return;
 
-        float linkLength = gravityController.gravLinks[linkNum].Length();
+        GravLink link = gravityController.gravLinks[linkNum];
+
+        float linkLength = link.Length();
         float sizeRatio = Mathf.Clamp01(1 - (linkLength / gravityController.maxLinkDistance));
 
         int lengthAxis = bodyLengthAxes[linkNum];
