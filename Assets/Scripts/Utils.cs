@@ -3,6 +3,35 @@ using UnityEngine;
 
 public enum GravityMode { None, Pull, Push }
 
+public static class Utils
+{
+    public static IGravitizable RaycastForGravitizable(Transform rayOrigin, bool isHolding = false, float maxDistance = Mathf.Infinity)
+    {
+        if (isHolding) return null;
+        if (!Physics.Raycast(rayOrigin.position, rayOrigin.forward, out RaycastHit hit, maxDistance)) return null;
+        return hit.collider.GetComponentInParent<IGravitizable>();
+    }
+
+    public static IHoldable RaycastForHoldable(Transform rayOrigin, bool isHolding = false, float maxDistance = Mathf.Infinity)
+    {
+        if (isHolding) return null;
+        if (!Physics.Raycast(rayOrigin.position, rayOrigin.forward, out RaycastHit hit, maxDistance)) return null;
+        return hit.collider.GetComponentInParent<IHoldable>();
+    }
+
+    public static float RoundTo0625(float value) => Mathf.Round(value / 0.625f) * 0.625f;
+
+    public static GameObject FindChild(Transform parent, string childName)
+    {
+        foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
+        {
+            if (child != parent && child.name == childName) return child.gameObject;
+        }
+
+        return null;
+    }
+}
+
 [System.Serializable]
 public struct SelectionStyle
 {

@@ -1,5 +1,4 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class MouseHover : MonoBehaviour
@@ -11,8 +10,10 @@ public class MouseHover : MonoBehaviour
     private GameObject hand;
     private GameObject handBack;
 
+    private PlayerHold playerHold;
+
     readonly float linkHoverDistance = 20f;
-    readonly float holdHoverDistance = 5f;
+    readonly float holdHoverDistance = 4f;
     bool linkHighlighting = false;
     bool holdHighlighting = false;
 
@@ -24,8 +25,10 @@ public class MouseHover : MonoBehaviour
             if (crosshairComponent != null) crosshair = crosshairComponent.gameObject;
         }
 
-        hand = FindChild(crosshair.transform, "Grab");
-        handBack = FindChild(crosshair.transform, "GrabBack");
+        hand = Utils.FindChild(crosshair.transform, "Grab");
+        handBack = Utils.FindChild(crosshair.transform, "GrabBack");
+
+        playerHold = GetComponentInParent<PlayerHold>();
     }
 
     private void Start()
@@ -39,8 +42,8 @@ public class MouseHover : MonoBehaviour
         if (!holdHighlighting && hand != null && handBack != null)
         {
             // Hold Highlight
-            IHoldable holdable = RaycastForHoldable();
-            if (holdable != null && !holdable.IsSelected)
+            IHoldable holdable = Utils.RaycastForHoldable(transform, maxDistance: holdHoverDistance);
+            if (holdable != null)
             {
                 // Show Crosshair thing
                 hand.SetActive(true);
@@ -52,7 +55,7 @@ public class MouseHover : MonoBehaviour
         if(!linkHighlighting)
         {
             // Link Highlight
-            IGravitizable gravitizable = RaycastForGravitizable();
+            IGravitizable gravitizable = Utils.RaycastForGravitizable(transform, isHolding: playerHold.IsHolding, maxDistance: linkHoverDistance);
             if (gravitizable != null && !gravitizable.IsSelected)
             {
                 gravitizable.SetFrame(Color.white, true);
@@ -64,8 +67,7 @@ public class MouseHover : MonoBehaviour
 
     IEnumerator GravitizableUnhighlight(IGravitizable gravitizable)
     {
-        // check both types
-        while (ReferenceEquals(gravitizable, RaycastForGravitizable()) && !gravitizable.IsSelected)
+        while (ReferenceEquals(gravitizable, Utils.RaycastForGravitizable(transform, isHolding: playerHold.IsHolding, maxDistance: linkHoverDistance)) && !gravitizable.IsSelected)
         {
             yield return new WaitForEndOfFrame();
         }
@@ -76,16 +78,9 @@ public class MouseHover : MonoBehaviour
         linkHighlighting = false;
     }
 
-    IGravitizable RaycastForGravitizable()
-    {
-        if (!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, linkHoverDistance)) return null;
-        return hit.collider.GetComponentInParent<IGravitizable>();
-    }
-
     IEnumerator HoldableUnhighlight(IHoldable holdable)
     {
-        // check both types
-        while (ReferenceEquals(holdable, RaycastForHoldable()) && !holdable.IsSelected)
+        while (playerHold.IsHolding || ReferenceEquals(holdable, Utils.RaycastForHoldable(transform, isHolding: playerHold.IsHolding, maxDistance: holdHoverDistance)))
         {
             yield return new WaitForEndOfFrame();
         }
@@ -94,19 +89,4 @@ public class MouseHover : MonoBehaviour
         holdHighlighting = false;
     }
 
-    IHoldable RaycastForHoldable()
-    {
-        if (!Physics.Raycast(transform.position, transform.forward, out RaycastHit hit, holdHoverDistance)) return null;
-        return hit.collider.GetComponentInParent<IHoldable>();
-    }
-
-    private static GameObject FindChild(Transform parent, string childName)
-    {
-        foreach (Transform child in parent.GetComponentsInChildren<Transform>(true))
-        {
-            if (child != parent && child.name == childName) return child.gameObject;
-        }
-
-        return null;
-    }
 }
