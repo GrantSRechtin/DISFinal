@@ -7,17 +7,28 @@ public class DoorOpen : MonoBehaviour
     [SerializeField] private float moveSpeed = 1f;
     [SerializeField] bool isEntrance;
     [SerializeField] private PressurePlate activationObject;
+    [SerializeField] private GameObject barrier;
 
     private float originY= 2;
     private float entranceDoorStart = 6.15f;
-    private float openHeight = 5f;
+    private float openHeight = 4.7f;
+    private Vector3 closedPosition;
+    private Coroutine movementCoroutine;
+
 
     void Start()
     {
+        SetBarrierActive(true);
+
         if (isEntrance)
         {
             transform.position = new Vector3(transform.position.x, entranceDoorStart, transform.position.z);
-            StartCoroutine(MoveToOrigin());
+            closedPosition = new Vector3(transform.position.x, originY, transform.position.z);
+            MoveDoorTo(closedPosition, false);
+        }
+        else
+        {
+            closedPosition = transform.position;
         }
         if (activationObject == null)
         {
@@ -25,6 +36,16 @@ public class DoorOpen : MonoBehaviour
             return;
         }
         activationObject.Activated += OpenDoor;
+        activationObject.Deactivated += CloseDoor;
+    }
+
+    void OnDestroy()
+    {
+        if (activationObject != null)
+        {
+            activationObject.Activated -= OpenDoor;
+            activationObject.Deactivated -= CloseDoor;
+        }
     }
 
     void Update()
@@ -33,16 +54,26 @@ public class DoorOpen : MonoBehaviour
 
     void OpenDoor()
     {
-        StartCoroutine(MoveToPosition(transform.position + Vector3.up * openHeight));
+        MoveDoorTo(closedPosition + Vector3.up * openHeight, true);
     }
 
-    IEnumerator MoveToOrigin()
+    void CloseDoor()
     {
-        Vector3 targetPosition = new Vector3(transform.position.x, originY, transform.position.z);
-        yield return MoveToPosition(targetPosition);
+        MoveDoorTo(closedPosition, false);
     }
 
-    IEnumerator MoveToPosition(Vector3 targetPosition)
+    void MoveDoorTo(Vector3 targetPosition, bool endOpen)
+    {
+        if (movementCoroutine != null)
+        {
+            StopCoroutine(movementCoroutine);
+        }
+
+        SetBarrierActive(true);
+        movementCoroutine = StartCoroutine(MoveToPosition(targetPosition, endOpen));
+    }
+
+    IEnumerator MoveToPosition(Vector3 targetPosition, bool endOpen)
     {
         Vector3 startPosition = transform.position;
         const float duration = 1f;
@@ -56,5 +87,15 @@ public class DoorOpen : MonoBehaviour
         }
 
         transform.position = targetPosition;
+        movementCoroutine = null;
+        SetBarrierActive(!endOpen || isEntrance);
+    }
+
+    void SetBarrierActive(bool isActive)
+    {
+        if (barrier != null)
+        {
+            barrier.SetActive(isActive);
+        }
     }
 }

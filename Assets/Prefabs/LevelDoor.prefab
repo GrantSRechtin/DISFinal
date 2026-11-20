@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4432282035246763534
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6676627439611783451}
+  - component: {fileID: 7747681280899220165}
+  m_Layer: 0
+  m_Name: InvisibleDoorBlock
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6676627439611783451
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4432282035246763534}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.006170542, y: -0.7070799, z: -0.006170542, w: 0.7070799}
+  m_LocalPosition: {x: 0.99, y: -0, z: 1.02}
+  m_LocalScale: {x: 0.9999999, y: 1, z: 0.99999976}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5638494303093538827}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7747681280899220165
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4432282035246763534}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 4.0106134, z: 3.8692412}
+  m_Center: {x: 5.062051e-10, y: -0.2716527, z: -0.011699439}
 --- !u!1001 &5311236877029287904
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110,7 +163,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_Name
-      value: LevelDoor 1
+      value: LevelDoor
       objectReference: {fileID: 0}
     - target: {fileID: 4083501151425157549, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_LocalScale.x
@@ -156,6 +209,38 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: -8700617353114198275, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
     - {fileID: 65702495048144492, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
-    m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6676627439611783451}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6542809464635192323}
   m_SourcePrefab: {fileID: 100100000, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
+--- !u!1 &4771896135420417412 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -8391222552659086748, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
+  m_PrefabInstance: {fileID: 5311236877029287904}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6542809464635192323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4771896135420417412}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76b577fe5489e334ba54ca54b1e12954, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DoorOpen
+  moveSpeed: 1
+  isEntrance: 0
+  activationObject: {fileID: 0}
+  barrier: {fileID: 4432282035246763534}
+--- !u!4 &5638494303093538827 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
+  m_PrefabInstance: {fileID: 5311236877029287904}
+  m_PrefabAsset: {fileID: 0}
