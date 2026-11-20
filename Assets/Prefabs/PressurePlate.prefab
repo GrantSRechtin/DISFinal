@@ -68,6 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PressurePlate
   pressDepth: 0.1
   plateToMove: {fileID: 4579014187363938346}
+  requiredWeight: 2
 --- !u!1 &1779809782186662515
 GameObject:
   m_ObjectHideFlags: 0
@@ -79,7 +80,6 @@ GameObject:
   - component: {fileID: 4579014187363938346}
   - component: {fileID: 775465199958819220}
   - component: {fileID: 4844529710213209655}
-  - component: {fileID: 6456482902262213692}
   - component: {fileID: 3092846722002823205}
   m_Layer: 0
   m_Name: Plate
@@ -160,20 +160,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6456482902262213692
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1779809782186662515}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 799f33d2a52c7a347b46284d1153f5f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PressurePlate
-  pressDepth: 0.1
-  plateToMove: {fileID: 0}
 --- !u!65 &3092846722002823205
 BoxCollider:
   m_ObjectHideFlags: 0

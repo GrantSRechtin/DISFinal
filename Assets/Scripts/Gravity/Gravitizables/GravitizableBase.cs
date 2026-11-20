@@ -5,7 +5,7 @@ public class GravitizableBase : RewindableBase, IGravitizable, IRewindable
 {
     [Header("Selection Frame")]
     [SerializeField] GameObject frame;
-
+    public float weight = 1f;
     Renderer[] frameRenderers = System.Array.Empty<Renderer>();
     GravityController gravityController;
 

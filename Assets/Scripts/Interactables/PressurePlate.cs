@@ -7,8 +7,10 @@ public class PressurePlate : MonoBehaviour
     public event Action Deactivated;
     public float pressDepth = 0.1f;
     [SerializeField] Transform plateToMove;
+    [SerializeField] float requiredWeight =2f;
     Vector3 originalPosition;
     Vector3 pressedPosition;
+
 
     void Start()
     {
@@ -19,8 +21,7 @@ public class PressurePlate : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.name);
-        if (other.GetComponent<IGravitizable>() != null)
+        if (other.GetComponent<GravitizableBase>().weight >= requiredWeight)
         {
             plateToMove.position = pressedPosition;
             Activated?.Invoke();
@@ -29,7 +30,7 @@ public class PressurePlate : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<IGravitizable>() != null)
+        if (other.GetComponent<GravitizableBase>().weight >= requiredWeight)
         {
             plateToMove.position = originalPosition;
             Deactivated?.Invoke();
