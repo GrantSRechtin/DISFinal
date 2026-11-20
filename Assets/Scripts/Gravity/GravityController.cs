@@ -38,12 +38,13 @@ public class GravityController : RewindableBase
         InitialLinkSetup();
     }
 
-    // ---------- Setup ----------
+    // -------------- Setup --------------
     [SerializeField] GameObject linePrefab;
 
-    [SerializeField] bool[] slot1Capabilities = new bool[2];
-    [SerializeField] bool[] slot2Capabilities = new bool[2];
-    [SerializeField] bool[] slot3Capabilities = new bool[2];
+    // -- Capabilities for current level --
+    [SerializeField] bool[] startingSlot1Capabilities = new bool[2];
+    [SerializeField] bool[] startingSlot2Capabilities = new bool[2];
+    [SerializeField] bool[] startingSlot3Capabilities = new bool[2];
 
     SelectionStyle firstStyle;
     SelectionStyle secondStyle;
@@ -58,9 +59,9 @@ public class GravityController : RewindableBase
 
         head = GameObject.FindGameObjectWithTag("Head").GetComponent<Transform>();
 
-        gravLinks[0] = new GravLink(firstStyle, Instantiate(linePrefab), 0, slot1Capabilities);
-        gravLinks[1] = new GravLink(secondStyle, Instantiate(linePrefab), 1, slot2Capabilities);
-        gravLinks[2] = new GravLink(thirdStyle, Instantiate(linePrefab), 2, slot3Capabilities);
+        gravLinks[0] = new GravLink(firstStyle, Instantiate(linePrefab), 0, startingSlot1Capabilities);
+        gravLinks[1] = new GravLink(secondStyle, Instantiate(linePrefab), 1, startingSlot2Capabilities);
+        gravLinks[2] = new GravLink(thirdStyle, Instantiate(linePrefab), 2, startingSlot3Capabilities);
     }
 
     // ------------- Checks -------------
@@ -70,7 +71,6 @@ public class GravityController : RewindableBase
         for (int i = 0; i < 3; i++)
         {
             CheckLinkLength(i);
-            
         }
     }
 
@@ -91,6 +91,7 @@ public class GravityController : RewindableBase
 
     public override void OnStoreTimestep()
     {
+        // Add slot capabilities to rewind
         Timestep timestep = new()
         {
             CurrentLinkNum = currentLinkNum,
@@ -149,6 +150,8 @@ public class GravityController : RewindableBase
 
     public void StartCurrentLink(IGravitizable gravitizableA, Vector3 anchorPoint)
     {
+        if (!gravLinks[currentLinkNum].linkControllable) return;
+
         ClearCurrentLink();
 
         SelectionStyle style = gravLinks[currentLinkNum].style;
@@ -168,6 +171,8 @@ public class GravityController : RewindableBase
 
     public void EndCurrentLink(IGravitizable gravitizableB, Vector3 anchorPoint)
     {
+        if (!gravLinks[currentLinkNum].linkControllable) return;
+
         SelectionStyle style = gravLinks[currentLinkNum].style;
 
         gravLinks[currentLinkNum].gravitizables.Add(gravitizableB);
@@ -183,8 +188,8 @@ public class GravityController : RewindableBase
     }
 
     public void SetCurrentLinkMode(GravityMode newMode)
-    {        
-        if (!gravLinks[currentLinkNum].Active()) { return; }
+    {       
+        if (!gravLinks[currentLinkNum].Active() || !gravLinks[currentLinkNum].modeControllable) return;
 
         gravLinks[currentLinkNum].mode = newMode;
 
@@ -193,6 +198,8 @@ public class GravityController : RewindableBase
 
     public void ClearCurrentLink()
     {
+        if (!gravLinks[currentLinkNum].linkControllable) return;
+
         ClearLink(currentLinkNum);
     }
 
