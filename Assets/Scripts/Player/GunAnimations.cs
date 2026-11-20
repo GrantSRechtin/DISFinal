@@ -58,11 +58,10 @@ public class GunAnimations : MonoBehaviour
         for (int i = 0; i < 3; i++)
         {
             GameObject cartridge = cartridges[i];
-            Color newColor = gc.gravLinks[i].linkControllable ? Color.gray2 : Color.black;
-            SetFrame(cartridge, newColor, true);
+            SetFrame(cartridge, Color.gray2, gc.gravLinks[i].linkControllable);
         }
 
-        SetFrame(cartridges[newLinkNum], Color.white, true);
+        SetFrame(cartridges[newLinkNum], Color.white, gc.gravLinks[newLinkNum].linkControllable);
     }
 
     void SetFrame(GameObject cartridge, Color color, bool visible)
@@ -90,17 +89,17 @@ public class GunAnimations : MonoBehaviour
             bool active = gc.gravLinks[i].Active();
             Color linkColor = gc.gravLinks[i].style.color;
             Color newColor = active ? linkColor : Color.white;
-            UpdateCartridgeColor(i, newColor);
+            UpdateCartridgeColor(i, newColor, gc.gravLinks[i].linkControllable);
         }
     }
 
-    void UpdateCartridgeColor(int linkNum, Color color)
+    void UpdateCartridgeColor(int linkNum, Color color, bool enabled)
     {
         GameObject cartridge = cartridges[linkNum];
         GameObject body = Utils.FindChild(cartridge.transform, "Body");
 
-        Color newColor = gc.gravLinks[linkNum].linkControllable ? color : Color.gray5;
-        body.GetComponent<Renderer>().material.color = newColor;
+        body.GetComponent<Renderer>().material.color = color;
+        body.GetComponent<Renderer>().enabled = enabled;
     }
 
     void FixedUpdate()
