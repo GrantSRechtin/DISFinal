@@ -39,20 +39,28 @@ public class GravityController : RewindableBase
     }
 
     // ---------- Setup ----------
-    [SerializeField] SelectionStyle firstStyle  = new(new Color(0f, 1f, 1f), Vector3.one * 1.01f);
-    [SerializeField] SelectionStyle secondStyle = new(new Color(1f, 0f, 1f), Vector3.one * 1.011f);
-    [SerializeField] SelectionStyle thirdStyle = new(new Color(1f, 1f, 0f), Vector3.one * 1.012f);
-
     [SerializeField] GameObject linePrefab;
+
+    [SerializeField] bool[] slot1Capabilities = new bool[2];
+    [SerializeField] bool[] slot2Capabilities = new bool[2];
+    [SerializeField] bool[] slot3Capabilities = new bool[2];
+
+    SelectionStyle firstStyle;
+    SelectionStyle secondStyle;
+    SelectionStyle thirdStyle;
     Transform head;
 
     private void InitialLinkSetup()
     {
+        firstStyle = new SelectionStyle(new Color(0f, 1f, 1f), Vector3.one * 1.01f);
+        secondStyle = new SelectionStyle(new Color(1f, 0f, 1f), Vector3.one * 1.011f);
+        thirdStyle = new SelectionStyle(new Color(1f, 1f, 0f), Vector3.one * 1.012f);
+
         head = GameObject.FindGameObjectWithTag("Head").GetComponent<Transform>();
 
-        gravLinks[0] = new GravLink(firstStyle, Instantiate(linePrefab), 0);
-        gravLinks[1] = new GravLink(secondStyle, Instantiate(linePrefab), 1);
-        gravLinks[2] = new GravLink(thirdStyle, Instantiate(linePrefab), 2);
+        gravLinks[0] = new GravLink(firstStyle, Instantiate(linePrefab), 0, slot1Capabilities);
+        gravLinks[1] = new GravLink(secondStyle, Instantiate(linePrefab), 1, slot2Capabilities);
+        gravLinks[2] = new GravLink(thirdStyle, Instantiate(linePrefab), 2, slot3Capabilities);
     }
 
     // ------------- Checks -------------

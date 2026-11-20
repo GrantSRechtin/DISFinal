@@ -55,16 +55,20 @@ public struct GravLink
     public GameObject line;
     public int linkNum;
 
-    public GravLink(SelectionStyle style, GameObject line, int linkNum)
+    public bool linkControllable;
+    public bool modeControllable;
+
+    public GravLink(SelectionStyle style, GameObject line, int linkNum, bool[] capabilities)
     {
         gravitizables = new();
         mode = GravityMode.None;
+        linkControllable = capabilities[0];
+        modeControllable = capabilities[1];
 
         this.style = style;
         this.line = line;
         this.linkNum = linkNum;
 
-        // Currently since the grav link doesn't store linkNum this could go in controller
         var lineScript = line.GetComponent<SelectionLine>();
         lineScript.linkNum = linkNum;
 
