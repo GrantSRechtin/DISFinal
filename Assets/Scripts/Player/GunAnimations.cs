@@ -15,7 +15,7 @@ public class GunAnimations : MonoBehaviour
     [SerializeField] GameObject[] cartridges;
 
     PlayerInputHandler input;
-    GravityController gravityController;
+    GravityController gc;
     Transform[] cartridgeBodies;
     Vector3[] bodyBoundsMin;
     Vector3[] bodyInitialScales;
@@ -31,35 +31,37 @@ public class GunAnimations : MonoBehaviour
     {
         CacheCartridgeBodies();
         OnChangeCurrentLink(0);
+        StartCoroutine(ChangeAfterUpdate());
     }
 
     void OnEnable()
     {
         input.ChangeCurrentLinkPerformed   += OnChangeCurrentLink;
 
-        gravityController = GravityController.Instance;
-        gravityController.GravLinksChanged += OnGravLinksChanged;
+        gc = GravityController.Instance;
+        gc.GravLinksChanged += OnGravLinksChanged;
     }
 
     void OnDisable()
     {
         input.ChangeCurrentLinkPerformed -= OnChangeCurrentLink;
 
-        if (gravityController != null)
+        if (gc != null)
         {
-            gravityController.GravLinksChanged -= OnGravLinksChanged;
-            gravityController = null;
+            gc.GravLinksChanged -= OnGravLinksChanged;
+            gc = null;
         }
     }
 
     void OnChangeCurrentLink(int newLinkNum)
     {
-        foreach (GameObject cartridge in cartridges)
+        for (int i = 0; i < 3; i++)
         {
-            SetFrame(cartridge, Color.gray2, true);
+            GameObject cartridge = cartridges[i];
+            SetFrame(cartridge, Color.gray2, gc.gravLinks[i].linkControllable);
         }
 
-        SetFrame(cartridges[newLinkNum], Color.white, true);
+        SetFrame(cartridges[newLinkNum], Color.white, gc.gravLinks[newLinkNum].linkControllable);
     }
 
     void SetFrame(GameObject cartridge, Color color, bool visible)
@@ -84,19 +86,20 @@ public class GunAnimations : MonoBehaviour
         yield return new WaitForEndOfFrame();
         for(int i = 0; i < 3; i++)
         {
-            bool active = gravityController.gravLinks[i].Active();
-            Color linkColor = gravityController.gravLinks[i].style.color;
+            bool active = gc.gravLinks[i].Active();
+            Color linkColor = gc.gravLinks[i].style.color;
             Color newColor = active ? linkColor : Color.white;
-            UpdateCartridgeColor(i, newColor);
+            UpdateCartridgeColor(i, newColor, gc.gravLinks[i].linkControllable);
         }
     }
 
-    void UpdateCartridgeColor(int linkNum, Color color)
+    void UpdateCartridgeColor(int linkNum, Color color, bool enabled)
     {
         GameObject cartridge = cartridges[linkNum];
         GameObject body = Utils.FindChild(cartridge.transform, "Body");
 
         body.GetComponent<Renderer>().material.color = color;
+        body.GetComponent<Renderer>().enabled = enabled;
     }
 
     void FixedUpdate()
@@ -112,10 +115,10 @@ public class GunAnimations : MonoBehaviour
         Transform body = cartridgeBodies[linkNum];
         if (body == null) return;
 
-        GravLink link = gravityController.gravLinks[linkNum];
+        GravLink link = gc.gravLinks[linkNum];
 
         float linkLength = link.Length();
-        float sizeRatio = Mathf.Clamp01(1 - (linkLength / gravityController.maxLinkDistance));
+        float sizeRatio = Mathf.Clamp01(1 - (linkLength / gc.maxLinkDistance));
 
         int lengthAxis = bodyLengthAxes[linkNum];
         Vector3 scale = bodyInitialScales[linkNum];
@@ -142,11 +145,7 @@ public class GunAnimations : MonoBehaviour
         {
             GameObject body = Utils.FindChild(cartridges[i].transform, "Body");
             MeshFilter meshFilter = body != null ? body.GetComponent<MeshFilter>() : null;
-            if (meshFilter == null || meshFilter.sharedMesh == null)
-            {
-                Debug.LogError($"Cartridge {i} is missing a Body mesh.", cartridges[i]);
-                continue;
-            }
+            if (meshFilter == null || meshFilter.sharedMesh == null) continue;
 
             Bounds bounds = meshFilter.sharedMesh.bounds;
             Vector3 size = bounds.size;
