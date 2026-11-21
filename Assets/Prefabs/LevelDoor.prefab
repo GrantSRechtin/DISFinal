@@ -239,6 +239,7 @@ MonoBehaviour:
   isEntrance: 0
   activationObject: {fileID: 0}
   barrier: {fileID: 4432282035246763534}
+  stoneGrindingClip: {fileID: 8300000, guid: 293a3558fb47b4e50ae6f101eec8a7e8, type: 3}
 --- !u!4 &5638494303093538827 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}

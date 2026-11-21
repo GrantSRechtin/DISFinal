@@ -8,6 +8,7 @@ public class DoorOpen : MonoBehaviour
     [SerializeField] bool isEntrance;
     [SerializeField] private PressurePlate activationObject;
     [SerializeField] private GameObject barrier;
+    [SerializeField] private AudioClip stoneGrindingClip;
 
     private float originY= 2;
     private float entranceDoorStart = 6.15f;
@@ -62,6 +63,14 @@ public class DoorOpen : MonoBehaviour
         MoveDoorTo(closedPosition, false);
     }
 
+    void PlayDoorGrindingSound()
+    {
+        if (stoneGrindingClip != null && SoundFXManager.instance != null)
+        {
+            SoundFXManager.instance.PlayAttached(stoneGrindingClip, transform);
+        }
+    }
+
     void MoveDoorTo(Vector3 targetPosition, bool endOpen)
     {
         if (movementCoroutine != null)
@@ -76,6 +85,11 @@ public class DoorOpen : MonoBehaviour
     IEnumerator MoveToPosition(Vector3 targetPosition, bool endOpen)
     {
         Vector3 startPosition = transform.position;
+        if (startPosition != targetPosition)
+        {
+            PlayDoorGrindingSound();
+        }
+
         const float duration = 1f;
         float elapsed = 0f;
 
