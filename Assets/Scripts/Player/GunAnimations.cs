@@ -71,7 +71,7 @@ public class GunAnimations : MonoBehaviour
 
         if (playSound && canisterChangeClip != null && SoundFXManager.instance != null)
         {
-            SoundFXManager.instance.Play2D(canisterChangeClip, 0.2f);
+            SoundFXManager.instance.Play2D(canisterChangeClip, 0.1f);
         }
     }
 
