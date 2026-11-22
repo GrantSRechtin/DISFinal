@@ -13,6 +13,7 @@ public class GunAnimations : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] GameObject[] cartridges;
+    [SerializeField] AudioClip canisterChangeClip;
 
     PlayerInputHandler input;
     GravityController gc;
@@ -30,7 +31,7 @@ public class GunAnimations : MonoBehaviour
     void Start()
     {
         CacheCartridgeBodies();
-        OnChangeCurrentLink(0);
+        UpdateCurrentLink(0, false);
         StartCoroutine(ChangeAfterUpdate());
     }
 
@@ -55,6 +56,11 @@ public class GunAnimations : MonoBehaviour
 
     void OnChangeCurrentLink(int newLinkNum)
     {
+        UpdateCurrentLink(newLinkNum, true);
+    }
+
+    void UpdateCurrentLink(int newLinkNum, bool playSound)
+    {
         for (int i = 0; i < 3; i++)
         {
             GameObject cartridge = cartridges[i];
@@ -62,6 +68,11 @@ public class GunAnimations : MonoBehaviour
         }
 
         SetFrame(cartridges[newLinkNum], Color.white, gc.gravLinks[newLinkNum].linkControllable);
+
+        if (playSound && canisterChangeClip != null && SoundFXManager.instance != null)
+        {
+            SoundFXManager.instance.Play2D(canisterChangeClip, 0.2f);
+        }
     }
 
     void SetFrame(GameObject cartridge, Color color, bool visible)

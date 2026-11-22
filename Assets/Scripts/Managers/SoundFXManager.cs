@@ -1,3 +1,5 @@
+//AI Generated Code file with Copilot in VSCode.
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -9,10 +11,17 @@ public class SoundFXManager : MonoBehaviour
     [Header("Sound Effect Pool")]
     [SerializeField, Min(1)] private int initialPoolSize = 8;
     [SerializeField] private AudioMixerGroup sfxMixerGroup;
-    [SerializeField] private AudioMixerGroup voiceoverMixerGroup;
     [SerializeField, Min(0.01f)] private float minDistance = 1f;
     [SerializeField, Min(0.01f)] private float maxDistance = 20f;
 
+    [Header("Music")]
+    [SerializeField] private AudioMixerGroup musicMixerGroup;
+    [SerializeField] private AudioClip startingMusicClip;
+    [SerializeField, Range(0f, 1f)] private float startingMusicVolume = 1f;
+
+    [SerializeField] private AudioMixerGroup voiceoverMixerGroup;
+
+    [Header("Audio Mixer Parameters")]
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] private string masterVolumeParameter = "MasterVolume";
     [SerializeField] private string musicVolumeParameter = "MusicVolume";
@@ -20,6 +29,7 @@ public class SoundFXManager : MonoBehaviour
     [SerializeField] private string voiceoverVolumeParameter = "VoiceoverVolume";
 
     private readonly List<PooledVoice> voices = new List<PooledVoice>();
+    private AudioSource musicSource;
 
     private sealed class PooledVoice
     {
@@ -43,6 +53,13 @@ public class SoundFXManager : MonoBehaviour
         {
             CreateVoice();
         }
+
+        CreateMusicSource();
+        if (startingMusicClip != null)
+        {
+            PlayMusic(startingMusicClip, startingMusicVolume);
+        }
+
     }
 
     private void OnDestroy()
@@ -190,6 +207,48 @@ public class SoundFXManager : MonoBehaviour
         PooledVoice voice = new PooledVoice { source = source };
         voices.Add(voice);
         return voice;
+    }
+
+    private void CreateMusicSource()
+    {
+        if (musicSource != null)
+        {
+            return;
+        }
+
+        GameObject musicObject = new GameObject("Music Source");
+        musicObject.transform.SetParent(transform, false);
+
+        musicSource = musicObject.AddComponent<AudioSource>();
+        musicSource.playOnAwake = false;
+        musicSource.loop = true;
+        musicSource.spatialBlend = 0f;
+        musicSource.outputAudioMixerGroup = musicMixerGroup;
+    }
+
+    public void PlayMusic(AudioClip clip, float volume = 1f)
+    {
+        if (clip == null)
+        {
+            Debug.LogError("An audio clip is required to play music.", this);
+            return;
+        }
+
+        CreateMusicSource();
+        musicSource.clip = clip;
+        musicSource.volume = Mathf.Clamp01(volume);
+        if (!musicSource.isPlaying)
+        {
+            musicSource.Play();
+        }
+    }
+
+    public void StopMusic()
+    {
+        if (musicSource != null)
+        {
+            musicSource.Stop();
+        }
     }
 
     public void SetMasterVolume(float volume)
