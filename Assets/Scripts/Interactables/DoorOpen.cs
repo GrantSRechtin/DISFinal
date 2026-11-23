@@ -4,33 +4,46 @@ using UnityEngine;
 public class DoorOpen : MonoBehaviour
 {
     
-    [SerializeField] private float moveSpeed = 1f;
     [SerializeField] bool isEntrance;
     [SerializeField] private PressurePlate activationObject;
-    [SerializeField] private GameObject barrier;
+    [SerializeField] private GameObject barrierAndTrigger;
     [SerializeField] private AudioClip stoneGrindingClip;
 
-    private float originY= 2;
-    private float entranceDoorStart = 6.15f;
-    private float openHeight = 4.7f;
+    private const float OpenOffset = 4.7f;
     private Vector3 closedPosition;
     private Coroutine movementCoroutine;
+    private Collider barrierCollider;
 
+    void Awake()
+    {
+        if (barrierAndTrigger != null)
+        {
+            barrierCollider = barrierAndTrigger.GetComponent<Collider>();
+        }
+
+        if (!isEntrance)
+        {
+            if (barrierCollider == null)
+            {
+                Debug.LogError("Exit doors require a barrier with a Collider.", this);
+            }
+            else
+            {
+                barrierCollider.isTrigger = false;
+            }
+        }
+    }
 
     void Start()
     {
-        SetBarrierActive(true);
+        closedPosition = transform.position;
 
         if (isEntrance)
         {
-            transform.position = new Vector3(transform.position.x, entranceDoorStart, transform.position.z);
-            closedPosition = new Vector3(transform.position.x, originY, transform.position.z);
+            transform.position = closedPosition + Vector3.up * OpenOffset;
             MoveDoorTo(closedPosition, false);
         }
-        else
-        {
-            closedPosition = transform.position;
-        }
+
         if (activationObject == null)
         {
             Debug.LogError("Activation object is not assigned.");
@@ -49,13 +62,9 @@ public class DoorOpen : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-    }
-
     void OpenDoor()
     {
-        MoveDoorTo(closedPosition + Vector3.up * openHeight, true);
+        MoveDoorTo(closedPosition + Vector3.up * OpenOffset, true);
     }
 
     void CloseDoor()
@@ -78,7 +87,7 @@ public class DoorOpen : MonoBehaviour
             StopCoroutine(movementCoroutine);
         }
 
-        SetBarrierActive(true);
+        SetBarrierTrigger(false);
         movementCoroutine = StartCoroutine(MoveToPosition(targetPosition, endOpen));
     }
 
@@ -102,14 +111,15 @@ public class DoorOpen : MonoBehaviour
 
         transform.position = targetPosition;
         movementCoroutine = null;
-        SetBarrierActive(!endOpen || isEntrance);
+        SetBarrierTrigger(endOpen);
     }
 
-    void SetBarrierActive(bool isActive)
+    void SetBarrierTrigger(bool isTrigger)
     {
-        if (barrier != null)
+        if (!isEntrance && barrierCollider != null)
         {
-            barrier.SetActive(isActive);
+            barrierCollider.isTrigger = isTrigger;
         }
     }
+
 }

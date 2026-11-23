@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4432282035246763534
+--- !u!1 &5385342127049847667
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,37 +8,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6676627439611783451}
-  - component: {fileID: 7747681280899220165}
+  - component: {fileID: 6307006840669653623}
+  - component: {fileID: 1198322573792980548}
+  - component: {fileID: 5318692539545870483}
   m_Layer: 0
-  m_Name: InvisibleDoorBlock
+  m_Name: BlockAndLevelTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6676627439611783451
+--- !u!4 &6307006840669653623
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4432282035246763534}
+  m_GameObject: {fileID: 5385342127049847667}
   serializedVersion: 2
   m_LocalRotation: {x: 0.006170542, y: -0.7070799, z: -0.006170542, w: 0.7070799}
-  m_LocalPosition: {x: 0.99, y: -0, z: 1.02}
+  m_LocalPosition: {x: 0.99, y: 0.02, z: -0.18}
   m_LocalScale: {x: 0.9999999, y: 1, z: 0.99999976}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5638494303093538827}
+  m_Father: {fileID: 9004833993530631805}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &7747681280899220165
+--- !u!65 &1198322573792980548
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4432282035246763534}
+  m_GameObject: {fileID: 5385342127049847667}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -53,7 +54,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 4.0106134, z: 3.8692412}
   m_Center: {x: 5.062051e-10, y: -0.2716527, z: -0.011699439}
---- !u!1001 &5311236877029287904
+--- !u!114 &5318692539545870483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5385342127049847667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ba977c7a178e4ca3a008e9b7b137836, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NextLevelTrigger
+--- !u!1001 &8898305494850732438
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -75,23 +88,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.7070799
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.006170542
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.7070799
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.006170542
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -163,7 +176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_Name
-      value: LevelDoor
+      value: ExitDoor
       objectReference: {fileID: 0}
     - target: {fileID: 4083501151425157549, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       propertyPath: m_LocalScale.x
@@ -212,36 +225,35 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6676627439611783451}
+      addedObject: {fileID: 6307006840669653623}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -8391222552659086748, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6542809464635192323}
+      addedObject: {fileID: 2396601732357980198}
   m_SourcePrefab: {fileID: 100100000, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
---- !u!1 &4771896135420417412 stripped
+--- !u!1 &8138358843458335730 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -8391222552659086748, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
-  m_PrefabInstance: {fileID: 5311236877029287904}
+  m_PrefabInstance: {fileID: 8898305494850732438}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6542809464635192323
+--- !u!114 &2396601732357980198
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4771896135420417412}
+  m_GameObject: {fileID: 8138358843458335730}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 76b577fe5489e334ba54ca54b1e12954, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorOpen
-  moveSpeed: 1
   isEntrance: 0
   activationObject: {fileID: 0}
-  barrier: {fileID: 4432282035246763534}
+  barrierAndTrigger: {fileID: 5385342127049847667}
   stoneGrindingClip: {fileID: 8300000, guid: 293a3558fb47b4e50ae6f101eec8a7e8, type: 3}
---- !u!4 &5638494303093538827 stripped
+--- !u!4 &9004833993530631805 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 5ec5e8a60d7ef48deb83d62f5c15ca96, type: 3}
-  m_PrefabInstance: {fileID: 5311236877029287904}
+  m_PrefabInstance: {fileID: 8898305494850732438}
   m_PrefabAsset: {fileID: 0}

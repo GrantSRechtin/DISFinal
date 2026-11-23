@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Grant.unity
     guid: 1b8c759d9eeeb1d438bad457d4ed2138
   - enabled: 1
+    path: Assets/Scenes/Riley1.unity
+    guid: d060bf9cfb7fcb546be0fc6adf1f15a4
+  - enabled: 1
     path: Assets/Scenes/Grant Launcher Testing.unity
     guid: dea901b0ee2951f43b77c47be9b81101
   m_configObjects:
