@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Splines.Interpolators;
 
 /// <summary>
 /// Turns player intent into commands on IGravitizable objects.
@@ -14,6 +15,8 @@ public class SelectionLine : RewindableBase
     public int linkNum;
 
     public float length = 0;
+
+    public Color baseColor;
 
     LineRenderer lineRenderer;
     List<Timestep> timesteps = new();
@@ -65,6 +68,7 @@ public class SelectionLine : RewindableBase
         a = timestep.LineA;
         b = timestep.LineB;
         lineRenderer.enabled = timestep.LineVisible;
+        UpdateColor();
     }
 
     void FixedUpdate()
@@ -94,10 +98,26 @@ public class SelectionLine : RewindableBase
         
         Vector3[] points = {firstPoint, secondPoint};
         lineRenderer.SetPositions(points);
+        UpdateColor();
+    }
+
+    void UpdateColor()
+    {
+        float maxDistance = Mathf.Max(GravityController.Instance.maxLinkDistance, Mathf.Epsilon);
+        float ratio = Mathf.Clamp01(length / maxDistance);
+        float fadeRatio = Mathf.Clamp01(Mathf.InverseLerp(0.1f, 1f, ratio));
+        fadeRatio = fadeRatio * fadeRatio * (3f - 2f * fadeRatio);
+
+        Color32 newColor = (Color32)baseColor;
+        newColor.a = (byte)Mathf.RoundToInt(Mathf.Lerp(255f, 25.5f, fadeRatio));
+
+        lineRenderer.startColor = newColor;
+        lineRenderer.endColor = newColor;
     }
 
     Vector3 LookingPoint()
     {
+        // make based on distance from first selected
         if (!Physics.Raycast(head.position, head.forward, out RaycastHit hit, GravityController.Instance.maxLinkDistance)) return Vector3.zero;
         return hit.point;
     }

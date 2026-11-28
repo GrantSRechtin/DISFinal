@@ -71,10 +71,7 @@ public struct GravLink
 
         var lineScript = line.GetComponent<SelectionLine>();
         lineScript.linkNum = linkNum;
-
-        var lineRenderer = line.GetComponent<LineRenderer>();
-        lineRenderer.startColor = style.color;
-        lineRenderer.endColor = style.color;
+        lineScript.baseColor = style.color;
     }
 
     public readonly bool Active()

@@ -77,6 +77,7 @@ public class GravityController : RewindableBase
     // ---------- Stored stuff ---------
     public float maxLinkDistance = 20f;
     public int currentLinkNum = 0;
+    public float gravitationalForce = 50f;
     public GravLink[] gravLinks = new GravLink[3];
 
     public event Action GravLinksChanged;

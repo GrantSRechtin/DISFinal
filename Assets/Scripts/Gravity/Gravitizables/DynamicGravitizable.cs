@@ -9,7 +9,6 @@ using UnityEngine;
 public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
 {
     [Header("Gravity")]
-    [SerializeField] float gravitationalForce = 50f;
     [SerializeField] float pushMultiplier = -0.625f;
     [SerializeField] float minForce = 5f;
 
@@ -39,7 +38,7 @@ public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
         {
             Vector3 anchor = Partners[linkNum].GetAnchor(linkNum);
             GravityMode mode = Modes[linkNum];
-            totalForce += CalculateForce(anchor, mode);
+            totalForce += CalculateForceSimple(anchor, mode);
         }
         return totalForce; 
     }
@@ -58,8 +57,22 @@ public class DynamicGravitizable : SingleAnchorGravitizable, IHoldable
         float powerRatio = distance / maxD;
         if (mode == GravityMode.Push) powerRatio = 1f-powerRatio;
 
+        float gravitationalForce = GravityController.Instance.gravitationalForce;
         Vector3 force = direction.normalized * powerRatio * gravitationalForce;
         if (force.magnitude < minForce) return Vector3.zero;
+
+        if (mode == GravityMode.Push) force *= pushMultiplier;
+        if (mode == GravityMode.None) force = Vector3.zero;
+
+        return force;
+    }
+
+    Vector3 CalculateForceSimple(Vector3 targetPosition, GravityMode mode)
+    {
+        Vector3 direction = targetPosition - transform.position;
+
+        float gravitationalForce = GravityController.Instance.gravitationalForce;
+        Vector3 force = direction.normalized * gravitationalForce;
 
         if (mode == GravityMode.Push) force *= pushMultiplier;
         if (mode == GravityMode.None) force = Vector3.zero;
