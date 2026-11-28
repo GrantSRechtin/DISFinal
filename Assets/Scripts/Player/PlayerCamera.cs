@@ -22,7 +22,7 @@ public class PlayerCamera : RewindableBase
     {
         SetCursorLocked(true);
         yaw = 0f;
-        pitch = 180f;
+        pitch = 0f;
     }
 
     private void Update()
