@@ -81,7 +81,7 @@ public class SelectionLine : RewindableBase
 
         Vector3 firstPoint = a.GetAnchor(linkNum);
 
-        Vector3 frontFloatingPoint = head.position + head.forward * 10f;
+        Vector3 frontFloatingPoint = head.position + head.forward * GravityController.Instance.maxLinkDistance;
 
         Vector3 frontClosePoint = LookingPoint();
         Vector3 frontPoint = frontClosePoint != Vector3.zero ? frontClosePoint : frontFloatingPoint;
@@ -105,11 +105,11 @@ public class SelectionLine : RewindableBase
     {
         float maxDistance = Mathf.Max(GravityController.Instance.maxLinkDistance, Mathf.Epsilon);
         float ratio = Mathf.Clamp01(length / maxDistance);
-        float fadeRatio = Mathf.Clamp01(Mathf.InverseLerp(0.1f, 1f, ratio));
+        float fadeRatio = Mathf.Clamp01(Mathf.InverseLerp(0.2f, 1f, ratio));
         fadeRatio = fadeRatio * fadeRatio * (3f - 2f * fadeRatio);
 
         Color32 newColor = (Color32)baseColor;
-        newColor.a = (byte)Mathf.RoundToInt(Mathf.Lerp(255f, 25.5f, fadeRatio));
+        newColor.a = (byte)Mathf.RoundToInt(Mathf.Lerp(255f, 10f, fadeRatio));
 
         lineRenderer.startColor = newColor;
         lineRenderer.endColor = newColor;
